@@ -1,0 +1,55 @@
+<div class="row" ng-switch on="editable">
+
+  <button ng-switch-default class="btn btn-link" ng-click="toggleEdit()" >
+    Edit
+  </button>
+
+  <button ng-switch-when="true" class="btn btn-default" ng-click="toggleEdit()">
+    Done Editing
+  </button>
+</div>
+
+<div class="row">
+
+  <h3>{{name}}</h3>
+
+  <p class="lead">{{description}}</p>
+
+</div>
+
+<div class="row">
+
+  <div class="col-md-8">
+    <table class="table">
+      <tr>
+        <th>Last Updated</th>
+        <td>{{lastUpdated}}</td>
+      </tr>
+      <tr>
+        <th>Documentation</th>
+        <td>{{documentationURL}}</td>
+      </tr>
+      <tr>
+        <th>Version</th>
+        <td>{{latest.moduleVersion}}</td>
+      </tr>
+      <tr>
+        <th>Compatibility</th>
+        <td>{{latest.requiredOMRSVersion}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="col-md-4">
+    <p>
+      <a ng-href="{{latest.downloadURL}}">
+        <button type="button" class="btn btn-primary">Download</button>
+      </a>
+    </p>
+
+  </div>
+
+</div>
+
+<h4>Raw data:
+  <pre>{{module | json}}</pre>

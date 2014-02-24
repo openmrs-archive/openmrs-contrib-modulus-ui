@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" ng-app="modulusOne">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Modulo Uno</title>
+
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="lib/angular/angular-csp.css">
+  <link rel="stylesheet" href="css/app.css"/>
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="row">
+
+      <h1 class="col-sm-6">This is the Module Repository.</h1>
+
+      <nav class="col-sm-6 navbar navbar-default">
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="#/">All Modules</a>
+          </li>
+          <li>
+            <a href="#/create">Create Module</a>
+          </li>
+        </ul>
+      </nav> 
+
+    </div>
+
+    <div class="row alerts" ng-controller="AlertCtrl" ng-repeat="alert in alerts">
+
+      <div class="alert alert-{{type}}">{{description}}</div>
+    </div>
+
+    <div ng-view></div>
+
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="js/bootstrap.min.js"></script>
+
+  <script src="lib/angular-file-upload/angular-file-upload-shim.min.js"></script>
+
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+  <script src="lib/angular/angular.js"></script>
+  <script src="lib/angular/angular-route.js"></script>
+  <script src="lib/angular/angular-resource.js"></script>
+  <script src="lib/xeditable/xeditable.min.js"></script>
+  <script src="lib/angular-file-upload/angular-file-upload.min.js"></script> 
+
+  <script src="js/app.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/createControllers.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/directives.js"></script>
+
+  <link rel="stylesheet" href="lib/xeditable/xeditable.css">
+
+</body>
+</html>

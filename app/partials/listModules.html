@@ -1,0 +1,21 @@
+<table class="table table-striped table-hover module-list">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+  </tr>
+
+  <tr ng-repeat="module in modules">
+      <td>
+        <a ng-href="#/show/{{module.slug}}">
+          {{module.name}}
+          <span class="incomplete" ng-if="!completed">(incomplete)</span>
+        </a>
+      </td>
+      <td>
+        <a ng-href="#/show/{{module.slug}}">
+          {{module.description}}
+        </a>
+      </td>
+  </tr>
+
+</table>

@@ -1,0 +1,74 @@
+<script src="js/createControllers.js"></script>
+<link rel="stylesheet" href="css/create.css"> 
+
+<form ng-controller="CreateCtrl">
+
+
+<div class="row" ng-controller="ReleaseFileCtrl" >
+  <div class="jumbotron upload-jumbotron" ng-file-drop="onFileSelect($files)"
+    ng-file-drag-over-class="upload-jumbotron-dragged">
+
+    <h3>Upload a module:</h3>
+
+      <div class="center-block">
+        <p ng-show="dropSupported">
+            Drop an .omod file here or <a class="action" ng-click="selectFile()">choose a file</a>
+        </p>
+        <p ng-show="progress">Upload progress: {{progress}}%</p>
+      </div>
+
+      <div ng-file-drop-available="dropSupported=true" 
+            ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
+
+      <!-- <button class="btn btn-default" ng-click="upload.abort()">Cancel Upload</button> -->
+
+  </div>
+</div>
+
+<div class="row">
+
+  <div ng-controller="ModuleMetadataCtrl" class="col-md-6">
+
+    <h3>Describe this module:</h3>
+    <div class="form-group">
+      <label>Name</label>
+      <input class="form-control" type="text" ng-model="name">
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+      <textarea class="form-control" rows="3" ng-model="description"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Documentation URL</label>
+      <input class="form-control" type="text" ng-model="documentationURL">
+    </div>
+  </div>
+  
+
+  <div ng-controller="ReleaseMetadataCtrl" class="col-md-6">
+
+    <h3>Describe this release:</h3>
+    <div class="form-group">
+      <label>Version</label>
+      <input class="form-control" type="text" ng-model="moduleVersion">
+    </div>
+
+    <div class="form-group">
+      <label>OpenMRS Version Requirement</label>
+      <input class="form-control" type="text" ng-model="requiredOMRSVersion">
+    </div>
+
+  </div>
+
+</div>
+
+<button class="btn btn-primary" ng-click="finishUpload()">
+  Complete Upload
+</button>
+<button class="btn btn-link" ng-click="cancelUpload()">
+  Cancel
+</button>
+
+</form>
