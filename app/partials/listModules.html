@@ -8,11 +8,10 @@
       <td>
         <a ng-href="#/show/{{module.slug}}">
           {{module.name}}
-          <span class="incomplete" ng-if="!completed">(incomplete)</span>
         </a>
       </td>
       <td>
-        <a ng-href="#/show/{{module.slug}}">
+        <a ng-href="#/show/{{module.id}}/{{module.slug}}">
           {{module.description}}
         </a>
       </td>

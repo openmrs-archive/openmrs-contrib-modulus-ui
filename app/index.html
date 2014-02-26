@@ -39,7 +39,7 @@
 
     </div>
 
-    <div class="row alerts" ng-controller="AlertCtrl" ng-repeat="alert in alerts">
+    <div class="row alerts ng-hide" ng-controller="AlertCtrl" ng-repeat="alert in alerts">
 
       <div class="alert alert-{{type}}">{{description}}</div>
     </div>
@@ -52,7 +52,7 @@
   <script src="https://code.jquery.com/jquery.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="js/bootstrap.min.js"></script>
-
+  <script src="lib/lodash/lodash.min.js"></script>
   <script src="lib/angular-file-upload/angular-file-upload-shim.min.js"></script>
 
 
@@ -61,7 +61,8 @@
   -->
   <script src="lib/angular/angular.js"></script>
   <script src="lib/angular/angular-route.js"></script>
-  <script src="lib/angular/angular-resource.js"></script>
+  <script src="lib/angular/angular-resource.js"></script><!-- TODO: remove -->
+  <script src="lib/restangular/restangular.min.js"></script>
   <script src="lib/xeditable/xeditable.min.js"></script>
   <script src="lib/angular-file-upload/angular-file-upload.min.js"></script> 
 

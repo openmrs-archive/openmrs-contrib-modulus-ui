@@ -1,10 +1,9 @@
-'use strict';
-
 /* Filters */
 
-angular.module('modulusOne.filters', []).
-  filter('interpolate', ['version', function(version) {
+angular.module('modulusOne.filters', [])
+  .filter('interpolate', ['version', function(version) {
     return function(text) {
-      return String(text).replace(/\%VERSION\%/mg, version);
+      return String(text).replace(/\%VERSION\%/mg, version)
     }
-  }]);
+  }])
+

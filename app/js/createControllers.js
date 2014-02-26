@@ -1,112 +1,71 @@
 // Module Creation Controllers
 angular.module('modulusOne.createControllers', [])
 
-  .controller('CreateCtrl', function($scope, ModuleService, ReleaseService) {
-
-    var module, release
-
-    window.ReleaseService = ReleaseService
-
-    // create a fresh module
-    module = $scope.module = ModuleService.new()
-
-    // create a fresh release
-    module.$promise.then(function() {
-      release = $scope.release = ReleaseService.new(
-        {moduleId: module.id},      // query parameters
-        {module: {id: module.id}})  // request body
+  .controller('CreateCtrl', function($scope, Restangular, isCompleted) {
 
 
+    // Create a fresh module
+    Restangular.all('modules').post()
+    .then(function(module) {
+      $scope.module = module
+      console.debug('module created')
+    })
+
+    // Create a fresh release
+    .then(function() {
+      return $scope.module.all('releases').post(
+        {module: {id: $scope.module.id}})
+    })
+    .then(function(release) {
+      // Associate the release with the module record (this has already
+      // happened on the server)
+      $scope.module.releases = [release]
+      $scope.release = $scope.module.releases[0]
+      console.debug('release created')
+    })
+
+    .catch(function(err) {
+      console.error('create resources error', err)
+    })
+    .finally(function() {
+      console.debug('resources created')
+
+      window.module = $scope.module
+      window.release = $scope.release
     })
 
 
+
     function uponExit(evt) {
-      if (!module.complete) {
+      if (!isCompleted($scope.module)) {
+        confirm('You have not finished uploading this module, and it will be '+
+          'deleted. Continue?')
         console.debug("Deleting unfinished module")
-        module.$delete({id: module.id})
+        return $scope.module.remove();
       }
     }
 
     window.addEventListener("beforeunload", uponExit)
     $scope.$on("$locationChangeStart", uponExit)
 
+    // Delete the module and release being created
     $scope.cancelUpload = function cancelUpload() {
-      uponExit()
+      return $scope.module.remove();
     }
 
-    $scope.finishUpload = function finishUpload() {
-      $scope.$broadcast('doReleaseMetadataUpdate')
-
-      $scope.$on('releaseMetadataUpdated', function() {
-        $scope.$broadcast('doModuleMetadataUpdate')
-
-        $scope.$on('moduleMetadataUpdated', function() {
-          console.log('finished!')
-        })
-      })
+    // Update the module's and its releases' metadata
+    $scope.metadataUpdate = function metadataUpdate() {
+      return $scope.module.put()
     }
 
+    $scope.isCompleted = isCompleted
+
 
   })
-
-
-
-
-  .controller('ModuleMetadataCtrl', function($scope, $rootScope) {
-
-    $rootScope.foo = 'baz'
-
-    $scope.$on('doModuleMetadataUpdate', function() {
-      var module = $scope.module
-
-      console.debug('updating module')
-
-      angular.extend(module, {
-        name: $scope.name,
-        description: $scope.description,
-        documentationURL: $scope.documentationURL
-      })
-
-      module.$save({id: module.id}, function(module) {
-        $scope.module = module
-        console.debug('module updated', module)
-        $scope.$emit('moduleMetadataUpdated')
-      })
-    })
-  })
-
-
-
-
-  .controller('ReleaseMetadataCtrl', function($scope) {
-
-    $scope.$on('doReleaseMetadataUpdate', function() {
-      var module = $scope.module
-      ,   release = $scope.release
-
-      release.module = module
-
-      console.debug('updating release')
-
-      angular.extend(release, {
-        moduleVersion: $scope.moduleVersion,
-        requiredOMRSVersion: $scope.requiredOMRSVersion
-      })
-
-      release.$save({id: release.id, moduleId: module.id}, function(release) {
-        $scope.release = release
-        console.debug('release updated', release)
-        $scope.$emit('releaseMetadataUpdated')
-      })
-    })
-  })
-
 
 
 
   .controller('ReleaseFileCtrl', function($scope, $upload, server) {
-
-    $scope.filename = "Hello"
 
     function onProgress(evt) {
       $scope.progress = parseInt(100.0 * evt.loaded / evt.total)
@@ -122,6 +81,7 @@ angular.module('modulusOne.createControllers', [])
       console.error('it broke')
     }
 
+    // Use file chooser to pick a file
     $scope.selectFile = function() {
       var fileSelector = document.createElement('input');
       fileSelector.setAttribute('type', 'file');
@@ -133,6 +93,7 @@ angular.module('modulusOne.createControllers', [])
       fileSelector.click()
     }
 
+    // When file is chosen or dropped into the controller
     $scope.onFileSelect = function($files) {
 
       //$files: an array of files selected, each file has name, size, and type.
@@ -147,8 +108,8 @@ angular.module('modulusOne.createControllers', [])
 
         $scope.upload = $upload.http({
           url: server + '/api/modules/' + $scope.module.id +
-            '/releases/upload',
-          method: 'POST',
+            '/releases/upload/' + $scope.release.id,
+          method: 'PUT',
           params: {'filename': file.name},
           headers: {'Content-Type': file.type},
           data: buf.buffer

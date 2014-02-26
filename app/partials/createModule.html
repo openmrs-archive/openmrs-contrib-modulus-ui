@@ -27,45 +27,46 @@
 
 <div class="row">
 
-  <div ng-controller="ModuleMetadataCtrl" class="col-md-6">
+  <div class="col-md-6">
 
     <h3>Describe this module:</h3>
     <div class="form-group">
       <label>Name</label>
-      <input class="form-control" type="text" ng-model="name">
+      <input class="form-control" type="text" ng-model="module.name">
     </div>
 
     <div class="form-group">
       <label>Description</label>
-      <textarea class="form-control" rows="3" ng-model="description"></textarea>
+      <textarea class="form-control" rows="3" ng-model="module.description"></textarea>
     </div>
 
     <div class="form-group">
       <label>Documentation URL</label>
-      <input class="form-control" type="text" ng-model="documentationURL">
+      <input class="form-control" type="text" ng-model="module.documentationURL">
     </div>
   </div>
   
 
-  <div ng-controller="ReleaseMetadataCtrl" class="col-md-6">
+  <div class="col-md-6">
 
     <h3>Describe this release:</h3>
     <div class="form-group">
       <label>Version</label>
-      <input class="form-control" type="text" ng-model="moduleVersion">
+      <input class="form-control" type="text" ng-model="release.moduleVersion">
     </div>
 
     <div class="form-group">
       <label>OpenMRS Version Requirement</label>
-      <input class="form-control" type="text" ng-model="requiredOMRSVersion">
+      <input class="form-control" type="text" ng-model="release.requiredOMRSVersion">
     </div>
 
   </div>
 
 </div>
 
-<button class="btn btn-primary" ng-click="finishUpload()">
-  Complete Upload
+<button class="btn btn-primary" ng-disabled="!isCompleted(module)"
+  ng-click="metadataUpdate()">
+    Complete Upload
 </button>
 <button class="btn btn-link" ng-click="cancelUpload()">
   Cancel

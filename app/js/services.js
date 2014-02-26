@@ -1,5 +1,3 @@
-'use strict';
-
 /* Services */
 
 angular.module('modulusOne.services', [])
@@ -34,7 +32,21 @@ angular.module('modulusOne.services', [])
     }
   ])
 
+  .value('isCompleted', function(module) {
+    var string;
+    if (module)
+      string = 'id=' + module.id + ' completed?'
 
+    if (module && module.name && module.description &&
+      module.releases && module.releases.length > 0) {
+        console.debug(string, 'true')
+        return true
+
+      } else {
+        console.debug(string, 'false')
+        return false
+      }
+  })
 
   .factory('UserService', ['$resource', 'server',
     function($resource, server) {
@@ -58,19 +70,6 @@ angular.module('modulusOne.services', [])
   }])
 
 
-  .factory('Modules', function(ModuleService) {
-    var Modules = []
-
-    Modules.get = function(id) {
-      ModuleService.get(id)
-        .then
-    }
-
-
-    return Modules
-  })
-
-
 
   .factory('DeleteUnfinishedOnExit', function(resource) {
     window.addEventListener()
@@ -81,4 +80,7 @@ angular.module('modulusOne.services', [])
       $rootScope.$broadcast('alert', message)
     }
   })
+
+
+
 

@@ -11,9 +11,9 @@
 
 <div class="row">
 
-  <h3>{{name}}</h3>
+  <h3>{{module.name}}</h3>
 
-  <p class="lead">{{description}}</p>
+  <p class="lead">{{module.description}}</p>
 
 </div>
 
@@ -23,26 +23,26 @@
     <table class="table">
       <tr>
         <th>Last Updated</th>
-        <td>{{lastUpdated}}</td>
+        <td>{{module.lastUpdated}}</td>
       </tr>
       <tr>
         <th>Documentation</th>
-        <td>{{documentationURL}}</td>
+        <td>{{module.documentationURL}}</td>
       </tr>
       <tr>
         <th>Version</th>
-        <td>{{latest.moduleVersion}}</td>
+        <td>{{latestRelease.moduleVersion}}</td>
       </tr>
       <tr>
         <th>Compatibility</th>
-        <td>{{latest.requiredOMRSVersion}}</td>
+        <td>{{latestRelease.requiredOMRSVersion}}</td>
       </tr>
     </table>
   </div>
 
   <div class="col-md-4">
     <p>
-      <a ng-href="{{latest.downloadURL}}">
+      <a ng-href="{{latestRelease.downloadURL}}">
         <button type="button" class="btn btn-primary">Download</button>
       </a>
     </p>

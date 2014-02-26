@@ -1,31 +1,20 @@
-'use strict';
-
 /* Controllers */
 
 angular.module('modulusOne.controllers', [])
 
-  .controller('ShowModuleCtrl', ['$scope', 'ModuleService', '$routeParams',
-    'MessageService', 'ReleaseService',
-    function($scope, Module, $routeParams, MessageService, ReleaseService) {
+  .controller('ShowModuleCtrl', function($scope, Restangular, $routeParams) {
 
-    // Look up this module
-    var module = $scope.module = Module.get({id: $routeParams.id}, function() {
-      console.log(module)
+    Restangular.one('modules', $routeParams.id).get()
+    .then(function(module) {
+      $scope.module = module
 
-      for (var k in module) {
-        $scope[k] = module[k]
-      }
-
-      $scope.latest = ReleaseService.get({id: module.releases[0].id,
-        moduleId: module.id}, function() {
-          console.log($scope.latest)
-        })
-
-      MessageService.publish('breadcrumb', [
-        {name: 'All Modules', url: '#/'},
-        {name: module.name, url: '#/show/'+module.slug}
-      ])
+      var latestReleaseId = module.releases.length
+      return module.one('releases', latestReleaseId).get()
     })
+    .then(function(release){
+      $scope.latestRelease = release
+    })
+
 
     // Editability
     $scope.editable = false
@@ -34,19 +23,18 @@ angular.module('modulusOne.controllers', [])
     }
 
 
-  }])
+  })
 
-  .controller('ListModulesCtrl', ['$scope', 'ModuleService', 'MessageService',
-    function($scope, ModuleService, MessageService) {
+  .controller('ListModulesCtrl', function($scope, Restangular, isCompleted) {
 
-      var modules = ModuleService.list(function() {
-        $scope.modules = modules
+      Restangular.all('modules').getList({max: 100})
+      .then(function(modules) {
+        $scope.modules = _.filter(modules, isCompleted)
+        console.log($scope.modules)
       })
 
-      MessageService.publish('breadcrumb', [
-        {name: 'All Modules', url: '#/'}
-      ])
-  }])
+
+  })
 
   .controller('AlertCtrl', function($scope) {
 
