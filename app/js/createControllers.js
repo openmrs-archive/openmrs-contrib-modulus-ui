@@ -1,7 +1,8 @@
 // Module Creation Controllers
 angular.module('modulusOne.createControllers', [])
 
-  .controller('CreateCtrl', function($scope, Restangular, isCompleted) {
+  .controller('CreateCtrl', function($scope, Restangular, isCompleted, isEmpty,
+    $location) {
 
 
     // Create a fresh module
@@ -37,11 +38,17 @@ angular.module('modulusOne.createControllers', [])
 
 
     function uponExit(evt) {
-      if (!isCompleted($scope.module)) {
-        confirm('You have not finished uploading this module, and it will be '+
+      if (!isCompleted($scope.module) && !isEmpty($scope.module)) {
+        var quit = confirm('You have not finished uploading this module, and it will be '+
           'deleted. Continue?')
-        console.debug("Deleting unfinished module")
-        return $scope.module.remove();
+        if (quit) {
+          console.debug("Deleting unfinished module")
+          window.removeEventListener("beforeunload", this)
+          return $scope.module.remove();
+        } else {
+          evt.preventDefault()
+          return false
+        }
       }
     }
 
@@ -55,7 +62,11 @@ angular.module('modulusOne.createControllers', [])
 
     // Update the module's and its releases' metadata
     $scope.metadataUpdate = function metadataUpdate() {
-      return $scope.module.put()
+      $scope.module.put()
+      .finally(function() {
+        console.log('Created module')
+        $location.path('/')
+      })
     }
 
     $scope.isCompleted = isCompleted
@@ -65,7 +76,7 @@ angular.module('modulusOne.createControllers', [])
 
 
 
-  .controller('ReleaseFileCtrl', function($scope, $upload, server) {
+  .controller('ReleaseFileCtrl', function($scope, $upload, Restangular) {
 
     function onProgress(evt) {
       $scope.progress = parseInt(100.0 * evt.loaded / evt.total)
@@ -74,7 +85,10 @@ angular.module('modulusOne.createControllers', [])
     function onSuccess(data, status, headers, config) {
       // file is uploaded successfully
       console.debug("upload success", data)
-      $scope.releaseId = data.id
+
+      for (var k in data) {
+        $scope.release[k] = data[k]
+      }
     }
 
     function onError() {
@@ -105,10 +119,13 @@ angular.module('modulusOne.createControllers', [])
       fileReader.onload = function(evt) {
 
         var buf = new Uint8Array(fileReader.result)
+            url = Restangular.one('modules', $scope.module.id).all('releases')
+                    .one('upload', $scope.release.id)
+
+        console.debug('url', url.getRestangularUrl())
 
         $scope.upload = $upload.http({
-          url: server + '/api/modules/' + $scope.module.id +
-            '/releases/upload/' + $scope.release.id,
+          url: url.getRestangularUrl(),
           method: 'PUT',
           params: {'filename': file.name},
           headers: {'Content-Type': file.type},

@@ -1,12 +1,14 @@
 {
-  "name": "angularjs-seed",
-  "description": "A starter project for AngularJS",
-  "repository": "https://github.com/angular/angular-seed",
+  "name": "openmrs-contrib-modulus-ui",
+  "description": "Reference interface for Modulus, the OpenMRS Module Repository",
+  "repository": "https://github.com/elliottwilliams/openmrs-contrib-modulus-ui",
   "devDependencies": {
-    "phantomjs" : "~1.9",
-    "karma" : "~0.10",
-    "karma-junit-reporter" : "~0.1",
-    "karma-jasmine" : "~0.1",
-    "protractor" : "~0.17.0"
+    "phantomjs": "~1.9",
+    "karma": "~0.10",
+    "karma-junit-reporter": "~0.1",
+    "karma-jasmine": "~0.1",
+    "protractor": "~0.17.0",
+    "grunt": "~0.4.2",
+    "grunt-contrib-less": "~0.9.0"
   }
 }
