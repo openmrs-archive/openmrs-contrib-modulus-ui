@@ -28,7 +28,7 @@ run(function(editableOptions, Restangular) {
   editableOptions.theme = 'bs3'
 
   Restangular.setBaseUrl(window.MODULUS_API_BASE_URL ||
-    'http://localhost:8080/api')
+    '/api')
 
   window.Restangular = Restangular
 });
