@@ -30,7 +30,7 @@ angular.module('modulusOne.services', [])
     return function(module, checkRelease) {
       checkRelease = checkRelease || true
 
-      if (module && module.name && module.description) {
+      if (module && module.name) {
 
         if (!checkRelease) {
           return true

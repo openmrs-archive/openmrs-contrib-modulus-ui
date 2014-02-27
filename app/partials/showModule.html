@@ -7,6 +7,10 @@
   <button ng-switch-when="true" class="btn btn-default" ng-click="toggleEdit()">
     Done Editing
   </button>
+
+  <button class="btn btn-link" ng-click="confirmDeleteModule()">
+    Delete
+  </button>
 </div>
 
 <div class="row">
@@ -27,7 +31,7 @@
       </tr>
       <tr>
         <th>Documentation</th>
-        <td>{{module.documentationURL}}</td>
+        <td><a ng-href="{{module.documentationURL}}">{{module.documentationURL}}</a></td>
       </tr>
       <tr>
         <th>Version</th>
@@ -51,6 +55,26 @@
 
 </div>
 
-<h4>Raw data:</h4>
-  <pre>{{module | json}}</pre>
-  <pre>{{latestRelease | json}}</pre>
+<div class="row">
+  <h3>Releases</h3>
+  <table class="table">
+    <tr>
+      <th>Version</th>
+      <th>OpenMRS Version Requirement</th>
+      <th>Date Created</th>
+      <th></th>
+    </tr>
+
+    <tr ng-repeat="release in module.releases">
+
+      <td>{{release.moduleVersion}}</td>    
+      <td>{{release.requiredOMRSVersion}}</td>
+      <td>{{release.dateCreated}}</td>
+      <td>
+        <a ng-href="{{release.downloadURL}}">
+          <button type="button" class="btn btn-default btn-xs">Download</button>
+        </a>
+      </td>
+    </tr>
+  </table>
+</div>
