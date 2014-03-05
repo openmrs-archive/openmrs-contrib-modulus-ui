@@ -11,10 +11,23 @@ module.exports = function(grunt) {
         dest: 'app/css/',
         ext: '.css'
       }
+    },
+
+    connect: {
+      server: {
+        options: {
+          port: 8083,
+          base: './app',
+          keepalive: 'true'
+        }
+      }
     }
   })
 
   grunt.loadNpmTasks('grunt-contrib-less')
+  grunt.loadNpmTasks('grunt-contrib-watch')
+  grunt.loadNpmTasks('grunt-contrib-connect')
 
   grunt.registerTask('default', ['less'])
+  grunt.registerTask('serve', ['less', 'connect'])
 }
