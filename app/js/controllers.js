@@ -35,6 +35,10 @@ angular.module('modulusOne.controllers', [])
       }
     }
 
+    $scope.incrementDownload = function() {
+      $scope.latestRelease.downloadCount++
+    }
+
   })
 
   .controller('ListModulesCtrl', function($scope, Restangular, isCompleted) {

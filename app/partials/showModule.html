@@ -1,14 +1,14 @@
 <div class="row" ng-switch on="editable">
 
-  <button ng-switch-default class="btn btn-link" ng-click="toggleEdit()" >
+  <button ng-switch-default class="btn btn-link btn-warning" ng-click="toggleEdit()" >
     Edit
   </button>
 
-  <button ng-switch-when="true" class="btn btn-default" ng-click="toggleEdit()">
+  <button ng-switch-when="true" class="btn btn-default btn-success" ng-click="toggleEdit()">
     Done Editing
   </button>
 
-  <button class="btn btn-link" ng-click="confirmDeleteModule()">
+  <button class="btn btn-link btn-warning" ng-click="confirmDeleteModule()">
     Delete
   </button>
 </div>
@@ -27,27 +27,31 @@
     <table class="table">
       <tr>
         <th>Last Updated</th>
-        <td>{{module.lastUpdated}}</td>
+        <td>{{module.lastUpdated | date : 'short'}}</td>
       </tr>
       <tr>
         <th>Documentation</th>
         <td><a ng-href="{{module.documentationURL}}">{{module.documentationURL}}</a></td>
       </tr>
       <tr>
-        <th>Version</th>
+        <th>Latest Version</th>
         <td>{{latestRelease.moduleVersion}}</td>
       </tr>
       <tr>
         <th>Compatibility</th>
         <td>{{latestRelease.requiredOMRSVersion}}</td>
       </tr>
+      <tr>
+        <th>Downloads</th>
+        <td>{{latestRelease.downloadCount}}</td>
+      </tr>
     </table>
   </div>
 
   <div class="col-md-4">
     <p>
-      <a ng-href="{{latestRelease.downloadURL}}">
-        <button type="button" class="btn btn-primary">Download</button>
+      <a ng-href="{{latestRelease.downloadURL}}" ng-click="incrementDownload()">
+        <button type="button" class="btn btn-primary btn-lg">Download</button>
       </a>
     </p>
 
@@ -69,7 +73,7 @@
 
       <td>{{release.moduleVersion}}</td>    
       <td>{{release.requiredOMRSVersion}}</td>
-      <td>{{release.dateCreated}}</td>
+      <td>{{release.dateCreated | date : 'short'}}</td>
       <td>
         <a ng-href="{{release.downloadURL}}">
           <button type="button" class="btn btn-default btn-xs">Download</button>
