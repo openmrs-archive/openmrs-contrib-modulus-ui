@@ -2,18 +2,20 @@
 
 angular.module('modulusOne.controllers', [])
 
-  .controller('ShowModuleCtrl', function($scope, Restangular, $routeParams) {
+  .controller('ShowModuleCtrl', function($scope, Restangular, $routeParams, $location) {
 
     Restangular.one('modules', $routeParams.id).get()
     .then(function(module) {
       $scope.module = module
 
-      var latestReleaseId = module.releases.length
-      return module.one('releases', latestReleaseId).get()
+      return module.all('releases').getList()
     })
-    .then(function(release){
-      $scope.latestRelease = release
+    .then(function(releases){
+      console.debug(releases)
+      $scope.latestRelease = releases[releases.length - 1]
+      $scope.module.releases = releases
     })
+
 
 
     // Editability
@@ -23,6 +25,16 @@ angular.module('modulusOne.controllers', [])
     }
 
 
+    $scope.confirmDeleteModule = function() {
+      if (confirm('"' + $scope.module.name + '" will be deleted.')) {
+
+        $scope.module.remove()
+        .finally(function() {
+          $location.path('/')
+        })
+      }
+    }
+
   })
 
   .controller('ListModulesCtrl', function($scope, Restangular, isCompleted) {
@@ -30,7 +42,6 @@ angular.module('modulusOne.controllers', [])
       Restangular.all('modules').getList({max: 100})
       .then(function(modules) {
         $scope.modules = _.filter(modules, isCompleted)
-        console.log($scope.modules)
       })
 
 
