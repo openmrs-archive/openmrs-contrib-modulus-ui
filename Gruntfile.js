@@ -1,3 +1,6 @@
+var morgan = require('morgan')
+,   serveStatic = require('serve-static')
+
 module.exports = function(grunt) {
   grunt.initConfig  ({
     less: {
@@ -18,7 +21,18 @@ module.exports = function(grunt) {
         options: {
           port: 8083,
           base: './app',
-          keepalive: 'true'
+          livereload: true,
+          middleware: [morgan('dev'), serveStatic('./app')]
+        }
+      }
+    },
+
+    watch: {
+      css: {
+        files: 'app/less/*.less',
+        tasks: ['less'],
+        options: {
+          livereload: true
         }
       }
     }
@@ -29,5 +43,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect')
 
   grunt.registerTask('default', ['less'])
-  grunt.registerTask('serve', ['less', 'connect'])
+  grunt.registerTask('serve', ['less', 'connect', 'watch'])
 }
