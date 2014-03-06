@@ -3,6 +3,7 @@ var morgan = require('morgan')
 
 module.exports = function(grunt) {
   grunt.initConfig  ({
+
     less: {
       options: {
         ieCompat: true
@@ -35,13 +36,28 @@ module.exports = function(grunt) {
           livereload: true
         }
       }
+    },
+
+    template: {
+      'index-html': {
+        options: {
+          data: {
+            modulusApiBaseUrl: process.env.MODULUS_API_BASE_URL || '/api',
+          }
+        },
+        files: {
+          'app/index.html': ['app/index.html.template']
+        }
+      }
     }
   })
 
   grunt.loadNpmTasks('grunt-contrib-less')
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-connect')
+  grunt.loadNpmTasks('grunt-template')
 
   grunt.registerTask('default', ['less'])
   grunt.registerTask('serve', ['less', 'connect', 'watch'])
+  grunt.registerTask('build', ['template'])
 }
