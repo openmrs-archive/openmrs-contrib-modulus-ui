@@ -1,6 +1,3 @@
-var morgan = require('morgan')
-,   serveStatic = require('serve-static')
-
 module.exports = function(grunt) {
   grunt.initConfig  ({
 
@@ -23,7 +20,13 @@ module.exports = function(grunt) {
           port: 8083,
           base: './app',
           livereload: true,
-          middleware: [morgan('dev'), serveStatic('./app')]
+
+          middleware: function(connect, options, middlewares) {
+            var morgan = require('morgan')
+
+            middlewares.unshift(morgan('dev'))
+            return middlewares;
+          }
         }
       }
     },
