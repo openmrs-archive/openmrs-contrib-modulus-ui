@@ -15,9 +15,9 @@ module.exports = function(grunt) {
     },
 
     connect: {
-      server: {
+      development: {
         options: {
-          port: 8083,
+          port: process.env.PORT || 8083,
           base: './app',
           livereload: true,
 
@@ -27,6 +27,13 @@ module.exports = function(grunt) {
             middlewares.unshift(morgan('dev'))
             return middlewares;
           }
+        }
+      },
+      heroku: {
+        options: {
+          port: process.env.PORT,
+          base: './app',
+          keepalive: true
         }
       }
     },
@@ -61,6 +68,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-template')
 
   grunt.registerTask('default', ['less'])
-  grunt.registerTask('serve', ['less', 'connect', 'watch'])
-  grunt.registerTask('build', ['template'])
+  grunt.registerTask('serve', ['less', 'connect:development', 'watch'])
+  grunt.registerTask('heroku', ['connect:heroku'])
+  grunt.registerTask('build', ['template', 'less'])
 }
