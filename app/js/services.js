@@ -2,8 +2,17 @@
 
 angular.module('modulusOne.services', [])
 
-  .value('server', 'http://localhost:8080')
   .value('version', '0.0.1')
+
+
+  .factory('getModule', function(Restangular) {
+    return function(scope, id) {
+      return Restangular.one('modules', id).get()
+              .then(function(module) {
+                scope.module = module
+              })
+    }
+  })
 
 
   .factory('isReleaseCompleted', function() {

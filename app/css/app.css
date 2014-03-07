@@ -1,4 +1,13 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700);
+.module-detail-table {
+  margin: 2em inherit;
+}
+.module-detail-table th {
+  width: 40%;
+}
+.module-detail-table td {
+  width: 60%;
+}
 body {
   color: #363463;
   font-family: "Open Sans";

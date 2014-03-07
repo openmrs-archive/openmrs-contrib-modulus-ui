@@ -13,34 +13,60 @@
   </button>
 </div>
 
-<div class="row">
+<div class="row col-md-8">
 
-  <h3>{{module.name}}</h3>
+  <h2 class="module-name" ng-if="!editable">{{module.name}}</h2>
+  <h2 ng-if="editable">
+    <span editable-text="module.name" onaftersave="updateModule()"
+      e-placeholder="Module Name">
+      {{module.name}}
+    </span>
+  </h2>
 
-  <p class="lead">{{module.description}}</p>
+  <p class="desciription lead" ng-if="!editable">{{module.description}}</p>
+  <p class="desciription lead" ng-if="editable">
+    <span editable-textarea="module.description" e-rows="4" e-cols="60"
+      onaftersave="updateModule()" e-placeholder="Description">
+      {{module.description}}
+    </span>
+  </p>
 
 </div>
 
 <div class="row">
 
   <div class="col-md-8">
-    <table class="table">
+    <table class="table module-detail-table">
       <tr>
         <th>Last Updated</th>
         <td>{{module.lastUpdated | date : 'short'}}</td>
       </tr>
+
       <tr>
         <th>Documentation</th>
-        <td><a ng-href="{{module.documentationURL}}">{{module.documentationURL}}</a></td>
+        <td ng-if="!editable">
+          <a ng-href="{{module.documentationURL}}">
+            {{module.documentationURL}}
+          </a>
+        </td>
+        <td ng-if="editable">
+          <span editable-text="module.documentationURL"
+            e-placeholder="Documentation URL" onaftersave="updateModule()">
+            {{module.documentationURL}}
+          </span>
+        </td>
       </tr>
+
       <tr>
         <th>Latest Version</th>
         <td>{{latestRelease.moduleVersion}}</td>
       </tr>
+
       <tr>
         <th>Compatibility</th>
         <td>{{latestRelease.requiredOMRSVersion}}</td>
       </tr>
+
       <tr>
         <th>Downloads</th>
         <td>{{latestRelease.downloadCount}}</td>
@@ -59,8 +85,8 @@
 
 </div>
 
-<div class="row">
-  <h3>Releases</h3>
+<div class="row col-md-12">
+  <h2>Releases</h2>
   <table class="table">
     <tr>
       <th>Version</th>

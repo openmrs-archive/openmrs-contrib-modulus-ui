@@ -1,0 +1,9 @@
+.module-detail-table {
+  margin: 2em inherit;
+}
+.module-detail-table th {
+  width: 40%;
+}
+.module-detail-table td {
+  width: 60%;
+}

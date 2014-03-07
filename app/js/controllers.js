@@ -2,16 +2,20 @@
 
 angular.module('modulusOne.controllers', [])
 
-  .controller('ShowModuleCtrl', function($scope, Restangular, $routeParams, $location) {
+  .controller('ShowModuleCtrl', function($scope, Restangular, $routeParams,
+    $location, getModule) {
 
-    Restangular.one('modules', $routeParams.id).get()
-    .then(function(module) {
-      $scope.module = module
+    getModule($scope, $routeParams.id)
+    .then(function() {
 
-      return module.all('releases').getList()
+      if ($routeParams.slug !== $scope.module.slug) {
+        $location.path('/show/'+$scope.module.id+'/'+$scope.module.slug)
+      }
+    })
+    .then(function() {
+      return $scope.module.all('releases').getList()
     })
     .then(function(releases){
-      console.debug(releases)
       $scope.latestRelease = releases[releases.length - 1]
       $scope.module.releases = releases
     })
@@ -22,6 +26,10 @@ angular.module('modulusOne.controllers', [])
     $scope.editable = false
     $scope.toggleEdit = function() {
       $scope.editable = Boolean(1 - $scope.editable)
+    }
+
+    $scope.updateModule = function() {
+      return $scope.module.put()
     }
 
 
