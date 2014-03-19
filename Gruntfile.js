@@ -72,7 +72,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-template')
 
   grunt.registerTask('default', ['build'])
-  grunt.registerTask('serve', ['less', 'connect:development', 'watch'])
+  grunt.registerTask('serve', ['build', 'connect:development', 'watch'])
   grunt.registerTask('heroku', ['connect:heroku'])
   grunt.registerTask('build', ['template', 'less'])
 }

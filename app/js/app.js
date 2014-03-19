@@ -11,24 +11,36 @@ angular.module('modulusOne', [
   'xeditable',
   'angularFileUpload'
 ]).
-config(['$routeProvider', function($routeProvider) {
+config(['$routeProvider', function($routeProvider, $route) {
 
-  $routeProvider.when('/', {templateUrl: 'partials/listModules.html',
-    controller: 'ListModulesCtrl'})
+  $routeProvider.when('/', {
+    templateUrl: 'partials/listModules.html',
+    controller: 'ListModulesCtrl',
+    title: 'All Modules'
+  })
 
-  $routeProvider.when('/show/:id/:slug?', {templateUrl: 'partials/showModule.html',
-    controller: 'ShowModuleCtrl'})
+  $routeProvider.when('/show/:id/:slug?', {
+    templateUrl: 'partials/showModule.html',
+    controller: 'ShowModuleCtrl'
+  })
 
-  $routeProvider.when('/create', {templateUrl: 'partials/createModule.html'})
+  $routeProvider.when('/create', {
+    templateUrl: 'partials/createModule.html',
+    title: "Upload Module"
+  })
 
   $routeProvider.otherwise({redirectTo: '/'});
 
 }]).
-run(function(editableOptions, Restangular) {
+run(function($rootScope, editableOptions, Restangular, $route) {
   editableOptions.theme = 'bs3'
 
   Restangular.setBaseUrl(window.MODULUS_API_BASE_URL ||
     '/api')
 
   window.Restangular = Restangular
+
+  $rootScope.$on('$routeChangeSuccess', function() {
+    $rootScope.title = $route.current.title
+  })
 });

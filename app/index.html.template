@@ -5,7 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Modulo Uno</title>
+  <title ng-bind="$root.title + ' — OpenMRS Module Repository'">
+    OpenMRS Module Repository
+  </title>
 
   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="lib/angular/angular-csp.css">
@@ -38,7 +40,7 @@
             <a href="#/">All Modules</a>
           </li>
           <li>
-            <a href="#/create">Create Module</a>
+            <a href="#/create">Upload Module</a>
           </li>
         </ul>
       </nav> 

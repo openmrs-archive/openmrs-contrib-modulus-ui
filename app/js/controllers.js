@@ -3,10 +3,11 @@
 angular.module('modulusOne.controllers', [])
 
   .controller('ShowModuleCtrl', function($scope, Restangular, $routeParams,
-    $location, getModule) {
+    $location, getModule, $rootScope) {
 
     getModule($scope, $routeParams.id)
     .then(function() {
+      $rootScope.title = $scope.module.name
 
       if ($routeParams.slug !== $scope.module.slug) {
         $location.path('/show/'+$scope.module.id+'/'+$scope.module.slug)
