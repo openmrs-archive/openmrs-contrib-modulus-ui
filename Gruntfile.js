@@ -45,6 +45,10 @@ module.exports = function(grunt) {
         options: {
           livereload: true
         }
+      },
+      template: {
+        files: 'app/index.html.template',
+        tasks: ['template']
       }
     },
 
@@ -67,7 +71,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect')
   grunt.loadNpmTasks('grunt-template')
 
-  grunt.registerTask('default', ['less'])
+  grunt.registerTask('default', ['build'])
   grunt.registerTask('serve', ['less', 'connect:development', 'watch'])
   grunt.registerTask('heroku', ['connect:heroku'])
   grunt.registerTask('build', ['template', 'less'])

@@ -26,9 +26,11 @@
 
   <div class="container">
 
-    <div class="row">
+    <header class="clearfix">
 
-      <h1 class="col-sm-6">This is the Module Repository.</h1>
+      <h1 class="col-sm-6">
+        <a href="#/">Module Repository</a>
+      </h1>
 
       <nav class="col-sm-6 navbar navbar-default">
         <ul class="nav navbar-nav">
@@ -41,7 +43,7 @@
         </ul>
       </nav> 
 
-    </div>
+    </header>
 
     <div class="row alerts ng-hide" ng-controller="AlertCtrl" ng-repeat="alert in alerts">
 
