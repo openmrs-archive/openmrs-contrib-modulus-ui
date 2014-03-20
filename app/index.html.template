@@ -23,6 +23,8 @@
     <script type="text/javascript">
       var MODULUS_API_BASE_URL = "<%= modulusApiBaseUrl %>"
     </script>
+
+    <script type="text/javascript" id="globalnav-script" src="https://id.openmrs.org/globalnav/js/app-optimized.js"></script>
 </head>
 <body>
 
@@ -52,7 +54,12 @@
       <div class="alert alert-{{type}}">{{description}}</div>
     </div>
 
-    <div ng-view></div>
+    <div ng-view class="clearfix"></div>
+
+    <footer>
+      Powered by 
+      <a href="http://github.com/openmrs/openmrs-contrib-modulus">Modulus</a>
+    </footer>
 
   </div>
 

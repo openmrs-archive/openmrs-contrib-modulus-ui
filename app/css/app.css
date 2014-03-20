@@ -28,7 +28,15 @@ header nav {
 body {
   color: #363463;
   font-family: "Open Sans";
+}
+.container {
   margin: 1em auto 3em;
+}
+footer {
+  font-size: 0.8em;
+  color: #999999;
+  text-align: center;
+  margin-top: 3em;
 }
 .action {
   cursor: pointer;
