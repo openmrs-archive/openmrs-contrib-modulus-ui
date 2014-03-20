@@ -25,6 +25,13 @@ header nav {
   margin-top: 1.43em;
   margin-bottom: 0.71em;
 }
+.ListModulesCtrl .incomplete {
+  color: #999999;
+}
+.ListModulesCtrl .pagenum {
+  color: #999999;
+  line-height: 32px;
+}
 body {
   color: #363463;
   font-family: "Open Sans";
@@ -40,9 +47,6 @@ footer {
 }
 .action {
   cursor: pointer;
-}
-.module-list .incomplete {
-  color: #999999;
 }
 /* app css stylesheet */
 .menu {

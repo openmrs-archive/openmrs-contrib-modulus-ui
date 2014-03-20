@@ -29,6 +29,12 @@ config(['$routeProvider', function($routeProvider, $route) {
     title: "Upload Module"
   })
 
+  $routeProvider.when('/browse/:page?', {
+    templateUrl: 'partials/listModules.html',
+    controller: "ListModulesCtrl",
+    title: "Recently Updated Modules"
+  })
+
   $routeProvider.otherwise({redirectTo: '/'});
 
 }]).
@@ -40,7 +46,8 @@ run(function($rootScope, editableOptions, Restangular, $route) {
 
   window.Restangular = Restangular
 
-  $rootScope.$on('$routeChangeSuccess', function() {
+  $rootScope.$on('$routeChangeSuccess', function(evt, data) {
     $rootScope.title = $route.current.title
+    $rootScope.controller = $route.current.controller
   })
 });
