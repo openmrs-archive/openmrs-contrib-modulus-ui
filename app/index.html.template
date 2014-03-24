@@ -9,6 +9,7 @@
     OpenMRS Module Repository
   </title>
 
+  <link rel="shortcut icon" href="img/favicon.ico">
   <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="vendor/angular/angular-csp.css">
   <link rel="stylesheet" href="css/app.css"/>
