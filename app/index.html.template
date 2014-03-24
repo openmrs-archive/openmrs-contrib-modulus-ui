@@ -5,6 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <base href="<%= publicBaseUrl %>">
+
   <title ng-bind="$root.title && ($root.title + ' — OpenMRS Module Repository') || 'OpenMRS Module Repository'">
     OpenMRS Module Repository
   </title>
@@ -34,7 +36,7 @@
     <header class="clearfix">
 
       <h1 class="col-sm-6">
-        <a href="#/">Module Repository</a>
+        <a href="">Module Repository</a>
         <sup>
           <span class="label label-info">2.0</span>
         </sup>
@@ -43,13 +45,13 @@
       <nav class="col-sm-6 navbar navbar-default">
         <ul class="nav navbar-nav">
           <li>
-            <a href="#/browse">Browse Modules</a>
+            <a href="browse">Browse Modules</a>
           </li>
           <li>
-            <a href="#/search">Search for Modules</a>
+            <a href="search">Search for Modules</a>
           </li>
           <li>
-            <a href="#/create">Upload Module</a>
+            <a href="create">Upload Module</a>
           </li>
         </ul>
       </nav> 

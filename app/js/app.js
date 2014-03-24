@@ -11,7 +11,7 @@ angular.module('modulusOne', [
   'xeditable',
   'angularFileUpload'
 ]).
-config(['$routeProvider', function($routeProvider, $route) {
+config(function($routeProvider, $locationProvider) {
 
   $routeProvider.when('/', {
     templateUrl: 'partials/search.html',
@@ -40,9 +40,11 @@ config(['$routeProvider', function($routeProvider, $route) {
     title: "Recently Updated Modules"
   })
 
-  $routeProvider.otherwise({redirectTo: '/'});
+  $routeProvider.otherwise({redirectTo: '/'})
 
-}]).
+  $locationProvider.html5Mode(true).hashPrefix('!')
+
+}).
 run(function($rootScope, editableOptions, Restangular, $route, Alert) {
   editableOptions.theme = 'bs3'
 

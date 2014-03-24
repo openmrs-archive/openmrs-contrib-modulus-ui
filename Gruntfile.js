@@ -57,6 +57,7 @@ module.exports = function(grunt) {
         options: {
           data: {
             modulusApiBaseUrl: process.env.MODULUS_API_BASE_URL || '/api',
+            publicBaseUrl: process.env.MODULUS_UI_PUBLIC_BASE_URL || '/'
           }
         },
         files: {

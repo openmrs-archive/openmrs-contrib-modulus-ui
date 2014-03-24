@@ -22,12 +22,12 @@
 
   <tr ng-repeat="module in modules">
       <td>
-        <a ng-href="#/show/{{module.id}}/{{module.slug}}">
+        <a ng-href="show/{{module.id}}/{{module.slug}}">
           {{module.name}}
         </a>
       </td>
       <td>
-        <a ng-href="#/show/{{module.id}}/{{module.slug}}">
+        <a ng-href="show/{{module.id}}/{{module.slug}}">
           {{module.description}}
         </a>
       </td>
@@ -37,10 +37,10 @@
 
 <ul class="pager" ng-if="showPager && modules.length">
   <li class="previous" ng-class="{disabled: page < 2}">
-    <a ng-href="#/browse/{{page - 1}}">&larr; Older</a>
+    <a ng-href="browse/{{page - 1}}">&larr; Older</a>
   </li>
   <li class="pagenum">Page {{page}}</li>
   <li class="next">
-    <a ng-href="#/browse/{{page + 1}}">Newer &rarr;</a>
+    <a ng-href="browse/{{page + 1}}">Newer &rarr;</a>
   </li>
 </ul> 
