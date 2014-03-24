@@ -1,7 +1,6 @@
 // Declare app level module which depends on filters, and services
 angular.module('modulusOne', [
   'ngRoute',
-  'ngResource',
   'restangular',
   'modulusOne.filters',
   'modulusOne.services',
