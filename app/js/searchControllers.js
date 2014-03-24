@@ -1,12 +1,9 @@
 angular.module('modulusOne.searchControllers', [])
 
-  .controller('SearchCtrl', function($scope, Restangular, $routeParams,
-    $location) {
+  .controller('SearchCtrl', function($scope, Restangular, $location) {
 
 
     $scope.searching = false
-    $scope.query = $routeParams.query
-
 
     // Initial query for the homepage
     if ($location.path() === '/') {
@@ -20,22 +17,25 @@ angular.module('modulusOne.searchControllers', [])
     }
 
     function doSearch(query) {
-      query = query || $scope.query
+      $scope.query = query
 
-      if (!query || $scope.searching) {
+      if (!$scope.query || $scope.searching) {
         return
       }
 
       $scope.searching = true
       Restangular.oneUrl('search').get({
-        q: query
+        q: $scope.query
       })
       .then(function(results) {
         $scope.searching = false
         $scope.results = results
         $scope.modules = results.items
+
+        // $location.path('/search/' + query)
       })
     }
+    $scope.doSearch = doSearch
 
     $scope.$watch('query', _.throttle(doSearch, 500, {trailing: true}))
   })

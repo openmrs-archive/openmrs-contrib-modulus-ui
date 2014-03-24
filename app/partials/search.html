@@ -5,7 +5,7 @@
 </section>
 
 <p ng-if="query && results.suggestion">
-  Did you mean <a ng-href="#/search/{{results.suggestion}}">
+  Did you mean <a class="action" ng-click="doSearch(results.suggestion)">
   {{results.suggestion}}</a>?
 </p>
 

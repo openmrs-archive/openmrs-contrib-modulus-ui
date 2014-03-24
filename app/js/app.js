@@ -19,7 +19,7 @@ config(['$routeProvider', function($routeProvider, $route) {
     title: null,
   })
 
-  $routeProvider.when('/search/:query?', {
+  $routeProvider.when('/search', {
     templateUrl: 'partials/search.html',
     controller: 'SearchCtrl'
   })
