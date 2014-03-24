@@ -53,6 +53,7 @@ angular.module('modulusOne.controllers', [])
   .controller('ListModulesCtrl', function($scope, Restangular, isCompleted,
     $routeParams) {
 
+      $scope.showPager = true
       $scope.pageSize = 25
       $scope.page = parseInt($routeParams.page, 10) || 1
 
@@ -76,10 +77,6 @@ angular.module('modulusOne.controllers', [])
       $scope.canPageLeft = function() {
         return $scope.page > 1
       }
-
-  })
-
-  .controller('AlertCtrl', function($scope) {
 
   })
 

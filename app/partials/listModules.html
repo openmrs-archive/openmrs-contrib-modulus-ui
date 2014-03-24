@@ -1,6 +1,4 @@
-<h2>Recently Updated Modules</h2>
-
-<ul class="pager">
+<ul class="pager" ng-if="showPager">
   <li class="previous" ng-class="{disabled: !canPageLeft()}"
     ng-switch on="canPageLeft()">
       <a ng-switch-when="true" ng-href="#/browse/{{page - 1}}">&larr; Newer</a>
@@ -37,7 +35,7 @@
 
 </table>
 
-<ul class="pager" ng-if="modules.length">
+<ul class="pager" ng-if="showPager && modules.length">
   <li class="previous" ng-class="{disabled: page < 2}">
     <a ng-href="#/browse/{{page - 1}}">&larr; Older</a>
   </li>

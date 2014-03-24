@@ -1,0 +1,14 @@
+<section class="search">
+  <span class="glyphicon glyphicon-search searchbar-icon"></span>
+  <input type="text" autofocus="true" ng-model="query"
+    placeholder="Search for Modules...">
+</section>
+
+<p ng-if="query && results.suggestion">
+  Did you mean <a ng-href="#/search/{{results.suggestion}}">
+  {{results.suggestion}}</a>?
+</p>
+
+
+<section ng-include="'/partials/listModules.html'">
+</section>

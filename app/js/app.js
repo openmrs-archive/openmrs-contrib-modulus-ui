@@ -8,15 +8,21 @@ angular.module('modulusOne', [
   'modulusOne.directives',
   'modulusOne.controllers',
   'modulusOne.createControllers',
+  'modulusOne.searchControllers',
   'xeditable',
   'angularFileUpload'
 ]).
 config(['$routeProvider', function($routeProvider, $route) {
 
   $routeProvider.when('/', {
-    templateUrl: 'partials/listModules.html',
-    controller: 'ListModulesCtrl',
-    title: 'All Modules'
+    templateUrl: 'partials/search.html',
+    controller: 'SearchCtrl',
+    title: null,
+  })
+
+  $routeProvider.when('/search/:query?', {
+    templateUrl: 'partials/search.html',
+    controller: 'SearchCtrl'
   })
 
   $routeProvider.when('/show/:id/:slug?', {
@@ -30,7 +36,7 @@ config(['$routeProvider', function($routeProvider, $route) {
   })
 
   $routeProvider.when('/browse/:page?', {
-    templateUrl: 'partials/listModules.html',
+    templateUrl: 'partials/browse.html',
     controller: "ListModulesCtrl",
     title: "Recently Updated Modules"
   })
