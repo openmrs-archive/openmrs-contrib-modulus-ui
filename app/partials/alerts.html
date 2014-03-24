@@ -1,0 +1,15 @@
+<aside ng-repeat="alert in $root.alerts" class="alert alert-{{alert.type}}">
+  {{alert.message}}
+
+  <a class="action" ng-if="alert.details" 
+    ng-click="alert.toggleDetails()">
+      [details]
+  </a>
+  
+  <small ng-if="alert.showDetails">{{alert.details}}</small>
+
+  <button type="button" class="close" aria-hidden="true"
+    ng-click="alert.close()">
+      &times;
+  </button>
+</aside>

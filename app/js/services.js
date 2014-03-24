@@ -85,6 +85,34 @@ angular.module('modulusOne.services', [])
     }
   })
 
+  .factory('Alert', function($rootScope) {
+    $rootScope.alerts = $rootScope.alerts || []
+
+    function Alert(type, message) {
+      this.type = type
+      this.message = message
+      this.isOpen = false
+      this.showDetails = false
+
+      return this
+    }
+
+    Alert.prototype.open = function open() {
+      $rootScope.alerts.push(this)
+      this.isOpen = true
+    }
+    Alert.prototype.close = function close() {
+      this.showDetails = false
+      _.pull($rootScope.alerts, this)
+      this.isOpen = false
+    }
+    Alert.prototype.toggleDetails = function toggleDetails() {
+      this.showDetails = Boolean(this.showDetails - 1)
+    }
+
+    return Alert
+  })
+
 
 
 

@@ -43,13 +43,36 @@ config(['$routeProvider', function($routeProvider, $route) {
   $routeProvider.otherwise({redirectTo: '/'});
 
 }]).
-run(function($rootScope, editableOptions, Restangular, $route) {
+run(function($rootScope, editableOptions, Restangular, $route, Alert) {
   editableOptions.theme = 'bs3'
 
   Restangular.setBaseUrl(window.MODULUS_API_BASE_URL ||
     '/api')
 
-  window.Restangular = Restangular
+  var apiError = new Alert('danger', 'Uh oh! Error communicating with the Modulus server.')
+  Restangular.setErrorInterceptor(function(response, promise) {
+
+    if (response.status < 500) { // Errors below 500 are user / resource errors
+      return true
+    }
+
+    if (console.error) {
+      console.error('Modulus API Error', response)
+    }
+    apiError.details = _.template('<%=config.method%> <%=config.url%> <%=status%>', response)
+    apiError.open()
+  })
+
+  Restangular.addResponseInterceptor(function(data, operation, what, url,
+    response, deferred) {
+
+      if (response.status < 500 && apiError.isOpen) {
+        apiError.close()
+      }
+
+      return data
+  })
+
 
   $rootScope.$on('$routeChangeSuccess', function(evt, data) {
     $rootScope.title = $route.current.title

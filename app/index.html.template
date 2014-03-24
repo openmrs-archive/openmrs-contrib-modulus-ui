@@ -56,12 +56,8 @@
 
     </header>
 
-    <aside class="row alerts">
-
-      <p ng-repeat="alert in $root.alerts" class="alert alert-{{alert.type}}">
-        {{alert.content}}
-      </p>
-    </aside>
+    <section class="row alerts" ng-include="'partials/alerts.html'">
+    </section>
 
     <section ng-view class="clearfix" ng-class="$root.controller"></section>
 

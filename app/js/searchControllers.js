@@ -7,7 +7,6 @@ angular.module('modulusOne.searchControllers', [])
     $scope.searching = false
     $scope.query = $routeParams.query
 
-    console.log('path', $location.path(), $location.path() === '/')
 
     // Initial query for the homepage
     if ($location.path() === '/') {
