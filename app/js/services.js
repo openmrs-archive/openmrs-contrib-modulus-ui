@@ -98,7 +98,9 @@ angular.module('modulusOne.services', [])
     }
 
     Alert.prototype.open = function open() {
-      $rootScope.alerts.push(this)
+      if (!_.contains($rootScope.alerts, this)) {
+        $rootScope.alerts.push(this)
+      }
       this.isOpen = true
     }
     Alert.prototype.close = function close() {
@@ -111,6 +113,23 @@ angular.module('modulusOne.services', [])
     }
 
     return Alert
+  })
+
+  .factory('prepareModule', function() {
+    return function(module) {
+      // Remove release subresource data. This makes requests smaller and
+      // prevents a duplicate resource bug on module upload.
+      var releases = module.releases
+      if (!releases) {
+        return module
+      }
+
+      module.releases = _.map(releases, function(release) {
+        return {class: release.class, id: release.id}
+      })
+
+      return module
+    }
   })
 
 

@@ -2,14 +2,13 @@
 angular.module('modulusOne.createControllers', [])
 
   .controller('CreateCtrl', function($scope, Restangular, isCompleted, isEmpty,
-    $location) {
+    $location, Alert) {
 
 
     // Create a fresh module
     Restangular.all('modules').post()
     .then(function(module) {
       $scope.module = module
-      console.debug('module created')
     })
 
     // Create a fresh release
@@ -22,15 +21,10 @@ angular.module('modulusOne.createControllers', [])
       // happened on the server)
       $scope.module.releases = [release]
       $scope.release = $scope.module.releases[0]
-      console.debug('release created')
     })
 
-    .catch(function(err) {
-      console.error('create resources error', err)
-    })
+
     .finally(function() {
-      console.debug('resources created')
-
       window.module = $scope.module
       window.release = $scope.release
     })
@@ -42,7 +36,6 @@ angular.module('modulusOne.createControllers', [])
         var quit = confirm('You have not finished uploading this module, and it will be '+
           'deleted. Continue?')
         if (quit) {
-          console.debug("Deleting unfinished module")
           window.removeEventListener("beforeunload", this)
           return $scope.module.remove();
         } else {
@@ -57,15 +50,26 @@ angular.module('modulusOne.createControllers', [])
 
     // Delete the module and release being created
     $scope.cancelUpload = function cancelUpload() {
-      return $scope.module.remove();
+      if ($scope.module) {
+        return $scope.module.remove()
+        .finally(function() {
+          $location.path('/')
+        })
+      } else {
+        $location.path('/')
+      }
     }
 
     // Update the module's and its releases' metadata
-    $scope.metadataUpdate = function metadataUpdate() {
-      $scope.module.put()
+    $scope.finishCreation = function finishCreation() {
+      $scope.release.put()
+      .then(function() {
+        return $scope.module.put()
+      })
       .finally(function() {
-        console.log('Created module')
-        $location.path('/')
+        new Alert('success', $scope.module.name + ' was created and uploaded. '+
+          'Thank you for your contribution!').open()
+        $location.path('/show/'+$scope.module.id)
       })
     }
 
@@ -76,7 +80,7 @@ angular.module('modulusOne.createControllers', [])
 
 
 
-  .controller('ReleaseFileCtrl', function($scope, $upload, Restangular) {
+  .controller('ReleaseFileCtrl', function($scope, $upload, Restangular, Alert) {
 
     function onProgress(evt) {
       $scope.progress = parseInt(100.0 * evt.loaded / evt.total)
@@ -84,15 +88,17 @@ angular.module('modulusOne.createControllers', [])
 
     function onSuccess(data, status, headers, config) {
       // file is uploaded successfully
-      console.debug("upload success", data)
 
       for (var k in data) {
-        $scope.release[k] = data[k]
+        $scope.release[k] = $scope.release[k] || data[k]
       }
     }
 
-    function onError() {
-      console.error('it broke')
+    function onError(err) {
+      if (console.error) {
+        console.error('Release upload error', err)
+      }
+      new Alert('danger', 'Encountered error while uploading release.').open()
     }
 
     // Use file chooser to pick a file
@@ -121,8 +127,6 @@ angular.module('modulusOne.createControllers', [])
         var buf = new Uint8Array(fileReader.result)
             url = Restangular.one('modules', $scope.module.id).all('releases')
                     .one('upload', $scope.release.id)
-
-        console.debug('url', url.getRestangularUrl())
 
         $scope.upload = $upload.http({
           url: url.getRestangularUrl(),

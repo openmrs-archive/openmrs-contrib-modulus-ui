@@ -60,7 +60,8 @@ angular.module('modulusOne.controllers', [])
       Restangular.all('modules').getList({
         max: $scope.pageSize,
         offset: ($scope.page - 1) * $scope.pageSize,
-        sort: 'lastUpdated'
+        sort: 'lastUpdated',
+        order: 'desc'
       })
       .then(function(modules) {
         $scope.modules = _.filter(modules, isCompleted)

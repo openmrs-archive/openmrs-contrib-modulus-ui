@@ -11,7 +11,7 @@ angular.module('modulusOne', [
   'xeditable',
   'angularFileUpload'
 ]).
-config(['$routeProvider', function($routeProvider, $route) {
+config(function($routeProvider, RestangularProvider) {
 
   $routeProvider.when('/', {
     templateUrl: 'partials/search.html',
@@ -42,8 +42,9 @@ config(['$routeProvider', function($routeProvider, $route) {
 
   $routeProvider.otherwise({redirectTo: '/'});
 
-}]).
-run(function($rootScope, editableOptions, Restangular, $route, Alert) {
+}).
+run(function($rootScope, editableOptions, Restangular, $route, Alert,
+  prepareModule) {
   editableOptions.theme = 'bs3'
 
   Restangular.setBaseUrl(window.MODULUS_API_BASE_URL ||
@@ -51,10 +52,6 @@ run(function($rootScope, editableOptions, Restangular, $route, Alert) {
 
   var apiError = new Alert('danger', 'Uh oh! Error communicating with the Modulus server.')
   Restangular.setErrorInterceptor(function(response, promise) {
-
-    if (response.status < 500) { // Errors below 500 are user / resource errors
-      return true
-    }
 
     if (console.error) {
       console.error('Modulus API Error', response)
@@ -71,6 +68,15 @@ run(function($rootScope, editableOptions, Restangular, $route, Alert) {
       }
 
       return data
+  })
+
+  Restangular.addRequestInterceptor(function(element) {
+    if (element && element.class === "org.openmrs.modulus.Module") {
+      console.debug('using prepareModule', 'before=', element)
+      element = prepareModule(element)
+      console.debug('after=', element)
+    }
+    return element
   })
 
 
