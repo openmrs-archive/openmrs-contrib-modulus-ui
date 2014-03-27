@@ -7,3 +7,7 @@
   cursor: copy;
   background: #eee;
 }
+body.readonly .CreateCtrl {
+  opacity: 0.5;
+  pointer-events: none;
+}

@@ -1,6 +1,7 @@
 // Declare app level module which depends on filters, and services
 angular.module('modulusOne', [
   'ngRoute',
+  'ngSanitize',
   'restangular',
   'modulusOne.filters',
   'modulusOne.services',
@@ -31,7 +32,8 @@ config(function($routeProvider, RestangularProvider) {
 
   $routeProvider.when('/create', {
     templateUrl: 'partials/createModule.html',
-    title: "Upload Module"
+    title: "Upload Module",
+    controller: "CreateCtrl"
   })
 
   $routeProvider.when('/browse/:page?', {
@@ -84,4 +86,6 @@ run(function($rootScope, editableOptions, Restangular, $route, Alert,
     $rootScope.title = $route.current.title
     $rootScope.controller = $route.current.controller
   })
+
+  $rootScope.modulusApiReadOnly = MODULUS_API_READ_ONLY
 });

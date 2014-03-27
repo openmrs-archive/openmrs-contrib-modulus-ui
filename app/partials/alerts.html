@@ -1,5 +1,7 @@
 <aside ng-repeat="alert in $root.alerts" class="alert alert-{{alert.type}}">
-  {{alert.message}}
+  
+  <span ng-if="!alert.partial" ng-bind-html="alert.message"></span>
+  <span ng-if="alert.partial" ng-include="alert.partial"></span>
 
   <a class="action" ng-if="alert.details" 
     ng-click="alert.toggleDetails()">

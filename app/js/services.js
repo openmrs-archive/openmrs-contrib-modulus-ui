@@ -93,6 +93,7 @@ angular.module('modulusOne.services', [])
       this.message = message
       this.isOpen = false
       this.showDetails = false
+      this.partial = null
 
       return this
     }
@@ -102,14 +103,21 @@ angular.module('modulusOne.services', [])
         $rootScope.alerts.push(this)
       }
       this.isOpen = true
+      return this
     }
     Alert.prototype.close = function close() {
       this.showDetails = false
       _.pull($rootScope.alerts, this)
       this.isOpen = false
+      return this
     }
     Alert.prototype.toggleDetails = function toggleDetails() {
       this.showDetails = Boolean(this.showDetails - 1)
+      return this
+    }
+    Alert.prototype.include = function(partial) {
+      this.partial = partial
+      return this
     }
 
     return Alert
@@ -130,6 +138,11 @@ angular.module('modulusOne.services', [])
 
       return module
     }
+  })
+
+  .factory('readonlyAlert', function(Alert) {
+    return new Alert('info')
+      .include('partials/readonlyMessage.html')
   })
 
 

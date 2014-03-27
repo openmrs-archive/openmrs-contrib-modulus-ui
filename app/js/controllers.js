@@ -3,7 +3,7 @@
 angular.module('modulusOne.controllers', [])
 
   .controller('ShowModuleCtrl', function($scope, Restangular, $routeParams,
-    $location, getModule, $rootScope) {
+    $location, getModule, $rootScope, readonlyAlert) {
 
     getModule($scope, $routeParams.id)
     .then(function() {
@@ -26,6 +26,10 @@ angular.module('modulusOne.controllers', [])
     // Editability
     $scope.editable = false
     $scope.toggleEdit = function() {
+      if (MODULUS_API_READ_ONLY) {
+        readonlyAlert.open()
+        return false
+      }
       $scope.editable = Boolean(1 - $scope.editable)
     }
 
@@ -35,6 +39,11 @@ angular.module('modulusOne.controllers', [])
 
 
     $scope.confirmDeleteModule = function() {
+      if (MODULUS_API_READ_ONLY) {
+        readonlyAlert.open()
+        return false
+      }
+
       if (confirm('"' + $scope.module.name + '" will be deleted.')) {
 
         $scope.module.remove()

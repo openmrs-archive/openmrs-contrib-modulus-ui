@@ -2,7 +2,14 @@
 angular.module('modulusOne.createControllers', [])
 
   .controller('CreateCtrl', function($scope, Restangular, isCompleted, isEmpty,
-    $location, Alert) {
+    $location, Alert, readonlyAlert) {
+
+
+    // If read only, do not allow this controller to be defined.
+    if (MODULUS_API_READ_ONLY) {
+      readonlyAlert.open()
+      return false
+    }
 
 
     // Create a fresh module
@@ -81,6 +88,11 @@ angular.module('modulusOne.createControllers', [])
 
 
   .controller('ReleaseFileCtrl', function($scope, $upload, Restangular, Alert) {
+
+    // If read only, do not allow this controller to be defined.
+    if (MODULUS_API_READ_ONLY) {
+      return false
+    }
 
     function onProgress(evt) {
       $scope.progress = parseInt(100.0 * evt.loaded / evt.total)

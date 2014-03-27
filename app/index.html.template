@@ -23,11 +23,14 @@
 
   <script type="text/javascript">
     var MODULUS_API_BASE_URL = "<%= modulusApiBaseUrl %>"
+
+    // don't flip this one, please
+    var MODULUS_API_READ_ONLY = <%= modulusApiReadOnly %>
   </script>
 
   <script type="text/javascript" id="globalnav-script" src="https://id.openmrs.org/globalnav/js/app-optimized.js"></script>
 </head>
-<body>
+<body ng-class="{readonly: $root.modulusApiReadOnly}">
 
   <div class="container">
 
@@ -85,6 +88,7 @@
   -->
   <script src="vendor/angular/angular.min.js"></script>
   <script src="vendor/angular-route/angular-route.min.js"></script>
+  <script src="vendor/angular-sanitize/angular-sanitize.min.js"></script>
   <script src="vendor/restangular/dist/restangular.min.js"></script>
   <script src="vendor/angular-xeditable/dist/js/xeditable.min.js"></script>
   <script src="vendor/danialfarid-angular-file-upload/dist/angular-file-upload.min.js"></script> 
