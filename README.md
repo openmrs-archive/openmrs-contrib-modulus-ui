@@ -3,7 +3,7 @@ Modulus UI
 
 This is the web-based reference interface for [Modulus][1], the OpenMRS Module Repository. It's scaffolded from [angular-seed][2].
 
-    $ git clone https://github.com/elliottwilliams/openmrs-contrib-modulus-ui.git
+    $ git clone https://github.com/openmrs/openmrs-contrib-modulus-ui.git
     $ cd openmrs-contrib-modulus-ui
 
     $ npm install
