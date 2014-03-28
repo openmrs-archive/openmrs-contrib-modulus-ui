@@ -2,11 +2,10 @@ angular.module('modulusOne.searchControllers', [])
 
   .controller('SearchCtrl', function($scope, Restangular, $location) {
 
-
     $scope.searching = false
 
-    // Initial query for the homepage
-    if ($location.path() === '/') {
+    // Default query for the homepage or search page
+    var defaultSearchResults = function() {
       Restangular.all('modules').getList({
         max: 25,
         sort: 'downloadCount',
@@ -16,10 +15,21 @@ angular.module('modulusOne.searchControllers', [])
       })
     }
 
+    if ($location.path() === '/') {
+      defaultSearchResults();
+    }
+
     function doSearch(query) {
       $scope.query = query
 
-      if (!$scope.query || $scope.searching) {
+      // Abort if we're in the middle of searching
+      if ($scope.searching) {
+        return
+      }
+
+      // If query field empty, return default list of modules
+      if (!$scope.query) {
+        defaultSearchResults()
         return
       }
 
