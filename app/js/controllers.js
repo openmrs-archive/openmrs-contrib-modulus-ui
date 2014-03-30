@@ -5,17 +5,24 @@ angular.module('modulusOne.controllers', [])
   .controller('ShowModuleCtrl', function($scope, Restangular, $routeParams,
     $location, getModule, $rootScope, readonlyAlert) {
 
+    // Load this page's module.
     getModule($scope, $routeParams.id)
     .then(function() {
       $rootScope.title = $scope.module.name
 
+      // Redirect to the "complete" URL if necessary (like /show/id/slug)
       if ($routeParams.slug !== $scope.module.slug) {
         $location.path('/show/'+$scope.module.id+'/'+$scope.module.slug)
       }
     })
+
+    // Load all releases for this module.
     .then(function() {
-      return $scope.module.all('releases').getList()
+      return $scope.module.all('releases').getList({sort: 'dateCreated',
+        order: 'desc'})
     })
+
+    // Stick release variables into scope.
     .then(function(releases){
       $scope.latestRelease = releases[releases.length - 1]
       $scope.module.releases = releases
