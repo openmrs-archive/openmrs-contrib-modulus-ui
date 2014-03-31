@@ -24,7 +24,7 @@ angular.module('modulusOne.controllers', [])
 
     // Stick release variables into scope.
     .then(function(releases){
-      $scope.latestRelease = releases[releases.length - 1]
+      $scope.latestRelease = releases[0] // release list sorted by dateCreated
       $scope.module.releases = releases
     })
 

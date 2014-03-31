@@ -1,25 +1,50 @@
 Modulus UI
 =====
 
-This is the web-based reference interface for [Modulus][1], the OpenMRS Module Repository. It's scaffolded from [angular-seed][2].
+This is the web-based reference interface for [Modulus][1], the OpenMRS Module Repository. It's a static, single-page web application written in AngularJS and provides a frontend to Modulus's REST API.
 
-    $ git clone https://github.com/openmrs/openmrs-contrib-modulus-ui.git
-    $ cd openmrs-contrib-modulus-ui
+Building
+-----
 
-    $ npm install
+1. You need [Node][0] v0.8 or greated installed.
 
-Set environment variable `MODULUS_API_BASE_URL` to the URL for your Modulus server's api. For example:
+2. Clone the source code:
 
-    $ export MODULUS_API_BASE_URL=http://localhost:8080/api
+        $ git clone https://github.com/openmrs/openmrs-contrib-modulus-ui.git
+        $ cd openmrs-contrib-modulus-ui
+        
+3. Install all dependencies:
 
-Then run `grunt build` to configure the application.
+        $ npm install
+    
+        # If you don't already have grunt installed on your system:
+        $ npm install -g grunt-cli
+        
+4. Set environment variable `MODULUS_API_BASE_URL` to the URL for your Modulus server's api:
+
+        $ export MODULUS_API_BASE_URL=http://localhost:8080/api
+
+5. Build & run:
+
+        # To build a static copy of Modulus UI in ./app:
+        $ grunt build
+        
+        # To run a development server:
+        $ grunt serve
 
 ---
 
-Modulus UI can be served statically (from the `app` directory). To run the development server, which will compile live-reload LESS stylesheets, run
+Contribute
+-----
 
-    $ grunt serve
+We'd love it if you'd like to give ideas, code contributions, or criticisms.
 
+Most feedback and development coordination is on the [Module Repository JIRA Project][3].
 
+Continous deployment is managed on [OpenMRS CI][4]. `master` auto-deploys to https://modules-stg.openmrs.org and `prod` auto-deploys to https://modules.openmrs.org
+
+[0]: http://nodejs.org
 [1]: https://github.com/elliottwilliams/openmrs-contrib-modulus
 [2]: https://github.com/angular/angular-seed
+[3]: https://tickets.openmrs.org/browse/MOD
+[4]: https://ci.openmrs.org/browse/MOD-UI
