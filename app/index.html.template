@@ -36,11 +36,11 @@
 
     <header class="clearfix">
 
+
       <h1 class="col-sm-6">
-        <a href="#/">Module Repository</a>
-        <sup>
-          <span class="label label-info">2.0</span>
-        </sup>
+        <a href="#/">
+          <img class="logo" src="img/logo-black.svg" alt="OpenMRS Modules">
+        </a>
       </h1>
 
       <nav class="col-sm-6 navbar navbar-default">
