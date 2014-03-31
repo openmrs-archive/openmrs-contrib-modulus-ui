@@ -4,11 +4,13 @@ header {
   padding-bottom: 1.5em;
 }
 header h1 {
-  background: url('/img/logo-cross.svg') no-repeat;
-  background-size: 1.1em 1.1em;
-  text-indent: 1.3em;
   margin-bottom: 10px;
   padding-bottom: 10px;
+  position: relative;
+  height: 1.361111111em;
+}
+header h1 img {
+  height: 100%;
 }
 header h1 a,
 header h1 a:link,
