@@ -1,7 +1,7 @@
 Modulus UI
 =====
 
-This is the web-based reference interface for [Modulus][1], the OpenMRS Module Repository. It's a static, single-page web application written in AngularJS and provides a frontend to Modulus's REST API.
+This is the web-based interface of [Modulus][1], the OpenMRS Modules directory. It's a static, single-page web application written in AngularJS and provides a frontend to Modulus's REST API.
 
 Building
 -----
@@ -39,7 +39,7 @@ Contribute
 
 We'd love it if you'd like to give ideas, code contributions, or criticisms.
 
-Most feedback and development coordination is on the [Module Repository JIRA Project][3].
+Most feedback and development coordination is on the [MOD JIRA Project][3].
 
 Continous deployment is managed on [OpenMRS CI][4]. `master` auto-deploys to https://modules-stg.openmrs.org and `prod` auto-deploys to https://modules.openmrs.org
 
