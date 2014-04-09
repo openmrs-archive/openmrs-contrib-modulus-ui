@@ -35,10 +35,10 @@ header nav {
   margin-bottom: 0.71em;
 }
 .ListModulesCtrl .incomplete {
-  color: #999999;
+  color: #555555;
 }
 .ListModulesCtrl .pagenum {
-  color: #999999;
+  color: #555555;
   line-height: 32px;
 }
 .SearchCtrl .search {
@@ -55,7 +55,7 @@ header nav {
 .SearchCtrl .search .searchbar-icon {
   position: absolute;
   padding: 0.15em 0.4em;
-  color: #999999;
+  color: #555555;
   line-height: 1.42em;
 }
 body {
@@ -67,12 +67,16 @@ body {
 }
 footer {
   font-size: 0.8em;
-  color: #999999;
+  color: #555555;
   text-align: center;
   margin-top: 3em;
 }
 .action {
   cursor: pointer;
+}
+a,
+a:link {
+  color: #275c8a;
 }
 /* app css stylesheet */
 .menu {
