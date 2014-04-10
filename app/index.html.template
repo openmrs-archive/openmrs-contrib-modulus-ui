@@ -81,6 +81,7 @@
   <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="vendor/lodash/dist/lodash.min.js"></script>
   <script src="vendor/danialfarid-angular-file-upload/dist/angular-file-upload-shim.min.js"></script>
+  <script src="vendor/select2/select2.min.js"></script>
 
 
   <!-- In production use:
@@ -92,10 +93,12 @@
   <script src="vendor/restangular/dist/restangular.min.js"></script>
   <script src="vendor/angular-xeditable/dist/js/xeditable.min.js"></script>
   <script src="vendor/danialfarid-angular-file-upload/dist/angular-file-upload.min.js"></script> 
+  <script src="vendor/angular-ui-select2/src/select2.js"></script>
 
   <script src="js/app.js"></script>
   <script src="js/services.js"></script>
-  <script src="js/controllers.js"></script>
+  <script src="js/listControllers.js"></script>
+  <script src="js/showControllers.js"></script>
   <script src="js/createControllers.js"></script>
   <script src="js/searchControllers.js"></script>
   <script src="js/filters.js"></script>

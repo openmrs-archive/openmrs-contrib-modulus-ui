@@ -71,6 +71,11 @@
         <th>Downloads</th>
         <td>{{latestRelease.downloadCount}}</td>
       </tr>
+
+      <tr>
+        <th>Owner</th>
+        <td ng-bind-html="module.owner | user"></td>
+      </tr>
     </table>
   </div>
 
