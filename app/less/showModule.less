@@ -1,12 +1,30 @@
+@import 'styleGuide';
 @import url('/vendor/select2/select2.css');
 
 .module-detail-table {
   margin: 2em inherit;
 
   th {
-    width: 40%
+    width: 40%;
+    .tooltip { font-weight: normal }
+    .glyphicon { font-weight: normal }
   }
   td {
-    width: 60%
+    width: 60%;
+  }
+
+  .no-users-label, {
+    color: @deemphasized;
+    font-style: italic;
+  }
+
+  .helptext {
+    font-style: italic;
+    font-size: small;
+    font-weight: normal;
+  }
+
+  .select-container {
+    min-width: 18em
   }
 }

@@ -25,6 +25,14 @@ footer {
   cursor: pointer;
 }
 
+// Bootstrap Overrides
+.tooltip, {
+  // WebKit/Blink (in my opinion) renders light-on-dark text too heavily.
+  // Using this custom unstandardized property, the rendering method can
+  // be adjusted, which should make the glyps a little lighter. This property
+  // should NEVER be used on dark-on-light text.
+  -webkit-font-smoothing: antialiased;
+}
 
 
 /* app css stylesheet */

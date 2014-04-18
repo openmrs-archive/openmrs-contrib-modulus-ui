@@ -1,4 +1,4 @@
-angular.module('modulusOne.showControllers', ['ui.select2'])
+angular.module('modulusOne.showControllers', ['ui'])
 .controller('ShowModuleCtrl', function($scope, Restangular, $routeParams,
     $location, getModule, $rootScope, readonlyAlert) {
 
@@ -37,8 +37,18 @@ angular.module('modulusOne.showControllers', ['ui.select2'])
       $scope.editable = Boolean(1 - $scope.editable)
     }
 
-    $scope.updateModule = function() {
+    $scope.updateModule = function(toggleEditWhenDone) {
       return $scope.module.put()
+      .then(function(updatedModule) {
+        // copy the release list since it has not changed
+        var releases = $scope.module.releases
+
+        // update the module record in scope
+        $scope.module = updatedModule
+        $scope.module.releases = releases
+
+        if (toggleEditWhenDone) $scope.toggleEdit()
+      })
     }
 
 
@@ -63,9 +73,109 @@ angular.module('modulusOne.showControllers', ['ui.select2'])
 
   })
 
-.filter('user', function($sanitize) {
+// Manages Select2 elements used to search for and find users
+.controller('UserSelectController', function($scope, Restangular) {
+
+  // Using these fake values helps Select2 recognize that there is data to
+  // be loaded, and thus call its `initSelection()` method, which is what
+  // load the _actual_ initial data.
+  var dummyOwner = $scope.chosenOwner = {id: 0, text: 'Loading...'}
+  var dummyMaintainers = $scope.chosenMaintainers = [{id: 0, text: 'Loading...'}]
+
+  // Update the Module object when the selected owner changes
+  $scope.$watch('chosenOwner', function(newValue, oldValue) {
+
+    // AngularUI-Select2's current implementation weirdly changes the object
+    // bound to newValue to a string, after user interaction. We only want to
+    // update the canonical module object when chosenOwner is an object.
+    if (typeof newValue === 'object' && newValue != dummyOwner) {
+      $scope.module.owner = {id: newValue.id, username: newValue.text}
+    }
+  })
+
+  // Update the Module object when the selected maintainers change
+  $scope.$watch('chosenMaintainers', function(newValue, oldValue) {
+
+    // AngularUI-Select2's current implementation weirdly changes the array
+    // bound to newValue to a string, after user interaction. We only want to
+    // update the canonical module object when chosenMaintainers is an array.
+    if (typeof newValue === 'object' && newValue != dummyMaintainers) {
+      $scope.module.maintainers = newValue.map(function(u) {
+        return {id: u.id, username: u.text}
+      })
+    }
+  })
+
+  // Search for users within the select2 interface
+  function selectUsernameSearch(options) {
+    // Query the API for users
+    Restangular.oneUrl('search').get({
+      type: 'user',
+      q: options.term
+    })
+
+    // Map search results into data understandable by select2
+    .then(function(search) {
+      return search.items.map(function(user) {
+        return {id: user.id, text: user.username}
+      })
+    })
+
+    // Return these mapped results
+    .then(function(users) {
+      options.callback({results: users})
+    })
+  }
+
+  // Options used for the `owner` field
+  $scope.singleSelectOpts = {
+    allowClear: false,
+    containerCssClass: 'select-container',
+
+    initSelection: function(elem, callback) {
+      if ($scope.module && $scope.module.owner) {
+        callback({id: $scope.module.owner.id,
+          text: $scope.module.owner.username})
+      }
+
+    },
+
+    query: selectUsernameSearch
+  }
+
+  // Options used for the `maintainers` field
+  $scope.multiSelectOpts = {
+    multiple: true,
+    containerCssClass: 'select-container',
+
+    placeholder: 'Select one or more maintainers',
+
+    initSelection: function(elem, callback) {
+      if ($scope.module && $scope.module.maintainers) {
+        var selection = $scope.module.maintainers.map(function(user) {
+          return {id: user.id, text: user.username}
+        })
+        callback(selection)
+      }
+    },
+
+    query: selectUsernameSearch
+  }
+})
+
+// Link to a user's wiki profile
+.filter('wikiprofile', function($sanitize) {
   return function(user) {
-    return $sanitize('<a href="https://wiki.openmrs.org/display/' +
-      user.username + '"> ' + user.username + '</a>')
+    if (!user) return null
+
+    return 'https://wiki.openmrs.org/display/' + user.username
+  }
+})
+
+// Translate a user object to the format used by Select2
+.filter('selectable', function() {
+  return function(user) {
+    if (!user) return false
+    return {id: user.id, text: user.username}
   }
 })
