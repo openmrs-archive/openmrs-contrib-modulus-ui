@@ -1,12 +1,31 @@
 @import url(//fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700);
+@import url('/vendor/select2/select2.css');
 .module-detail-table {
   margin: 2em inherit;
 }
 .module-detail-table th {
   width: 40%;
 }
+.module-detail-table th .tooltip {
+  font-weight: normal;
+}
+.module-detail-table th .glyphicon {
+  font-weight: normal;
+}
 .module-detail-table td {
   width: 60%;
+}
+.module-detail-table .no-users-label {
+  color: #555555;
+  font-style: italic;
+}
+.module-detail-table .helptext {
+  font-style: italic;
+  font-size: small;
+  font-weight: normal;
+}
+.module-detail-table .select-container {
+  min-width: 18em;
 }
 header {
   padding-top: 1.5em;
@@ -77,6 +96,9 @@ footer {
 a,
 a:link {
   color: #275c8a;
+}
+.tooltip {
+  -webkit-font-smoothing: antialiased;
 }
 /* app css stylesheet */
 .menu {

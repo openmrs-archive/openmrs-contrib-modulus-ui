@@ -6,11 +6,13 @@ angular.module('modulusOne', [
   'modulusOne.filters',
   'modulusOne.services',
   'modulusOne.directives',
-  'modulusOne.controllers',
+  'modulusOne.listControllers',
+  'modulusOne.showControllers',
   'modulusOne.createControllers',
   'modulusOne.searchControllers',
   'xeditable',
-  'angularFileUpload'
+  'angularFileUpload',
+  'ui.bootstrap'
 ]).
 config(function($routeProvider, RestangularProvider) {
 
@@ -74,9 +76,7 @@ run(function($rootScope, editableOptions, Restangular, $route, Alert,
 
   Restangular.addRequestInterceptor(function(element) {
     if (element && element.class === "org.openmrs.modulus.Module") {
-      console.debug('using prepareModule', 'before=', element)
       element = prepareModule(element)
-      console.debug('after=', element)
     }
     return element
   })

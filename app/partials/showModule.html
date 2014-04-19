@@ -4,8 +4,8 @@
     Edit
   </button>
 
-  <button ng-switch-when="true" class="btn btn-default btn-success" ng-click="toggleEdit()">
-    Done Editing
+  <button ng-switch-when="true" class="btn btn-default btn-success" ng-click="updateModule(true)">
+    Save Edits
   </button>
 
   <button class="btn btn-link btn-warning" ng-click="confirmDeleteModule()">
@@ -17,8 +17,7 @@
 
   <h2 class="module-name" ng-if="!editable">{{module.name}}</h2>
   <h2 ng-if="editable">
-    <span editable-text="module.name" onaftersave="updateModule()"
-      e-placeholder="Module Name">
+    <span editable-text="module.name" e-placeholder="Module Name">
       {{module.name}}
     </span>
   </h2>
@@ -26,7 +25,7 @@
   <p class="desciription lead" ng-if="!editable">{{module.description}}</p>
   <p class="desciription lead" ng-if="editable">
     <span editable-textarea="module.description" e-rows="4" e-cols="60"
-      onaftersave="updateModule()" e-placeholder="Description">
+      e-placeholder="Description">
       {{module.description}}
     </span>
   </p>
@@ -51,7 +50,7 @@
         </td>
         <td ng-if="editable">
           <span editable-text="module.documentationURL"
-            e-placeholder="Documentation URL" onaftersave="updateModule()">
+            e-placeholder="Documentation URL">
             {{module.documentationURL}}
           </span>
         </td>
@@ -70,6 +69,48 @@
       <tr>
         <th>Downloads</th>
         <td>{{latestRelease.downloadCount}}</td>
+      </tr>
+
+      <tr ng-switch on="editable">
+        <th>
+          Owner
+          <span class="glyphicon glyphicon-question-sign" tooltip="Owners can
+          make any modifications to a module, and can assign and manage
+          maintainers."></span>
+        </th>
+
+        <td ng-switch-when="false">
+          <a ng-href="{{module.owner | wikiprofile}}">
+            {{module.owner.username}}
+          </a>
+          <span ng-if="!module.owner" class="no-users-label">
+            None
+          </span>
+        </td>
+        <td ng-switch-when="true" ng-controller="UserSelectController">
+          <input ui-select2="singleSelectOpts" ng-model="chosenOwner">
+        </td>
+      </tr>
+
+      <tr ng-switch on="editable">
+        <th>
+          Maintainers
+          <span class="glyphicon glyphicon-question-sign" tooltip="Maintainers
+          can make edits and updates to a module, but cannot delete content or
+          change authorship."></span>
+        </th>
+
+        <td ng-switch-when="false">
+          <span ng-repeat="m in module.maintainers">
+            <a ng-href="{{m | wikiprofile}}">{{m.username}}</a>{{$last ? '' : ','}} 
+          </span>
+          <span ng-if="module.maintainers.length == 0" class="no-users-label">
+            None
+          </span>
+        </td>
+        <td ng-switch-when="true" ng-controller="UserSelectController">
+          <input ui-select2="multiSelectOpts" ng-model="chosenMaintainers">
+        </td>
       </tr>
     </table>
   </div>
