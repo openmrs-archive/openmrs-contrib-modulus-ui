@@ -71,6 +71,21 @@ angular.module('modulusOne.showControllers', ['ui'])
       $scope.latestRelease.downloadCount++
     }
 
+    // Search function that typeahead in the `owner` field calls
+    $scope.searchUsers = function(query) {
+
+      // Query the API for users
+      return Restangular.oneUrl('search').get({
+        type: 'user',
+        q: query
+      })
+      .then(function(search) {
+        return search.items.map(function(user) {
+          return user.username
+        });
+      })
+    }
+
   })
 
 // Manages Select2 elements used to search for and find users
@@ -128,7 +143,7 @@ angular.module('modulusOne.showControllers', ['ui'])
   }
 
   // Options used for the `owner` field
-  $scope.singleSelectOpts = {
+  $scope.ownerOpts = {
     allowClear: false,
     containerCssClass: 'select-container',
 
@@ -144,7 +159,7 @@ angular.module('modulusOne.showControllers', ['ui'])
   }
 
   // Options used for the `maintainers` field
-  $scope.multiSelectOpts = {
+  $scope.maintainersOpts = {
     multiple: true,
     containerCssClass: 'select-container',
 
@@ -153,6 +168,7 @@ angular.module('modulusOne.showControllers', ['ui'])
     initSelection: function(elem, callback) {
       if ($scope.module && $scope.module.maintainers) {
         var selection = $scope.module.maintainers.map(function(user) {
+          // TODO: If current user, add locked: true to the array below
           return {id: user.id, text: user.username}
         })
         callback(selection)

@@ -74,30 +74,27 @@
       <tr ng-switch on="editable">
         <th>
           Owner
-          <span class="glyphicon glyphicon-question-sign" tooltip="Owners can
-          make any modifications to a module, and can assign and manage
-          maintainers."></span>
+          <span class="glyphicon glyphicon-question-sign" tooltip="The lead
+          developer or organization responsible for this module."></span>
         </th>
 
         <td ng-switch-when="false">
-          <a ng-href="{{module.owner | wikiprofile}}">
-            {{module.owner.username}}
-          </a>
+            {{module.owner}}
           <span ng-if="!module.owner" class="no-users-label">
             None
           </span>
         </td>
-        <td ng-switch-when="true" ng-controller="UserSelectController">
-          <input ui-select2="singleSelectOpts" ng-model="chosenOwner">
+        <td ng-switch-when="true">
+          <input type="text", ng-model="module.owner"
+          typeahead="user for user in searchUsers($viewValue)">
         </td>
       </tr>
 
       <tr ng-switch on="editable">
         <th>
           Maintainers
-          <span class="glyphicon glyphicon-question-sign" tooltip="Maintainers
-          can make edits and updates to a module, but cannot delete content or
-          change authorship."></span>
+          <span class="glyphicon glyphicon-question-sign" tooltip="Users who
+          have edit and upload permissions for this module."></span>
         </th>
 
         <td ng-switch-when="false">
@@ -109,7 +106,7 @@
           </span>
         </td>
         <td ng-switch-when="true" ng-controller="UserSelectController">
-          <input ui-select2="multiSelectOpts" ng-model="chosenMaintainers">
+          <input ui-select2="maintainersOpts" ng-model="chosenMaintainers">
         </td>
       </tr>
     </table>
