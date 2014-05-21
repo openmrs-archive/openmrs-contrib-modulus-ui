@@ -5,8 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title ng-bind="$root.title && ($root.title + ' — OpenMRS Module Repository') || 'OpenMRS Module Repository'">
-    OpenMRS Module Repository
+  <title ng-bind="$root.title && ($root.title + ' — OpenMRS Modules') || 'OpenMRS Modules'">
+    OpenMRS Modules
   </title>
 
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -75,7 +75,9 @@
     <section ng-view class="clearfix" ng-class="$root.controller"></section>
 
     <noscript>
-      <p class="lead text-center">Unfortunatly, JavaScript is required to use the Module Repository.</p>
+      <p class="lead text-center">
+        JavaScript is required to use OpenMRS Modules. &#x1F612;
+      </p>
     </noscript>
 
     <footer>

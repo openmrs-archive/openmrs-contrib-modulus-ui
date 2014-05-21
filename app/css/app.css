@@ -97,9 +97,6 @@ a,
 a:link {
   color: #275c8a;
 }
-.tooltip {
-  -webkit-font-smoothing: antialiased;
-}
 /* app css stylesheet */
 .menu {
   list-style: none;
