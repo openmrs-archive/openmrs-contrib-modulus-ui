@@ -44,7 +44,7 @@
       <tr>
         <th>Documentation</th>
         <td ng-if="!editable">
-          <a ng-href="{{module.documentationURL}}">
+          <a class="url" ng-href="{{module.documentationURL}}">
             {{module.documentationURL}}
           </a>
         </td>
@@ -68,7 +68,15 @@
 
       <tr>
         <th>Downloads</th>
-        <td>{{latestRelease.downloadCount}}</td>
+        <td>
+          <span class="count">{{latestRelease.downloadCount}}
+            <span class="count-description">latest release</span>
+          </span>
+          <span class="count">
+            {{module.downloadCount}}
+            <span class="count-description">total</span>
+          </span>
+        </td>
       </tr>
 
       <tr ng-switch on="editable">
