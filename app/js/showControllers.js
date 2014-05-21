@@ -68,7 +68,8 @@ angular.module('modulusOne.showControllers', ['ui'])
     }
 
     $scope.incrementDownload = function() {
-      $scope.latestRelease.downloadCount++
+      $scope.latestRelease.downloadCount++;
+      $scope.module.downloadCount++
     }
 
     // Search function that typeahead in the `owner` field calls

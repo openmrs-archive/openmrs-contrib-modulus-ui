@@ -11,6 +11,11 @@
   }
   td {
     width: 60%;
+
+    // Break long URLs to prevent overflow problems on small screens.
+    .url {
+      word-break: break-all;
+    }
   }
 
   .no-users-label, {
@@ -25,6 +30,17 @@
   }
 
   .select-container {
-    min-width: 18em
+    min-width: 18em;
+  }
+
+  .count {
+
+    white-space: nowrap;
+
+    .count-description {
+      font-size: 85%;
+      margin-right: 1em;
+    }
+
   }
 }
