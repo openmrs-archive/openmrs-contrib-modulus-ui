@@ -47,24 +47,38 @@
     <header class="clearfix">
 
 
-      <h1 class="col-sm-6">
+      <h1 class="col-sm-5">
         <a href="#/">
           <img class="logo" src="img/logo-black.svg" alt="OpenMRS Modules">
         </a>
       </h1>
 
-      <nav class="col-sm-6 navbar navbar-default">
+      <nav class="col-sm-7 navbar navbar-default">
         <ul class="nav navbar-nav">
           <li>
-            <a href="#/browse">Browse Modules</a>
+            <a href="#/browse">
+              <span class="glyphicon glyphicon-list"></span>
+              Browse Modules
+            </a>
           </li>
           <li>
-            <a href="#/search">Search for Modules</a>
+            <a href="#/search">
+              <span class="glyphicon glyphicon-search"></span>
+              <span class="hidden-sm">Search</span>
+            </a>
           </li>
           <li>
-            <a href="#/create">Upload Module</a>
+            <a href="#/create">
+              <span class="glyphicon glyphicon-upload"></span>
+              <span class="hidden-sm">Upload</span>
+            </a>
           </li>
         </ul>
+
+        <button type="button" class="btn btn-primary navbar-btn navbar-right"
+        ng-controller="AuthController" ng-click="hello()">
+          Log in <span class="hidden-sm hidden-md">with OpenMRS ID</span>
+        </button>
       </nav> 
 
     </header>
@@ -109,6 +123,7 @@
   <script src="js/showControllers.js"></script>
   <script src="js/createControllers.js"></script>
   <script src="js/searchControllers.js"></script>
+  <script src="js/authControllers.js"></script>
   <script src="js/filters.js"></script>
   <script src="js/directives.js"></script>
 
