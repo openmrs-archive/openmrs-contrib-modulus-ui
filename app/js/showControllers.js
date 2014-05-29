@@ -1,6 +1,6 @@
 angular.module('modulusOne.showControllers', ['ui'])
 .controller('ShowModuleCtrl', function($scope, Restangular, $routeParams,
-    $location, getModule, $rootScope, readonlyAlert) {
+    $location, getModule, $rootScope, readonlyAlert, Config) {
 
     // Load this page's module.
     getModule($scope, $routeParams.id)
@@ -30,7 +30,7 @@ angular.module('modulusOne.showControllers', ['ui'])
     // Editability
     $scope.editable = false
     $scope.toggleEdit = function() {
-      if (MODULUS_API_READ_ONLY) {
+      if (Config.api.readOnly) {
         readonlyAlert.open()
         return false
       }
@@ -53,7 +53,7 @@ angular.module('modulusOne.showControllers', ['ui'])
 
 
     $scope.confirmDeleteModule = function() {
-      if (MODULUS_API_READ_ONLY) {
+      if (Config.api.readOnly) {
         readonlyAlert.open()
         return false
       }

@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 module.exports = function(grunt) {
   grunt.initConfig  ({
 
@@ -49,20 +51,10 @@ module.exports = function(grunt) {
       template: {
         files: 'app/index.html.template',
         tasks: ['template']
-      }
-    },
-
-    template: {
-      'index-html': {
-        options: {
-          data: {
-            modulusApiBaseUrl: process.env.MODULUS_API_BASE_URL || '/api',
-            modulusApiReadOnly: process.env.MODULUS_API_READ_ONLY === 'true'
-          }
-        },
-        files: {
-          'app/index.html': ['app/index.html.template']
-        }
+      },
+      config: {
+        files: 'config/modulusui.conf.js',
+        tasks: 'config'
       }
     }
   })
@@ -70,10 +62,38 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less')
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-connect')
-  grunt.loadNpmTasks('grunt-template')
 
   grunt.registerTask('default', ['build'])
   grunt.registerTask('serve', ['build', 'connect:development', 'watch'])
   grunt.registerTask('heroku', ['connect:heroku'])
-  grunt.registerTask('build', ['template', 'less'])
+  grunt.registerTask('build', ['config', 'less'])
+
+  grunt.registerTask('config', function() {
+
+    var config = require('./config/modulusui.conf.js');
+
+    if (process.env.MODULUS_UI_CONF) {
+      try {
+        var override = JSON.parse(process.env.MODULUS_UI_CONF);
+        config = _.assign(config, override);
+      } catch (error) {
+        grunt.log.error("Failed to parse configuration in MODULUS_UI_CONF " +
+          "environment variable.");
+      }
+    }
+
+    if (process.env.MODULUS_API_BASE_URL) {
+      config.api.baseUrl = process.env.MODULUS_API_BASE_URL;
+    }
+
+    if (process.env.MODULUS_API_READ_ONLY) {
+      config.api.readOnly = process.env.MODULUS_API_READ_ONLY;
+    }
+
+    var contents = "angular.module('modulusOne').constant('Config', " +
+      JSON.stringify(config) + ");"
+    grunt.file.write('app/js/config.js', contents);
+
+    grunt.log.writeln("Wrote current configuration to app/js/config.js");
+  })
 }
