@@ -71,10 +71,18 @@ module.exports = function(grunt) {
   grunt.registerTask('config', function() {
 
     var config = require('./config/modulusui.conf.js');
+    var env = {
+      conf: process.env.MODULUS_UI_CONF || process.env.BAMBOO_MODULUS_UI_CONF,
+      base: process.env.MODULUS_API_BASE_URL ||
+        process.env.BAMBOO_MODULUS_API_BASE_URL,
+      readOnly: process.env.MODULUS_API_READ_ONLY ||
+        process.env.BAMBOO_MODULUS_API_READ_ONLY
+    };
 
-    if (process.env.MODULUS_UI_CONF) {
+
+    if (env.conf) {
       try {
-        var override = JSON.parse(process.env.MODULUS_UI_CONF);
+        var override = JSON.parse(env.conf);
         config = _.assign(config, override);
       } catch (error) {
         grunt.log.error("Failed to parse configuration in MODULUS_UI_CONF " +
@@ -82,12 +90,12 @@ module.exports = function(grunt) {
       }
     }
 
-    if (process.env.MODULUS_API_BASE_URL) {
-      config.api.baseUrl = process.env.MODULUS_API_BASE_URL;
+    if (env.base) {
+      config.api.baseUrl = env.base;
     }
 
-    if (process.env.MODULUS_API_READ_ONLY) {
-      config.api.readOnly = process.env.MODULUS_API_READ_ONLY;
+    if (env.readOnly) {
+      config.api.readOnly = env.readOnly;
     }
 
     var contents = "angular.module('modulusOne').constant('Config', " +
