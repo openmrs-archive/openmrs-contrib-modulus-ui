@@ -85,7 +85,7 @@ module.exports = function(grunt) {
     if (env.conf) {
       try {
         var override = JSON.parse(env.conf);
-        config = _.assign(config, override);
+        config = _.merge(config, override);
       } catch (error) {
         grunt.log.error("Failed to parse configuration in MODULUS_UI_CONF " +
           "environment variable.");
