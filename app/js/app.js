@@ -51,7 +51,7 @@ run(function($rootScope, editableOptions, Restangular, $route, Alert,
   prepareModule, Config) {
   editableOptions.theme = 'bs3'
 
-  window.Config = Config;
+  $rootScope.Config = Config
 
   Restangular.setBaseUrl(Config.api.baseUrl + '/api' ||
     '/api')

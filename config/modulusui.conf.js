@@ -7,7 +7,7 @@ module.exports = {
     // `/api` in the base URL.
     baseUrl: 'http://localhost:8080',
 
-    // Set to `true` to disable writables actions on the Modulus API, such as
+    // Set to `true` to disable writable actions on the Modulus API, such as
     // uploading releases or editing modules.
     readOnly: true
   }
