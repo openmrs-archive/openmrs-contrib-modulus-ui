@@ -10,6 +10,7 @@ angular.module('modulusOne', [
   'modulusOne.showControllers',
   'modulusOne.createControllers',
   'modulusOne.searchControllers',
+  'modulusOne.authControllers',
   'xeditable',
   'angularFileUpload',
   'ui.bootstrap'

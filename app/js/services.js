@@ -4,7 +4,6 @@ angular.module('modulusOne.services', [])
 
   .value('version', '0.0.1')
 
-
   .factory('getModule', function(Restangular) {
     return function(scope, id) {
       return Restangular.one('modules', id).get()

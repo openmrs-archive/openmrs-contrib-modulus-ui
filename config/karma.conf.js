@@ -3,9 +3,15 @@ module.exports = function(config){
     basePath : '../',
 
     files : [
-      'app/lib/angular/angular.js',
-      'app/lib/angular/angular-*.js',
-      'test/lib/angular/angular-mocks.js',
+      'app/vendor/angular/angular.js',
+      'app/vendor/angular-route/angular-route.min.js',
+      'app/vendor/angular-mocks/angular-mocks.js',
+      'app/vendor/angular-sanitize/angular-sanitize.min.js',
+      'app/vendor/restangular/dist/restangular.min.js',
+      'app/vendor/angular-xeditable/dist/js/xeditable.min.js',
+      'app/vendor/danialfarid-angular-file-upload/dist/angular-file-upload.min.js',
+      'app/vendor/angular-ui/build/angular-ui.min.js',
+      'app/vendor/ngstorage/ngStorage.min.js',
       'app/js/**/*.js',
       'test/unit/**/*.js'
     ],
@@ -13,17 +19,19 @@ module.exports = function(config){
     exclude : [
       'app/lib/angular/angular-loader.js',
       'app/lib/angular/*.min.js',
-      'app/lib/angular/angular-scenario.js'
+      'app/lib/angular/angular-scenario.js',
+      'test/unit/examples/*'
     ],
 
     autoWatch : true,
 
     frameworks: ['jasmine'],
 
-    browsers : ['Chrome'],
+    browsers : ['PhantomJS'],
 
     plugins : [
             'karma-junit-reporter',
+            'karma-phantomjs-launcher',
             'karma-chrome-launcher',
             'karma-firefox-launcher',
             'karma-jasmine'
