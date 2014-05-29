@@ -72,12 +72,14 @@ module.exports = function(grunt) {
 
     var config = require('./config/modulusui.conf.js');
     var env = {
-      conf: process.env.MODULUS_UI_CONF || process.env.BAMBOO_MODULUS_UI_CONF,
+      conf: process.env.MODULUS_UI_CONF || process.env.bamboo_MODULUS_UI_CONF,
       base: process.env.MODULUS_API_BASE_URL ||
-        process.env.BAMBOO_MODULUS_API_BASE_URL,
+        process.env.bamboo_MODULUS_API_BASE_URL,
       readOnly: process.env.MODULUS_API_READ_ONLY ||
-        process.env.BAMBOO_MODULUS_API_READ_ONLY
+        process.env.bamboo_MODULUS_API_READ_ONLY
     };
+
+    console.log(env)
 
 
     if (env.conf) {
