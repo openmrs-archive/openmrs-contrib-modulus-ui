@@ -79,9 +79,6 @@ module.exports = function(grunt) {
         process.env.bamboo_MODULUS_API_READ_ONLY
     };
 
-    console.log(env)
-
-
     if (env.conf) {
       try {
         var override = JSON.parse(env.conf);
