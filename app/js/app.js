@@ -48,10 +48,12 @@ config(function($routeProvider, RestangularProvider) {
 
 }).
 run(function($rootScope, editableOptions, Restangular, $route, Alert,
-  prepareModule) {
+  prepareModule, Config) {
   editableOptions.theme = 'bs3'
 
-  Restangular.setBaseUrl(window.MODULUS_API_BASE_URL ||
+  $rootScope.Config = Config
+
+  Restangular.setBaseUrl(Config.api.baseUrl + '/api' ||
     '/api')
 
   var apiError = new Alert('danger', 'Uh oh! Error communicating with the Modulus server.')
@@ -87,5 +89,4 @@ run(function($rootScope, editableOptions, Restangular, $route, Alert,
     $rootScope.controller = $route.current.controller
   })
 
-  $rootScope.modulusApiReadOnly = MODULUS_API_READ_ONLY
 });

@@ -2,11 +2,11 @@
 angular.module('modulusOne.createControllers', [])
 
   .controller('CreateCtrl', function($scope, Restangular, isCompleted, isEmpty,
-    $location, Alert, readonlyAlert) {
+    $location, Alert, readonlyAlert, Config) {
 
 
     // If read only, do not allow this controller to be defined.
-    if (MODULUS_API_READ_ONLY) {
+    if (Config.api.readOnly) {
       readonlyAlert.open()
       return false
     }
@@ -87,10 +87,11 @@ angular.module('modulusOne.createControllers', [])
 
 
 
-  .controller('ReleaseFileCtrl', function($scope, $upload, Restangular, Alert) {
+  .controller('ReleaseFileCtrl', function($scope, $upload, Restangular, Alert,
+    Config) {
 
     // If read only, do not allow this controller to be defined.
-    if (MODULUS_API_READ_ONLY) {
+    if (Config.api.readOnly) {
       return false
     }
 
