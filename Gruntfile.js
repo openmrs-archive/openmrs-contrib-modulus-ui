@@ -72,6 +72,16 @@ module.exports = function(grunt) {
 
     var config = require('./config/modulusui.conf.js');
 
+    if (process.env.MODULUS_UI_CONF) {
+      try {
+        var override = JSON.parse(process.env.MODULUS_UI_CONF);
+        config = _.assign(config, override);
+      } catch (error) {
+        grunt.log.error("Failed to parse configuration in MODULUS_UI_CONF " +
+          "environment variable.");
+      }
+    }
+
     if (process.env.MODULUS_API_BASE_URL) {
       config.api.baseUrl = process.env.MODULUS_API_BASE_URL;
     }
