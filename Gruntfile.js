@@ -50,10 +50,10 @@ module.exports = function(grunt) {
       },
       template: {
         files: 'app/index.html.template',
-        tasks: ['template']
+        tasks: ['template'],
       },
       config: {
-        files: 'config/modulusui.conf.js',
+        files: 'config/modulusui*.conf.js',
         tasks: 'config'
       }
     }
@@ -71,10 +71,18 @@ module.exports = function(grunt) {
   grunt.registerTask('config', function() {
 
     var config = require('./config/modulusui.conf.js');
+    grunt.log.writeln("Including config from modulusui.conf.js");
+
+    if (grunt.file.exists('./config/modulusui-dev.conf.js')) {
+      grunt.log.writeln("Including config from modulusui-dev.conf.js");
+      var devConfig = require('./config/modulusui-dev.conf.js');
+      config = _.assign(config, devConfig);
+    }
 
     if (process.env.MODULUS_UI_CONF) {
       try {
         var override = JSON.parse(process.env.MODULUS_UI_CONF);
+        grunt.log.writeln("Including config from environment in MODULUS_UI_CONF");
         config = _.assign(config, override);
       } catch (error) {
         grunt.log.error("Failed to parse configuration in MODULUS_UI_CONF " +
