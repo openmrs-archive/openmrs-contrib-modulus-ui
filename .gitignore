@@ -6,3 +6,4 @@ tmp
 .idea
 *.sublime-*
 app/js/config.js
+modulusui-dev.conf.js

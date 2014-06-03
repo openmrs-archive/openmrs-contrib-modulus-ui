@@ -48,13 +48,18 @@ module.exports = function(grunt) {
           livereload: true
         }
       },
-      template: {
-        files: 'app/index.html.template',
-        tasks: ['template']
+      templates: {
+        files: 'app/**/*.html',
+        options: {
+          livereload: true
+        }
       },
       config: {
-        files: 'config/modulusui.conf.js',
-        tasks: 'config'
+        files: 'config/modulusui*.conf.js',
+        tasks: 'config',
+        options: {
+          livereload: true
+        }
       }
     }
   })
@@ -79,9 +84,18 @@ module.exports = function(grunt) {
         process.env.bamboo_MODULUS_API_READ_ONLY
     };
 
+    grunt.log.writeln("Including config from modulusui.conf.js");
+
+    if (grunt.file.exists('./config/modulusui-dev.conf.js')) {
+      grunt.log.writeln("Including config from modulusui-dev.conf.js");
+      var devConfig = require('./config/modulusui-dev.conf.js');
+      config = _.assign(config, devConfig);
+    }
+
     if (env.conf) {
       try {
         var override = JSON.parse(env.conf);
+        grunt.log.writeln("Including config from environment in MODULUS_UI_CONF");
         config = _.merge(config, override);
       } catch (error) {
         grunt.log.error("Failed to parse configuration in MODULUS_UI_CONF " +
