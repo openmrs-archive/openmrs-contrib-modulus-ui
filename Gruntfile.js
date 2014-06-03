@@ -48,13 +48,18 @@ module.exports = function(grunt) {
           livereload: true
         }
       },
-      template: {
-        files: 'app/index.html.template',
-        tasks: ['template'],
+      templates: {
+        files: 'app/**/*.html',
+        options: {
+          livereload: true
+        }
       },
       config: {
         files: 'config/modulusui*.conf.js',
-        tasks: 'config'
+        tasks: 'config',
+        options: {
+          livereload: true
+        }
       }
     }
   })
