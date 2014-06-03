@@ -144,6 +144,42 @@ angular.module('modulusOne.services', [])
       .include('partials/readonlyMessage.html')
   })
 
+  // Allow jsUri uri-manipulation library to be injected. This service should
+  // always be used to get access to jsUri. Do not access the global object.
+  // See https://github.com/derek-watson/jsUri for API.
+  .factory('Uri', function injectUri($window) {
+    return $window.Uri;
+  })
 
+  .factory('UserAuth', function() {
+    var UserAuth = function UserAuth(accessToken, tokenType, expiresIn, scope) {
+
+      // Support creating a UserAuth from a JSON object
+      if (typeof accessToken === 'object') {
+        var props = angular.copy(accessToken);
+        this.accessToken = props.accessToken;
+        this.tokenType = props.tokenType;
+        this.expireTime = new Date(props.expireTime);
+        this.scope = props.scope;
+      } else {
+        this.accessToken = accessToken;
+        this.tokenType = tokenType;
+        this.expireTime = new Date(Date.now() + expiresIn * 1000);
+        this.scope = scope;
+      }
+
+      return this;
+    };
+
+    UserAuth.prototype.isValid = function() {
+      if (this.accessToken && this.tokenType && this.expireTime) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    return UserAuth;
+  })
 
 

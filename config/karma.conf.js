@@ -11,9 +11,11 @@ module.exports = function(config){
       'app/vendor/angular-xeditable/dist/js/xeditable.min.js',
       'app/vendor/danialfarid-angular-file-upload/dist/angular-file-upload.min.js',
       'app/vendor/angular-ui/build/angular-ui.min.js',
-      'app/vendor/ngstorage/ngStorage.min.js',
+      'app/vendor/angular-local-storage/angular-local-storage.min.js',
+      'app/vendor/lodash/dist/lodash.min.js',
       'app/js/**/*.js',
-      'test/unit/**/*.js'
+      'test/unit/**/*.js',
+      'test/lib/**/*.js'
     ],
 
     exclude : [
@@ -40,6 +42,6 @@ module.exports = function(config){
     junitReporter : {
       outputFile: 'test_out/unit.xml',
       suite: 'unit'
-    }
+    },
 
 })}

@@ -1,4 +1,110 @@
 @import url(//fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700);
+@import url('/vendor/select2/select2.css');
+.module-detail-table {
+  margin: 2em inherit;
+}
+.module-detail-table th {
+  width: 40%;
+}
+.module-detail-table th .tooltip {
+  font-weight: normal;
+}
+.module-detail-table th .glyphicon {
+  font-weight: normal;
+}
+.module-detail-table td {
+  width: 60%;
+}
+.module-detail-table td .url {
+  word-break: break-all;
+}
+.module-detail-table .no-users-label {
+  color: #555555;
+  font-style: italic;
+}
+.module-detail-table .helptext {
+  font-style: italic;
+  font-size: small;
+  font-weight: normal;
+}
+.module-detail-table .select-container {
+  min-width: 18em;
+}
+.module-detail-table .count {
+  white-space: nowrap;
+}
+.module-detail-table .count .count-description {
+  font-size: 85%;
+  margin-right: 1em;
+}
+.ListModulesCtrl .incomplete {
+  color: #555555;
+}
+.ListModulesCtrl .pagenum {
+  color: #555555;
+  line-height: 32px;
+}
+.SearchCtrl .search {
+  position: relative;
+  font-size: 2em;
+  font-weight: 200;
+}
+.SearchCtrl .search input {
+  display: block;
+  width: 100%;
+  padding: 0.15em 0.2em 0.15em 1.7em;
+  border: none;
+}
+.SearchCtrl .search .searchbar-icon {
+  position: absolute;
+  padding: 0.15em 0.4em;
+  color: #555555;
+  line-height: 1.42em;
+}
+body {
+  color: #363463;
+  font-family: "Open Sans";
+}
+.container {
+  margin: 1em auto 3em;
+}
+footer {
+  font-size: 0.8em;
+  color: #555555;
+  text-align: center;
+  margin-top: 3em;
+}
+.action {
+  cursor: pointer;
+}
+a,
+a:link {
+  color: #275c8a;
+}
+/* app css stylesheet */
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+.menu:before {
+  content: "[";
+}
+.menu:after {
+  content: "]";
+}
+.menu > li {
+  display: inline;
+}
+.menu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+.menu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
 header {
   padding-top: 1.5em;
   padding-bottom: 1.5em;
@@ -24,4 +130,10 @@ header h1 sup {
 header nav {
   margin-top: 1.43em;
   margin-bottom: 0.71em;
+}
+header nav .navbar-btn.dropdown-toggle {
+  margin-bottom: 0;
+}
+header nav .dropdown-menu a {
+  cursor: pointer;
 }

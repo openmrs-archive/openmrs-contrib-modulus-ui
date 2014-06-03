@@ -1,29 +1,9 @@
 angular.module('modulusOne.authSuccessEndpoint', [
-    'ngStorage'
+    'LocalStorageModule',
+    'modulusOne.services'
   ])
-  .factory('UserAuth', function() {
-    var UserAuth = function UserAuth(accessToken, tokenType, expiresIn, scope) {
-
-      this.accessToken = accessToken;
-      this.tokenType = tokenType;
-      this.expireTime = Date.now() + expiresIn * 1000;
-      this.scope = scope;
-
-      return this;
-    };
-
-    UserAuth.prototype.isValid = function() {
-      if (this.accessToken && this.tokenType && this.expireTime) {
-        return true;
-      } else {
-        return false;
-      }
-    };
-
-    return UserAuth;
-  })
-  .controller('AuthSuccessEndpointCtrl', function($scope, $localStorage,
-  $location, UserAuth, $window) {
+  .controller('AuthSuccessEndpointCtrl', function($scope, localStorageService,
+  $location, UserAuth, $window, $timeout) {
 
     /**
      * Generate a UserAuth token from a url with OAuth callback parameters in it.
@@ -56,7 +36,14 @@ angular.module('modulusOne.authSuccessEndpoint', [
      */
     $scope.storeToken = function storeToken(token) {
       if (token.isValid()) {
-        $localStorage.authToken = token;
+        localStorageService.set('modulus-authToken', token);
+
+        // Broadcast event to parent window if the endpoint is open in a popup.
+        if ($window.opener) {
+          var parentApp = $window.opener.angular.element($window.opener.document);
+          parentApp.scope().$broadcast('obtainedAuthToken', token);
+        }
+
         return true;
       } else {
         return false;
@@ -80,7 +67,7 @@ angular.module('modulusOne.authSuccessEndpoint', [
 
     if ($scope.storeToken(token)) {
       $scope.success = true;
-      $scope.exitEndpoint();
+      $timeout($scope.exitEndpoint, 1000);
     } else {
       $scope.success = false;
     }

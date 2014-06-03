@@ -36,21 +36,29 @@ describe('AuthSuccessEndpointCtrl', function() {
   });
 
   describe('#storeToken', function() {
+
+    var token;
+
+    beforeEach(inject(function(UserAuth) {
+      token = new UserAuth('64142E97-E1FE-4B48-8572-1FE181980D54',
+        'bearer', 3600, 'foobarscope');
+    }));
+
     it('should place token in local storage',
       inject(function($controller, UserAuth) {
 
-        var token = new UserAuth('64142E97-E1FE-4B48-8572-1FE181980D54',
-          'bearer', 3600, 'foobarscope');
-        var storage = {};
+        var storage = {set: function() {}};
         var $scope = {};
 
+        spyOn(storage, 'set');
+
         var asec = $controller('AuthSuccessEndpointCtrl', {$scope: $scope,
-          $localStorage: storage});
+          localStorageService: storage});
 
         var result = $scope.storeToken(token);
 
         expect(result).toBe(true);
-        expect(storage.authToken).toBe(token);
+        expect(storage.set).toHaveBeenCalledWith('modulus-authToken', token);
 
       }));
 
@@ -65,6 +73,37 @@ describe('AuthSuccessEndpointCtrl', function() {
 
         expect(result).toBe(false);
       }));
+
+    it('should broadcast obtainedAuthToken event to its parent',
+      inject(function($controller) {
+
+        var $scope = {};
+        var docScope = {
+          $broadcast: function() {}
+        };
+        var element = {
+          scope: function() {return docScope}
+        };
+        var $window = {
+          opener: {
+            angular: {
+              element: function() {return element}
+            },
+            document: {}
+          }
+        };
+
+        spyOn(docScope, '$broadcast');
+
+        var asec = $controller('AuthSuccessEndpointCtrl', {$scope: $scope,
+          $window: $window});
+
+        $scope.storeToken(token);
+
+        expect(docScope.$broadcast).toHaveBeenCalledWith('obtainedAuthToken',
+          token);
+
+    }));
   })
 
   describe('#exitEndpoint', function() {
