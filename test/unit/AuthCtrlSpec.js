@@ -108,9 +108,6 @@ describe('AuthCtrl', function() {
       user = {id: 1, username: 'horatio', fullname: 'Horatio Hornblower'};
       rootScope = {};
 
-      $httpBackend.when('GET', 'http://server.local/api/users/current')
-        .respond(user);
-
       openAlert = jasmine.createSpy();
       Alert = jasmine.createSpy().andReturn({
         open: openAlert
@@ -136,6 +133,9 @@ describe('AuthCtrl', function() {
     });
 
     it('should call /api/users/current with an access token', function() {
+      $httpBackend.when('GET', 'http://server.local/api/users/current')
+        .respond(user);
+
       $httpBackend.expect(
         'GET',
         'http://server.local/api/users/current',
@@ -154,6 +154,8 @@ describe('AuthCtrl', function() {
 
     it('should set `user` to the current user profile',
     function() {
+      $httpBackend.when('GET', 'http://server.local/api/users/current')
+        .respond(user);
 
       var result = $scope.updateAuthStatus(token);
       expect(result).toBe(true);
@@ -166,6 +168,9 @@ describe('AuthCtrl', function() {
     });
 
     it('should set `loggedIn` to true', function() {
+      $httpBackend.when('GET', 'http://server.local/api/users/current')
+        .respond(user);
+
       var result = $scope.updateAuthStatus(token);
       expect(result).toBe(true);
 
@@ -175,6 +180,9 @@ describe('AuthCtrl', function() {
     });
 
     it('should copy `user` and `loggedIn` properties to rootScope', function() {
+      $httpBackend.when('GET', 'http://server.local/api/users/current')
+        .respond(user);
+
       $scope.bindEvents();
       var result = $scope.updateAuthStatus(token);
       expect(result).toBe(true);
@@ -185,14 +193,17 @@ describe('AuthCtrl', function() {
       expect(rootScope.loggedIn).toBe($scope.loggedIn);
     });
 
-    it('should open an alert when logged in', function() {
+    it('should log out if it gets a 401 Unauthorized error', function() {
+      $httpBackend.when('GET', 'http://server.local/api/users/current')
+        .respond(401, '');
+
+      spyOn($scope, 'logout');
+
       $scope.updateAuthStatus(token);
       $httpBackend.flush();
 
-      expect(Alert).toHaveBeenCalledWith('success',
-        'You have been logged in. Welcome!');
-      expect(openAlert).toHaveBeenCalled();
-    })
+      expect($scope.logout).toHaveBeenCalled();
+    });
 
   });
 

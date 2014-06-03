@@ -66,7 +66,8 @@ angular.module('modulusOne.authControllers', [
       }
 
       Restangular.one('users', 'current').get()
-      .then(function(user) {
+      .then(function success(user) {
+        // console.debug('success', user);
         $scope.user = user;
         $scope.loggedIn = true;
 
@@ -74,8 +75,10 @@ angular.module('modulusOne.authControllers', [
           logoutAlert.close();
         }
 
-        loginAlert = new Alert('success', 'You have been logged in. Welcome!')
-          .open();
+      }, function error(err) {
+        if (err.status === 401) { // Log out, due to expired / invalid token
+          $scope.logout();
+        }
       });
 
       return true;
@@ -110,7 +113,10 @@ angular.module('modulusOne.authControllers', [
     $scope.bindEvents = function bindEvents() {
       // Bind events
       $scope.$on('obtainedAuthToken', function(event, token) {
-        $scope.updateAuthStatus(token);
+        if ($scope.updateAuthStatus(token)) {
+          loginAlert = new Alert('success',
+            'You have been logged in. Welcome!').open();
+        }
       });
 
       $scope.$watch('user', function(user) {
