@@ -1,5 +1,8 @@
 describe('AuthSuccessEndpointCtrl', function() {
-  beforeEach(module('modulusOne.authSuccessEndpoint'));
+  beforeEach(function() {
+    module('modulusOne.authSuccessEndpoint');
+    angular.mock.module('modulusOne.authServices');
+  });
 
   describe('#getOAuthToken', function() {
     it('should output an object with any url-params passed',
@@ -35,83 +38,17 @@ describe('AuthSuccessEndpointCtrl', function() {
 
   });
 
-  describe('#storeToken', function() {
-
-    var token;
-
-    beforeEach(inject(function(UserAuth) {
-      token = new UserAuth('64142E97-E1FE-4B48-8572-1FE181980D54',
-        'bearer', 3600, 'foobarscope');
-    }));
-
-    it('should place token in local storage',
-      inject(function($controller, UserAuth) {
-
-        var storage = {set: function() {}};
-        var $scope = {};
-
-        spyOn(storage, 'set');
-
-        var asec = $controller('AuthSuccessEndpointCtrl', {$scope: $scope,
-          localStorageService: storage});
-
-        var result = $scope.storeToken(token);
-
-        expect(result).toBe(true);
-        expect(storage.set).toHaveBeenCalledWith('modulus-authToken', token);
-
-      }));
-
-    it('should return false when passed an invalid token',
-      inject(function($controller, UserAuth) {
-
-        var $scope = {};
-
-        var asec = $controller('AuthSuccessEndpointCtrl', {$scope: $scope});
-
-        var result = $scope.storeToken(new UserAuth());
-
-        expect(result).toBe(false);
-      }));
-
-    it('should broadcast obtainedAuthToken event to its parent',
-      inject(function($controller) {
-
-        var $scope = {};
-        var docScope = {
-          $broadcast: function() {}
-        };
-        var element = {
-          scope: function() {return docScope}
-        };
-        var $window = {
-          opener: {
-            angular: {
-              element: function() {return element}
-            },
-            document: {}
-          }
-        };
-
-        spyOn(docScope, '$broadcast');
-
-        var asec = $controller('AuthSuccessEndpointCtrl', {$scope: $scope,
-          $window: $window});
-
-        $scope.storeToken(token);
-
-        expect(docScope.$broadcast).toHaveBeenCalledWith('obtainedAuthToken',
-          token);
-
-    }));
-  })
-
   describe('#exitEndpoint', function() {
 
-    it('should close itself if it\'s a popup', inject(function($controller) {
+    it('should close itself and trigger parent reload if it\'s a popup',
+    inject(function($controller) {
 
       var $scope = {};
-      var $window = {opener: {window: 'yep'}, close: function() {}};
+      var $window = {
+        opener: {location: {
+          reload: jasmine.createSpy()
+        }},
+        close: function() {}};
 
       spyOn($window, 'close');
 
@@ -121,23 +58,24 @@ describe('AuthSuccessEndpointCtrl', function() {
       $scope.exitEndpoint()
 
       expect($window.close).toHaveBeenCalled();
+      expect($window.opener.location.reload).toHaveBeenCalled();
 
 
     }));
 
-    it('should redirect to the main app if it\'s a standard window', inject(
-      function($controller, $location) {
+    it('should redirect to the main app if it\'s a standard window',
+    inject(function($controller, $location) {
 
-        var $scope = {};
-        var $window = {location: undefined}
+      var $scope = {};
+      var $window = {location: undefined}
 
-        var asec = $controller('AuthSuccessEndpointCtrl', {$scope: $scope,
-          $window: $window});
+      var asec = $controller('AuthSuccessEndpointCtrl', {$scope: $scope,
+        $window: $window});
 
-        $scope.exitEndpoint();
+      $scope.exitEndpoint();
 
-        expect($window.location).toBe('/');
+      expect($window.location).toBe('/');
 
-      }));
+    }));
   });
 })

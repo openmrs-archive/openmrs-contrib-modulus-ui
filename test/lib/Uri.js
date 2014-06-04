@@ -373,4 +373,12 @@
     // } else {
     //     module.exports = Uri;
     // }
-}(this));
+}(function() {
+    var scope = {};
+    beforeEach(module(function($provide) {
+        window.Uri = scope.Uri;
+        $provide.value('Uri', scope.Uri);
+    }));
+    return scope;
+}()));
+

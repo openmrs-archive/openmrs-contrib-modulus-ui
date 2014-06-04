@@ -3,6 +3,7 @@ angular.module('modulusOne', [
   'ngRoute',
   'ngSanitize',
   'restangular',
+  'modulusOne.config',
   'modulusOne.filters',
   'modulusOne.services',
   'modulusOne.directives',
@@ -21,28 +22,53 @@ config(function($routeProvider, RestangularProvider) {
     templateUrl: 'partials/search.html',
     controller: 'SearchCtrl',
     title: null,
+    resolve: {
+      auth: function resolveAuth(AuthService) {
+        return AuthService.waitUntilLoaded;
+      }
+    }
   })
 
   $routeProvider.when('/search', {
     templateUrl: 'partials/search.html',
-    controller: 'SearchCtrl'
+    controller: 'SearchCtrl',
+    resolve: {
+      auth: function resolveAuth(AuthService) {
+        return AuthService.waitUntilLoaded;
+      }
+    }
   })
 
   $routeProvider.when('/show/:id/:slug?', {
     templateUrl: 'partials/showModule.html',
-    controller: 'ShowModuleCtrl'
+    controller: 'ShowModuleCtrl',
+    resolve: {
+      auth: function resolveAuth(AuthService) {
+        return AuthService.waitUntilLoaded;
+      }
+    }
   })
 
   $routeProvider.when('/create', {
     templateUrl: 'partials/createModule.html',
     title: "Upload Module",
-    controller: "CreateCtrl"
+    controller: "CreateCtrl",
+    resolve: {
+      auth: function resolveAuth(AuthService) {
+        return AuthService.waitUntilLoaded;
+      }
+    }
   })
 
   $routeProvider.when('/browse/:page?', {
     templateUrl: 'partials/browse.html',
     controller: "ListModulesCtrl",
-    title: "Recently Updated Modules"
+    title: "Recently Updated Modules",
+    resolve: {
+      auth: function resolveAuth(AuthService) {
+        return AuthService.waitUntilLoaded;
+      }
+    }
   })
 
   $routeProvider.otherwise({redirectTo: '/'});

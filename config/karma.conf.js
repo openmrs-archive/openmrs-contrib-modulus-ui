@@ -31,12 +31,16 @@ module.exports = function(config){
 
     browsers : ['PhantomJS'],
 
+    reporters: ['dots', 'osx'],
+
     plugins : [
             'karma-junit-reporter',
             'karma-phantomjs-launcher',
             'karma-chrome-launcher',
             'karma-firefox-launcher',
-            'karma-jasmine'
+            'karma-jasmine',
+            'karma-mocha-reporter',
+            'karma-osx-reporter'
             ],
 
     junitReporter : {

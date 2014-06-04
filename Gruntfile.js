@@ -111,7 +111,7 @@ module.exports = function(grunt) {
       config.api.readOnly = env.readOnly;
     }
 
-    var contents = "angular.module('modulusOne').constant('Config', " +
+    var contents = "angular.module('modulusOne.config', []).constant('Config', " +
       JSON.stringify(config) + ");"
     grunt.file.write('app/js/config.js', contents);
 

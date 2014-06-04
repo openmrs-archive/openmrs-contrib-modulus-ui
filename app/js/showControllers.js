@@ -1,6 +1,6 @@
 angular.module('modulusOne.showControllers', ['ui'])
 .controller('ShowModuleCtrl', function($scope, Restangular, $routeParams,
-    $location, getModule, $rootScope, readonlyAlert, Config) {
+    $location, getModule, $rootScope, readonlyAlert, Config, AuthService) {
 
     // Load this page's module.
     getModule($scope, $routeParams.id)
@@ -25,6 +25,9 @@ angular.module('modulusOne.showControllers', ['ui'])
       $scope.module.releases = releases
     })
 
+
+    // Allow the view to access the logged-in user.
+    $scope.user = AuthService.user;
 
 
     // Editability
@@ -194,5 +197,16 @@ angular.module('modulusOne.showControllers', ['ui'])
   return function(user) {
     if (!user) return false
     return {id: user.id, text: user.username}
+  }
+})
+
+.filter('canEdit', function canEdit() {
+  return function(user, module) {
+    if (!user || !module) return false;
+
+    var isMaintainer = _.contains(module.maintainers, user);
+    var isAdmin = _.contains(user.roles, 'ROLE_ADMIN');
+
+    return isMaintainer || isAdmin;
   }
 })
