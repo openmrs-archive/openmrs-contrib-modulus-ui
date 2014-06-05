@@ -38,41 +38,79 @@ describe('AuthSuccessEndpointCtrl', function() {
 
   });
 
-  describe('#exitEndpoint', function() {
+  describe('#init', function() {
 
-    it('should close itself and trigger parent reload if it\'s a popup',
+    var q;
+    var AuthService;
+    var rootScope;
+
+    beforeEach(function() {
+      inject(function(UserAuth, _$q_, _AuthService_, $rootScope) {
+        this.token = new UserAuth('ada95902-06c7-4335-8ff0-0dec3b0538cf',
+          'bearer', 1234);
+        q = _$q_;
+        AuthService = _AuthService_;
+        rootScope = $rootScope;
+      });
+    });
+
+    it('should call the parent\'s AuthService and close itself if it\'s a popup',
     inject(function($controller) {
 
-      var $scope = {};
-      var $window = {
-        opener: {location: {
-          reload: jasmine.createSpy()
-        }},
-        close: function() {}};
+      var $scope = rootScope;
+      var defer = q.defer();
 
-      spyOn($window, 'close');
+      var injector = jasmine.createSpy().and.returnValue({
+        get: jasmine.createSpy().and.returnValue(AuthService)
+      });
+      var element = jasmine.createSpy().and.returnValue({
+        injector: injector
+      });
+
+      var $window = {
+        opener: {
+          location: { reload: jasmine.createSpy() },
+          angular: {
+            element: element
+          }
+        },
+        close: function() {}
+      };
+
 
       var asec = $controller('AuthSuccessEndpointCtrl', {$scope: $scope,
-        $window: $window});
+        $window: $window, AuthService: AuthService});
 
-      $scope.exitEndpoint()
+      spyOn($scope, 'getOAuthToken').and.returnValue(this.token);
+      spyOn($window, 'close');
+      spyOn(AuthService, 'doLogin').and.returnValue(defer.promise);
 
+      $scope.init();
+      defer.resolve();
+      $scope.$apply();
+
+      expect($scope.success).toBe(true);
       expect($window.close).toHaveBeenCalled();
-      expect($window.opener.location.reload).toHaveBeenCalled();
+      expect(AuthService.doLogin).toHaveBeenCalled();
 
 
     }));
 
-    it('should redirect to the main app if it\'s a standard window',
+    it('should call doLogin and redirect to the main app if it\'s a standard window',
     inject(function($controller, $location) {
 
-      var $scope = {};
-      var $window = {location: undefined}
+      var $scope = rootScope;
+      var $window = {location: undefined};
+      var defer = q.defer();
 
       var asec = $controller('AuthSuccessEndpointCtrl', {$scope: $scope,
-        $window: $window});
+        $window: $window, AuthService: AuthService});
 
-      $scope.exitEndpoint();
+      spyOn(AuthService, 'doLogin').and.returnValue(defer.promise);
+
+      $scope.init();
+      defer.resolve();
+      $scope.$apply();
 
       expect($window.location).toBe('/');
 

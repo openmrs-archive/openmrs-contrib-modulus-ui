@@ -46,8 +46,6 @@ angular.module('modulusOne.authControllers', [
      */
     $scope.logout = function logout() {
       AuthService.doLogout();
-
-      $window.location.reload(false);
     };
 
     /**

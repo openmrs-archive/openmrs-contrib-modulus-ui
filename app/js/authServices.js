@@ -103,10 +103,11 @@ angular.module('modulusOne.authServices', [
 
       }, function error(err) {
         if (err.status === 401) { // Log out, due to expired / invalid token
-          AuthService.logout();
+          AuthService.doLogout();
         }
       })
       .finally(function() {
+
         return authResolver.resolve();
       });
     };

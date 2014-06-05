@@ -86,13 +86,6 @@ describe('AuthCtrl', function() {
 
       $scope.logout();
       expect(AuthService.doLogout).toHaveBeenCalled();
-    })
-
-    it('should reload the page', function() {
-      spyOn($window.location, 'reload');
-
-      $scope.logout();
-      expect($window.location.reload).toHaveBeenCalled();
     });
   });
 

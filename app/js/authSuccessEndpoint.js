@@ -32,30 +32,35 @@ angular.module('modulusOne.authSuccessEndpoint', [
         params.expires_in, params.scope);
     };
 
-    /**
-     * Leave the success endpoint. If the window is a popup, close the popup.
-     * If the window is a standard page, redirect to the main application.
-     * @return {[type]} [description]
-     */
-    $scope.exitEndpoint = function exitEndpoint() {
-      if ($window.opener) {
-        $window.opener.location.reload(false); // reload the parent page
-        $window.close();
-      } else {
-        $window.location = '/';
-      }
-    }
-
     $scope.init = function init() {
       var token = $scope.getOAuthToken($location.absUrl());
 
-      AuthService.doLogin(token)
-      .then(function () {
-        $scope.success = true;
-        $scope.exitEndpoint();
-      }, function() {
-        $scope.success = false;
-      });
+      if ($window.opener) {
+
+        var parent = $window.opener;
+        var injector = parent.angular.element(parent.document).injector();
+        var parentAuthService = injector.get('AuthService');
+        parentAuthService.doLogin(token)
+        .then(function() {
+          $scope.success = true;
+          $window.close();
+        }, function() {
+          $scope.success = false;
+        });
+
+      } else {
+
+        AuthService.doLogin(token)
+        .then(function () {
+          $scope.success = true;
+          $window.location = '/';
+        }, function() {
+          $scope.success = false;
+        });
+
+      }
+
+
     };
 
   });
