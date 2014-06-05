@@ -1,6 +1,5 @@
 // Declare app level module which depends on filters, and services
 angular.module('modulusOne', [
-  'ngRoute',
   'ngSanitize',
   'restangular',
   'modulusOne.config',
@@ -14,67 +13,71 @@ angular.module('modulusOne', [
   'modulusOne.authControllers',
   'xeditable',
   'angularFileUpload',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ui.router'
 ]).
-config(function($routeProvider, RestangularProvider) {
+config(function($stateProvider, $urlRouterProvider, RestangularProvider) {
 
-  $routeProvider.when('/', {
-    templateUrl: 'partials/search.html',
-    controller: 'SearchCtrl',
-    title: null,
-    resolve: {
-      auth: function resolveAuth(AuthService) {
-        return AuthService.waitUntilLoaded;
-      }
-    }
-  })
+  function resolveAuth(AuthService) {
+    return AuthService.waitUntilLoaded;
+  }
 
-  $routeProvider.when('/search', {
+  $stateProvider
+  .state('search', {
+    url: '/search',
     templateUrl: 'partials/search.html',
     controller: 'SearchCtrl',
     resolve: {
-      auth: function resolveAuth(AuthService) {
-        return AuthService.waitUntilLoaded;
-      }
+      auth: resolveAuth
+    },
+    date: {
+      title: 'Search'
     }
   })
-
-  $routeProvider.when('/show/:id/:slug?', {
+  .state('show', {
+    url: '/show/:id',
     templateUrl: 'partials/showModule.html',
     controller: 'ShowModuleCtrl',
     resolve: {
-      auth: function resolveAuth(AuthService) {
-        return AuthService.waitUntilLoaded;
-      }
+      auth: resolveAuth
     }
   })
-
-  $routeProvider.when('/create', {
+  .state('show.slug', {
+    url: '/:slug'
+  })
+  .state('create', {
+    url: '/create',
     templateUrl: 'partials/createModule.html',
-    title: "Upload Module",
-    controller: "CreateCtrl",
+    controller: 'CreateCtrl',
     resolve: {
-      auth: function resolveAuth(AuthService) {
-        return AuthService.waitUntilLoaded;
-      }
+      auth: resolveAuth
+    },
+    data: {
+      title: 'Upload Module'
     }
   })
-
-  $routeProvider.when('/browse/:page?', {
+  .state('browse', {
+    url: '/browse',
     templateUrl: 'partials/browse.html',
-    controller: "ListModulesCtrl",
-    title: "Recently Updated Modules",
+    controller: 'ListModulesCtrl',
     resolve: {
-      auth: function resolveAuth(AuthService) {
-        return AuthService.waitUntilLoaded;
-      }
+      auth: resolveAuth
+    },
+    data: {
+      title: 'Recently Update Modules'
     }
   })
+  .state('browse.page', {
+    url: '/:page'
+  });
 
-  $routeProvider.otherwise({redirectTo: '/'});
+  // Direct empty routes to the search state
+  $urlRouterProvider.when('/', function($state) {
+    $state.go('search', null, {location : false});
+  });
 
 }).
-run(function($rootScope, editableOptions, Restangular, $route, Alert,
+run(function($rootScope, editableOptions, Restangular, Alert,
   prepareModule, Config) {
   editableOptions.theme = 'bs3'
 
@@ -111,9 +114,9 @@ run(function($rootScope, editableOptions, Restangular, $route, Alert,
   })
 
 
-  $rootScope.$on('$routeChangeSuccess', function(evt, data) {
-    $rootScope.title = $route.current.title
-    $rootScope.controller = $route.current.controller
-  })
+  $rootScope.$on('$stateChangeSuccess', function(evt, state) {
+    $rootScope.title = state.data ? state.data.title : null;
+    $rootScope.controller = state.controller;
+  });
 
 });

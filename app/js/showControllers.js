@@ -1,15 +1,20 @@
 angular.module('modulusOne.showControllers', ['ui'])
-.controller('ShowModuleCtrl', function($scope, Restangular, $routeParams,
-    $location, getModule, $rootScope, readonlyAlert, Config, AuthService) {
+.controller('ShowModuleCtrl', function($scope, Restangular, $stateParams,
+    $state, getModule, $rootScope, readonlyAlert, Config, AuthService) {
 
     // Load this page's module.
-    getModule($scope, $routeParams.id)
+    getModule($scope, $stateParams.id)
     .then(function() {
       $rootScope.title = $scope.module.name
 
       // Redirect to the "complete" URL if necessary (like /show/id/slug)
-      if ($routeParams.slug !== $scope.module.slug) {
-        $location.path('/show/'+$scope.module.id+'/'+$scope.module.slug)
+      if ($stateParams.slug !== $scope.module.slug) {
+        $state.go('show.slug', {
+          id: $scope.module.id,
+          slug: $scope.module.slug
+        }, {
+          location: 'replace'
+        });
       }
     })
 
@@ -65,7 +70,7 @@ angular.module('modulusOne.showControllers', ['ui'])
 
         $scope.module.remove()
         .finally(function() {
-          $location.path('/')
+          $state.go('browse');
         })
       }
     }

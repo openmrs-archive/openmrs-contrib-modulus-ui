@@ -49,19 +49,19 @@
       <nav class="col-sm-7 navbar navbar-default">
         <ul class="nav navbar-nav">
           <li>
-            <a href="#/browse">
+            <a ui-sref="browse">
               <span class="glyphicon glyphicon-list"></span>
               Browse Modules
             </a>
           </li>
           <li>
-            <a href="#/search">
+            <a ui-sref="search">
               <span class="glyphicon glyphicon-search"></span>
               <span class="hidden-sm">Search</span>
             </a>
           </li>
           <li>
-            <a href="#/create">
+            <a ui-sref="create">
               <span class="glyphicon glyphicon-upload"></span>
               <span class="hidden-sm">Upload</span>
             </a>
@@ -94,7 +94,7 @@
     <section class="row alerts" ng-include="'partials/alerts.html'">
     </section>
 
-    <section ng-view class="clearfix" ng-class="$root.controller"></section>
+    <section ui-view class="clearfix" ng-class="$root.controller"></section>
 
     <noscript>
       <p class="lead text-center">
@@ -117,7 +117,7 @@
   <script src="vendor/select2/select2.min.js"></script>
 
   <script src="vendor/angular/angular.min.js"></script>
-  <script src="vendor/angular-route/angular-route.min.js"></script>
+  <script src="vendor/angular-ui-router/release/angular-ui-router.min.js"></script>
   <script src="vendor/angular-sanitize/angular-sanitize.min.js"></script>
   <script src="vendor/restangular/dist/restangular.min.js"></script>
   <script src="vendor/angular-xeditable/dist/js/xeditable.min.js"></script>
