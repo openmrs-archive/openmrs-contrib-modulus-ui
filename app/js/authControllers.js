@@ -10,7 +10,9 @@ angular.module('modulusOne.authControllers', [
       Uri,
       localStorageService,
       Restangular,
-      UserAuth
+      UserAuth,
+      $state,
+      Alert
     ) {
 
     /**
@@ -46,6 +48,8 @@ angular.module('modulusOne.authControllers', [
      */
     $scope.logout = function logout() {
       AuthService.doLogout();
+      $state.go('home');
+      new Alert('info', 'You have been logged out.').open();
     };
 
     /**
@@ -56,7 +60,7 @@ angular.module('modulusOne.authControllers', [
     $scope.init = function init() {
       // Attempt to load an authentication token at startup
       var token = localStorageService.get('modulus-authToken');
-      $scope.loggedIn = AuthService.doLogin(token);
+      AuthService.doLogin(token);
     };
 
     $scope.$watch(function watchUser() {

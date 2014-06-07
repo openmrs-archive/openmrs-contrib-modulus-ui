@@ -1,6 +1,18 @@
-<h2>You are not authorized to view this resource.</h2>
-<p>
-  Your profile does not have the requisite permissions to access this
-  resource. Usually, this means that you need administration credentials to
-  continue.
-</p>
+<div class="modal-header">
+  <button type="button" class="close" ng-click="close()">
+    &times;
+  </button>
+  <h4 class="modal-title">You are not authorized to view this resource.</h2>
+</div>
+<div class="modal-body">
+  <p>
+    Your profile does not have the requisite permissions to access the resource
+    at <code>{{path}}</code>. <strong>Only {{requiredRole | role}}s can access
+    this resource.</strong>
+  </p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-danger" ng-click="close()">
+    Close
+  </button>
+</div>

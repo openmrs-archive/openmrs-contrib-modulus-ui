@@ -11,6 +11,7 @@ angular.module('modulusOne', [
   'modulusOne.createControllers',
   'modulusOne.searchControllers',
   'modulusOne.authControllers',
+  'modulusOne.routeSecurity',
   'xeditable',
   'angularFileUpload',
   'ui.bootstrap',
@@ -23,6 +24,12 @@ config(function($stateProvider, $urlRouterProvider, RestangularProvider) {
   }
 
   $stateProvider
+  .state('home', {
+    url: '/',
+    controller: function($state) {
+      $state.go('search', null, {location: 'replace'});
+    }
+  })
   .state('search', {
     url: '/search',
     templateUrl: 'partials/search.html',
@@ -53,7 +60,8 @@ config(function($stateProvider, $urlRouterProvider, RestangularProvider) {
       auth: resolveAuth
     },
     data: {
-      title: 'Upload Module'
+      title: 'Upload Module',
+      requiredRole: 'ROLE_USER'
     }
   })
   .state('browse', {
@@ -71,14 +79,13 @@ config(function($stateProvider, $urlRouterProvider, RestangularProvider) {
     url: '/:page'
   });
 
-  // Direct empty routes to the search state
-  $urlRouterProvider.when('/', function($state) {
-    $state.go('search', null, {location : false});
-  });
-
+  // Direct empty routes to the home state
+  $urlRouterProvider.when('', '/');
 }).
-run(function($rootScope, editableOptions, Restangular, Alert,
-  prepareModule, Config) {
+
+run(function($rootScope, editableOptions, Restangular, $state, Alert,
+  prepareModule, Config, AuthService, $location, $stateParams, checkAuthorization) {
+
   editableOptions.theme = 'bs3'
 
   $rootScope.Config = Config
@@ -111,12 +118,30 @@ run(function($rootScope, editableOptions, Restangular, Alert,
       element = prepareModule(element)
     }
     return element
-  })
+  });
 
+  $rootScope.$on('$stateChangeStart', checkAuthorization);
 
   $rootScope.$on('$stateChangeSuccess', function(evt, state) {
     $rootScope.title = state.data ? state.data.title : null;
     $rootScope.controller = state.controller;
+  });
+
+  // When logged-in status changes, reload the route.
+  $rootScope.$watch(function() {
+    return AuthService.loggedIn;
+  }, function(current, former) {
+
+    // true if `loggedIn` changed from true->false or false->true
+    if (current + former == 1) {
+
+      // $state.reload();
+
+      // $state.reload() is broken in current builds of ui-router, so we do it
+      // the hard way:
+      $state.transitionTo($state.current.name, angular.copy($stateParams, checkAuthorization), {
+        reload: true, inherit: true, notify: true });
+    }
   });
 
 });
