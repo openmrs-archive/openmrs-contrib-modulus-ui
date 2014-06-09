@@ -96,6 +96,14 @@ run(function($rootScope, editableOptions, Restangular, $state, Alert,
   var apiError = new Alert('danger', 'Uh oh! Error communicating with the Modulus server.')
   Restangular.setErrorInterceptor(function(response, promise) {
 
+    // Log out if the token has expired.
+    if (response.status === 401 && response.data.error === "invalid_token") {
+      console.log('Logging out due to invalid_token');
+      AuthService.doLogout();
+      reloadState();
+      return promise.reject(response);
+    }
+
     if (console.error) {
       console.error('Modulus API Error', response)
     }
@@ -133,15 +141,24 @@ run(function($rootScope, editableOptions, Restangular, $state, Alert,
   }, function(current, former) {
 
     // true if `loggedIn` changed from true->false or false->true
-    if (current + former == 1) {
-
-      // $state.reload();
-
-      // $state.reload() is broken in current builds of ui-router, so we do it
-      // the hard way:
-      $state.transitionTo($state.current.name, angular.copy($stateParams, checkAuthorization), {
-        reload: true, inherit: true, notify: true });
-    }
+    if (current + former == 1) { reloadState(); }
   });
+
+  /**
+   * Reload the current state of the application, which re-initializes the
+   * controller.
+   * @return {undefined}
+   */
+  function reloadState() {
+    // $state.reload();
+
+    // $state.reload() is broken in current builds of ui-router, so we do the
+    // same thing manually:
+    $state.transitionTo(
+      $state.current.name || 'home',
+      angular.copy($stateParams, checkAuthorization),
+      {reload: true, inherit: true, notify: true }
+    );
+  }
 
 });

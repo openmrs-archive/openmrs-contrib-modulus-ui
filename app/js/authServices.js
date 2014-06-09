@@ -85,9 +85,9 @@ angular.module('modulusOne.authServices', [
       // If a valid token, set all restangular requests to use it
       if (token && token.isValid()) {
         localStorageService.set('modulus-authToken', token);
-        Restangular.setDefaultHeaders({
+        Restangular.setDefaultHeaders(angular.extend({
           'Authorization': 'Bearer ' + token.accessToken
-        });
+        }, Restangular.defaultHeaders));
       } else {
         AuthService.doLogout();
         return authResolver.resolve();
@@ -101,10 +101,6 @@ angular.module('modulusOne.authServices', [
 
         return user;
 
-      }, function error(err) {
-        if (err.status === 401) { // Log out, due to expired / invalid token
-          AuthService.doLogout();
-        }
       })
       .finally(function() {
 
@@ -119,6 +115,7 @@ angular.module('modulusOne.authServices', [
      */
     AuthService.doLogout = function doLogout() {
       localStorageService.remove('modulus-authToken');
+      delete Restangular.defaultHeaders.Authorization;
       AuthService.loggedIn = false;
       AuthService.user = undefined;
 
