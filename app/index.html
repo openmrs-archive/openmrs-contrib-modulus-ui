@@ -77,11 +77,15 @@
           <div class="btn-group navbar-right" dropdown is-open="status.isopen" 
           ng-switch-when="true">
             <button type="button" class="btn btn-primary navbar-btn
-            dropdown-toggle" ng-disabled="disabled">
+            dropdown-toggle" ng-disabled="disabled" title="{{user.username}}">
               {{user.fullname || user.username}}
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
+              <li><a href="https://id.openmrs.org/profile" target="_blank">
+                Your OpenMRS ID Profile
+              </a></li>
+              <li class="divider"></li>
               <li><a ng-click="logout()">Log out</a></li>
             </ul>
           </div>

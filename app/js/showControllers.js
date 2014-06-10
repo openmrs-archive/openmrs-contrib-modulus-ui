@@ -209,8 +209,11 @@ angular.module('modulusOne.showControllers', ['ui'])
   return function(user, module) {
     if (!user || !module) return false;
 
-    var isMaintainer = _.contains(module.maintainers, user);
     var isAdmin = _.contains(user.roles, 'ROLE_ADMIN');
+    var isMaintainer = _.contains(
+      _.map(module.maintainers, 'id'),
+      user.id
+    );
 
     return isMaintainer || isAdmin;
   }

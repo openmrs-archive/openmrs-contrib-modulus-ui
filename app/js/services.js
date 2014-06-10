@@ -88,7 +88,7 @@ angular.module('modulusOne.services', [])
     $rootScope.alerts = $rootScope.alerts || []
 
     function Alert(type, message) {
-      this.type = type
+      this.type = type // one of 'success', 'info', 'warning', 'danger'
       this.message = message
       this.isOpen = false
       this.showDetails = false
