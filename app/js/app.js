@@ -99,6 +99,13 @@ run(function($rootScope, editableOptions, Restangular, $state, Alert,
     // Log out if the token has expired.
     if (response.status === 401 && response.data.error === "invalid_token") {
       console.log('Logging out due to invalid_token');
+
+      // Open an alert only if the invalidation occured during usage.
+      if ($state.current) { // Returns false when the app is initially loading.
+        new Alert('info', 'Your authentication token became invalid and you ' +
+          'have been logged out.').open();
+      }
+
       AuthService.doLogout();
       reloadState();
       return promise.reject(response);

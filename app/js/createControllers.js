@@ -2,7 +2,7 @@
 angular.module('modulusOne.createControllers', [])
 
   .controller('CreateCtrl', function($scope, Restangular, isCompleted, isEmpty,
-    $location, Alert, readonlyAlert, Config) {
+    $location, Alert, readonlyAlert, Config, $window) {
 
 
     // If read only, do not allow this controller to be defined.
@@ -31,19 +31,13 @@ angular.module('modulusOne.createControllers', [])
     })
 
 
-    .finally(function() {
-      window.module = $scope.module
-      window.release = $scope.release
-    })
-
-
 
     function uponExit(evt) {
       if (!isCompleted($scope.module) && !isEmpty($scope.module)) {
         var quit = confirm('You have not finished uploading this module, and it will be '+
           'deleted. Continue?')
         if (quit) {
-          window.removeEventListener("beforeunload", this)
+          $window.removeEventListener("beforeunload", this)
           return $scope.module.remove();
         } else {
           evt.preventDefault()
@@ -52,8 +46,8 @@ angular.module('modulusOne.createControllers', [])
       }
     }
 
-    window.addEventListener("beforeunload", uponExit)
-    $scope.$on("$locationChangeStart", uponExit)
+    $window.addEventListener("beforeunload", uponExit);
+    $scope.$on("$scopeChangeStart", uponExit);
 
     // Delete the module and release being created
     $scope.cancelUpload = function cancelUpload() {
@@ -96,14 +90,20 @@ angular.module('modulusOne.createControllers', [])
     }
 
     function onProgress(evt) {
-      $scope.progress = parseInt(100.0 * evt.loaded / evt.total)
+      $scope.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
     }
 
     function onSuccess(data, status, headers, config) {
       // file is uploaded successfully
+      $scope.success = true;
 
-      for (var k in data) {
+      var k;
+      for (k in data) {
         $scope.release[k] = $scope.release[k] || data[k]
+      }
+
+      for (k in data.module) {
+        $scope.module[k] = $scope.module[k] || data.module[k]
       }
     }
 
