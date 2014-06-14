@@ -63,6 +63,12 @@ header nav {
   margin-top: 1.43em;
   margin-bottom: 0.71em;
 }
+header nav .navbar-btn.dropdown-toggle {
+  margin-bottom: 0;
+}
+header nav .dropdown-menu a {
+  cursor: pointer;
+}
 .ListModulesCtrl .incomplete {
   color: #555555;
 }

@@ -2,7 +2,7 @@
 angular.module('modulusOne.createControllers', [])
 
   .controller('CreateCtrl', function($scope, Restangular, isCompleted, isEmpty,
-    $location, Alert, readonlyAlert, Config) {
+    $state, Alert, readonlyAlert, Config, $window, $modal) {
 
 
     // If read only, do not allow this controller to be defined.
@@ -11,40 +11,59 @@ angular.module('modulusOne.createControllers', [])
       return false
     }
 
+    /**
+     * Create a release and module to use for uploaded content. This must happen
+     * _before_ release and module metadata are sent, since the release upload
+     * requires a module object to belong to.
+     *
+     * $scope.module and $scope.release will be populated
+     *
+     * @return {Promise} Resolved when module and release have been created.
+     */
+    $scope.createResources = function() {
 
-    // Create a fresh module
-    Restangular.all('modules').post()
-    .then(function(module) {
-      $scope.module = module
-    })
+      // Create a fresh module
+      return Restangular.all('modules').post()
+      .then(function(module) {
+        $scope.module = angular.extend(module, $scope.module);
+      })
+      .then(function() {
+        // Create a fresh release
+        return $scope.module.all('releases').post(
+          {module: {id: $scope.module.id}})
+      })
+      .then(function(release) {
+        // Associate the release with the module record (this has already
+        // happened on the server)
+        $scope.module.releases = [release]
+        $scope.release = angular.extend($scope.module.releases[0],
+          $scope.release);
+        $scope.created = true;
+      });
 
-    // Create a fresh release
-    .then(function() {
-      return $scope.module.all('releases').post(
-        {module: {id: $scope.module.id}})
-    })
-    .then(function(release) {
-      // Associate the release with the module record (this has already
-      // happened on the server)
-      $scope.module.releases = [release]
-      $scope.release = $scope.module.releases[0]
-    })
+    };
 
+    /**
+     * Delete a created module and release
+     * @return {Promise} Resolved when deletion is complete
+     */
+    $scope.deleteResources = function deleteResources() {
 
-    .finally(function() {
-      window.module = $scope.module
-      window.release = $scope.release
-    })
+      return $scope.module.remove()
+      .then(function() {
+        $scope.created = false;
+      });
+    };
 
 
 
     function uponExit(evt) {
-      if (!isCompleted($scope.module) && !isEmpty($scope.module)) {
-        var quit = confirm('You have not finished uploading this module, and it will be '+
+      if (!$scope.completed) {
+        var quit = $window.confirm('You have not finished uploading this module, and it will be '+
           'deleted. Continue?')
         if (quit) {
-          window.removeEventListener("beforeunload", this)
-          return $scope.module.remove();
+          $window.removeEventListener("beforeunload", this)
+          return $scope.deleteResources();
         } else {
           evt.preventDefault()
           return false
@@ -52,18 +71,68 @@ angular.module('modulusOne.createControllers', [])
       }
     }
 
-    window.addEventListener("beforeunload", uponExit)
-    $scope.$on("$locationChangeStart", uponExit)
+    function beforeUnloadPrompt() {
+      if (!$scope.created) return;
+
+      return "The module you've begun to upload is not complete! If you " +
+        "exit the page, it will be deleted.";
+    }
+
+    function syncDeleteModule() {
+      if (!$scope.created) return true;
+
+      // Send a module delete request. This must be done (sadly) with a direct
+      // XMLHttpRequest, since AngularJS is hard-coded to send async requests.
+      // This request must be sent sync so that the window doesn't close before
+      // it's fired off.
+      var req = new XMLHttpRequest();
+      req.open("delete" , $scope.module.getRestangularUrl(), false);
+      for (var h in Restangular.defaultHeaders) {
+        req.setRequestHeader(h, Restangular.defaultHeaders[h]);
+      }
+      req.send();
+    }
+
+    $window.onbeforeunload = beforeUnloadPrompt;
+    $window.onunload = syncDeleteModule;
+
+    $scope.$on('$destroy', function() {
+      $window.onbeforeunload = null;
+      $window.onunload = null;
+    })
+
+    function uponStateChange(event, toState, toStateParams) {
+      // Only display dialog if resources have been created but not completed.
+      if (!$scope.created) return;
+      if ($scope.created && $scope.completed) return;
+
+      event.preventDefault();
+
+      var modal = $modal.open({templateUrl: 'uponExitDialog.html'});
+      modal.result.then(function removeModule() {
+
+        return $scope.deleteResources()
+        .then(function() {
+          $scope.created = false;
+          $state.go(toState, toStateParams);
+        });
+
+      });
+
+    }
+
+    // $window.addEventListener("beforeunload", uponBeforeUnload);
+    $scope.$on("$stateChangeStart", uponStateChange);
 
     // Delete the module and release being created
     $scope.cancelUpload = function cancelUpload() {
       if ($scope.module) {
-        return $scope.module.remove()
+        return $scope.deleteResources()
         .finally(function() {
-          $location.path('/')
+          $state.go('home');
         })
       } else {
-        $location.path('/')
+        $state.go('home');
       }
     }
 
@@ -74,9 +143,12 @@ angular.module('modulusOne.createControllers', [])
         return $scope.module.put()
       })
       .finally(function() {
-        new Alert('success', $scope.module.name + ' was created and uploaded. '+
-          'Thank you for your contribution!').open()
-        $location.path('/show/'+$scope.module.id)
+        $scope.completed = true;
+        $state.go('show', {id: $scope.module.id}).then(function() {
+          console.debug('promise back');
+          new Alert('success', $scope.module.name + ' was created and ' +
+            'uploaded. Thank you for your contribution!').open()
+        });
       })
     }
 
@@ -85,25 +157,29 @@ angular.module('modulusOne.createControllers', [])
 
   })
 
-
-
   .controller('ReleaseFileCtrl', function($scope, $upload, Restangular, Alert,
     Config) {
 
     // If read only, do not allow this controller to be defined.
     if (Config.api.readOnly) {
-      return false
+      return false;
     }
 
     function onProgress(evt) {
-      $scope.progress = parseInt(100.0 * evt.loaded / evt.total)
+      $scope.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
     }
 
     function onSuccess(data, status, headers, config) {
       // file is uploaded successfully
+      $scope.success = true;
 
-      for (var k in data) {
+      var k;
+      for (k in data) {
         $scope.release[k] = $scope.release[k] || data[k]
+      }
+
+      for (k in data.module) {
+        $scope.module[k] = $scope.module[k] || data.module[k]
       }
     }
 
@@ -115,42 +191,48 @@ angular.module('modulusOne.createControllers', [])
     }
 
     // Use file chooser to pick a file
-    $scope.selectFile = function() {
+    $scope.selectFile = function selectFile() {
       var fileSelector = document.createElement('input');
       fileSelector.setAttribute('type', 'file');
 
       fileSelector.onchange = function(evt) {
-        $scope.onFileSelect(fileSelector.files)
-      }
+        $scope.onFileSelect(fileSelector.files);
+      };
 
-      fileSelector.click()
-    }
+      fileSelector.click();
+    };
 
     // When file is chosen or dropped into the controller
-    $scope.onFileSelect = function($files) {
+    $scope.onFileSelect = function onFileSelect($files) {
 
-      //$files: an array of files selected, each file has name, size, and type.
-      var file = $files[0]
-      ,   fileReader = new FileReader()
+      // Start by creating a module and release to upload to.
+      $scope.createResources()
+      .then(function() {
+
+        //$files: an array of files selected, each file has name, size, and type.
+        var file = $files[0]
+        ,   fileReader = new FileReader()
 
 
-      fileReader.readAsArrayBuffer(file)
-      fileReader.onload = function(evt) {
+        fileReader.readAsArrayBuffer(file)
+        fileReader.onload = function(evt) {
 
-        var buf = new Uint8Array(fileReader.result)
-            url = Restangular.one('modules', $scope.module.id).all('releases')
-                    .one('upload', $scope.release.id)
+          var buf = new Uint8Array(fileReader.result)
+              url = Restangular.one('modules', $scope.module.id).all('releases')
+                      .one('upload', $scope.release.id)
 
-        $scope.upload = $upload.http({
-          url: url.getRestangularUrl(),
-          method: 'PUT',
-          params: {'filename': file.name},
-          headers: {'Content-Type': file.type},
-          data: buf.buffer
-        }).progress(onProgress)
-          .success(onSuccess)
-          .error(onError)
-      }
+          $scope.upload = $upload.http({
+            url: url.getRestangularUrl(),
+            method: 'PUT',
+            params: {'filename': file.name},
+            headers: {'Content-Type': file.type},
+            data: buf.buffer
+          }).progress(onProgress)
+            .success(onSuccess)
+            .error(onError)
+        }
+
+      });
 
     }
   })

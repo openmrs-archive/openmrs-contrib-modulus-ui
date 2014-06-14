@@ -4,7 +4,6 @@ angular.module('modulusOne.services', [])
 
   .value('version', '0.0.1')
 
-
   .factory('getModule', function(Restangular) {
     return function(scope, id) {
       return Restangular.one('modules', id).get()
@@ -89,7 +88,7 @@ angular.module('modulusOne.services', [])
     $rootScope.alerts = $rootScope.alerts || []
 
     function Alert(type, message) {
-      this.type = type
+      this.type = type // one of 'success', 'info', 'warning', 'danger'
       this.message = message
       this.isOpen = false
       this.showDetails = false
@@ -145,6 +144,11 @@ angular.module('modulusOne.services', [])
       .include('partials/readonlyMessage.html')
   })
 
-
+  // Allow jsUri uri-manipulation library to be injected. This service should
+  // always be used to get access to jsUri. Do not access the global object.
+  // See https://github.com/derek-watson/jsUri for API.
+  .factory('Uri', function injectUri($window) {
+    return $window.Uri;
+  })
 
 

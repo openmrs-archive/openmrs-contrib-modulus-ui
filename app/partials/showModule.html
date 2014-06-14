@@ -1,4 +1,4 @@
-<div class="row" ng-switch on="editable">
+<div class="row" ng-if="user | canEdit:module" ng-switch on="editable">
 
   <button ng-switch-default class="btn btn-link btn-warning" ng-click="toggleEdit()" >
     Edit

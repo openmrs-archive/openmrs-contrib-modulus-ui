@@ -5,19 +5,26 @@
 
 <div class="row" ng-controller="ReleaseFileCtrl" >
   <div class="jumbotron upload-jumbotron" ng-file-drop="onFileSelect($files)"
-    ng-file-drag-over-class="upload-jumbotron-dragged">
+    ng-file-drag-over-class="upload-jumbotron-dragged"
+    ng-file-drop-available="dropSupported=true">
 
     <h3>Upload a module:</h3>
 
       <div class="center-block">
         <p ng-show="dropSupported">
-            Drop an .omod file here or <a class="action" ng-click="selectFile()">choose a file</a>
+            Drop an <code>.omod</code> here or
+            <a class="btn btn-default action" ng-click="selectFile()">
+              choose a file
+            </a>
         </p>
-        <p ng-show="progress">Upload progress: {{progress}}%</p>
+        <p ng-show="progress">
+          <progressbar value="progress" type="{{success ? 'success' : 'primary'}}"
+          ng-switch on="success">
+            <span ng-switch-default>{{progress}}% complete</span>
+            <span ng-switch-when="true">Upload complete.</span>
+          </progressbar>
+        </p>
       </div>
-
-      <div ng-file-drop-available="dropSupported=true" 
-            ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
 
       <!-- <button class="btn btn-default" ng-click="upload.abort()">Cancel Upload</button> -->
 
@@ -72,3 +79,30 @@
 </button>
 
 </form>
+
+<script type="text/ng-template" id="uponExitDialog.html">
+<div class="modal-header">
+  <button type="button" class="close" ng-click="close()">
+    &times;
+  </button>
+  <h4 class="modal-title">You have an unsaved module.</h4>
+</div>
+<div class="modal-body">
+  <p>
+    The module you've begun to upload is not complete! If you continue, it will
+    be deleted.
+  </p>
+  <p>
+    To finish uploading your module, ensure a file has been uploaded and its
+    metadata fields have been filled out. Then, press "Complete Upload".
+  </p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-danger" ng-click="$close()">
+    Continue and Delete Upload
+  </button>
+  <button type="button" class="btn btn-default" ng-click="$dismiss()">
+    Cancel
+  </button>
+</div>
+</script>

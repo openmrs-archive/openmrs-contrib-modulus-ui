@@ -18,7 +18,7 @@ describe('ModuleService', function() {
   }))
 
 
-  it('should get a module specified', function( ModuleService) {
+  xit('should get a module specified', function( ModuleService) {
 
     console.log(ModuleService)
 

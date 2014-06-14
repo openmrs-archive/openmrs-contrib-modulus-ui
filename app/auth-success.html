@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" ng-app="modulusOne.authSuccessEndpoint">
+<head>
+  <title>OpenMRS Modules &mdash; Authentication Successful</title>
+  <script src="vendor/angular/angular.min.js"></script>
+  <script src="vendor/angular-local-storage/angular-local-storage.min.js"></script>
+  <script src="vendor/lodash/dist/lodash.min.js"></script>
+  <script src="vendor/restangular/dist/restangular.min.js"></script>
+  <script src="js/authSuccessEndpoint.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/authServices.js"></script>
+
+
+</head>
+<body ng-controller="AuthSuccessEndpointCtrl" ng-init="init()">
+
+  <code>{{params | json}}</code>
+
+  <div ng-switch on="success">
+    <p ng-switch-when="true">
+      Redirecting you to OpenMRS Modules...
+    </p>
+    <p ng-switch-when="false">
+      Whoops! Error parsing authentication token from Modulus. Please try again
+      or contact <a href="mailto:helpdesk@openmrs.org">helpdesk@openmrs.org</a>.
+    </p>
+  </div>
+
+
+</body>
+</html>

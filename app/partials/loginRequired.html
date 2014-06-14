@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="close()">
+    &times;
+  </button>
+  <h4 class="modal-title">You must log in to continue.</h4>
+</div>
+<div class="modal-body">
+  <p>
+    The resource at
+    <code>{{path}}</code>
+    is only available for authorized users.
+  </p>
+</div>
+<div class="modal-footer" ng-controller="AuthCtrl">
+  <button type="button" class="btn btn-default" ng-click="close()">
+    Close
+  </button>
+  <button type="button" class="btn btn-primary" ng-click="login()">
+    Log in with OpenMRS ID
+  </button>
+</div>

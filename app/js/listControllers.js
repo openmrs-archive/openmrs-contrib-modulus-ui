@@ -1,10 +1,10 @@
 angular.module('modulusOne.listControllers', [])
   .controller('ListModulesCtrl', function($scope, Restangular, isCompleted,
-    $routeParams) {
+    $stateParams) {
 
       $scope.showPager = true
       $scope.pageSize = 25
-      $scope.page = parseInt($routeParams.page, 10) || 1
+      $scope.page = parseInt($stateParams.page, 10) || 1
 
       Restangular.all('modules').getList({
         max: $scope.pageSize,

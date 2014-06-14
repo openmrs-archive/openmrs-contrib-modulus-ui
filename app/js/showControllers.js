@@ -1,15 +1,20 @@
 angular.module('modulusOne.showControllers', ['ui'])
-.controller('ShowModuleCtrl', function($scope, Restangular, $routeParams,
-    $location, getModule, $rootScope, readonlyAlert, Config) {
+.controller('ShowModuleCtrl', function($scope, Restangular, $stateParams,
+    $state, getModule, $rootScope, readonlyAlert, Config, AuthService) {
 
     // Load this page's module.
-    getModule($scope, $routeParams.id)
+    getModule($scope, $stateParams.id)
     .then(function() {
       $rootScope.title = $scope.module.name
 
       // Redirect to the "complete" URL if necessary (like /show/id/slug)
-      if ($routeParams.slug !== $scope.module.slug) {
-        $location.path('/show/'+$scope.module.id+'/'+$scope.module.slug)
+      if ($stateParams.slug !== $scope.module.slug) {
+        $state.go('show.slug', {
+          id: $scope.module.id,
+          slug: $scope.module.slug
+        }, {
+          location: 'replace'
+        });
       }
     })
 
@@ -25,6 +30,9 @@ angular.module('modulusOne.showControllers', ['ui'])
       $scope.module.releases = releases
     })
 
+
+    // Allow the view to access the logged-in user.
+    $scope.user = AuthService.user;
 
 
     // Editability
@@ -62,7 +70,7 @@ angular.module('modulusOne.showControllers', ['ui'])
 
         $scope.module.remove()
         .finally(function() {
-          $location.path('/')
+          $state.go('browse');
         })
       }
     }
@@ -194,5 +202,19 @@ angular.module('modulusOne.showControllers', ['ui'])
   return function(user) {
     if (!user) return false
     return {id: user.id, text: user.username}
+  }
+})
+
+.filter('canEdit', function canEdit() {
+  return function(user, module) {
+    if (!user || !module) return false;
+
+    var isAdmin = _.contains(user.roles, 'ROLE_ADMIN');
+    var isMaintainer = _.contains(
+      _.map(module.maintainers, 'id'),
+      user.id
+    );
+
+    return isMaintainer || isAdmin;
   }
 })

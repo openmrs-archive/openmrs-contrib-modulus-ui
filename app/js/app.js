@@ -1,8 +1,8 @@
 // Declare app level module which depends on filters, and services
 angular.module('modulusOne', [
-  'ngRoute',
   'ngSanitize',
   'restangular',
+  'modulusOne.config',
   'modulusOne.filters',
   'modulusOne.services',
   'modulusOne.directives',
@@ -10,45 +10,82 @@ angular.module('modulusOne', [
   'modulusOne.showControllers',
   'modulusOne.createControllers',
   'modulusOne.searchControllers',
+  'modulusOne.authControllers',
+  'modulusOne.routeSecurity',
   'xeditable',
   'angularFileUpload',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ui.router'
 ]).
-config(function($routeProvider, RestangularProvider) {
+config(function($stateProvider, $urlRouterProvider, RestangularProvider) {
 
-  $routeProvider.when('/', {
+  function resolveAuth(AuthService) {
+    return AuthService.waitUntilLoaded;
+  }
+
+  $stateProvider
+  .state('home', {
+    url: '/',
+    controller: function($state) {
+      $state.go('search', null, {location: 'replace'});
+    }
+  })
+  .state('search', {
+    url: '/search',
     templateUrl: 'partials/search.html',
     controller: 'SearchCtrl',
-    title: null,
+    resolve: {
+      auth: resolveAuth
+    },
+    date: {
+      title: 'Search'
+    }
   })
-
-  $routeProvider.when('/search', {
-    templateUrl: 'partials/search.html',
-    controller: 'SearchCtrl'
-  })
-
-  $routeProvider.when('/show/:id/:slug?', {
+  .state('show', {
+    url: '/show/:id',
     templateUrl: 'partials/showModule.html',
-    controller: 'ShowModuleCtrl'
+    controller: 'ShowModuleCtrl',
+    resolve: {
+      auth: resolveAuth
+    }
   })
-
-  $routeProvider.when('/create', {
+  .state('show.slug', {
+    url: '/:slug'
+  })
+  .state('create', {
+    url: '/create',
     templateUrl: 'partials/createModule.html',
-    title: "Upload Module",
-    controller: "CreateCtrl"
+    controller: 'CreateCtrl',
+    resolve: {
+      auth: resolveAuth
+    },
+    data: {
+      title: 'Upload Module',
+      requiredRole: 'ROLE_USER'
+    }
   })
-
-  $routeProvider.when('/browse/:page?', {
+  .state('browse', {
+    url: '/browse',
     templateUrl: 'partials/browse.html',
-    controller: "ListModulesCtrl",
-    title: "Recently Updated Modules"
+    controller: 'ListModulesCtrl',
+    resolve: {
+      auth: resolveAuth
+    },
+    data: {
+      title: 'Recently Update Modules'
+    }
   })
+  .state('browse.page', {
+    url: '/:page'
+  });
 
-  $routeProvider.otherwise({redirectTo: '/'});
-
+  // Direct empty routes to the home state
+  $urlRouterProvider.when('', '/');
 }).
-run(function($rootScope, editableOptions, Restangular, $route, Alert,
-  prepareModule, Config) {
+
+run(function($rootScope, editableOptions, Restangular, $state, Alert,
+  prepareModule, Config, AuthService, $location, $stateParams, checkAuthorization) {
+
   editableOptions.theme = 'bs3'
 
   $rootScope.Config = Config
@@ -58,6 +95,21 @@ run(function($rootScope, editableOptions, Restangular, $route, Alert,
 
   var apiError = new Alert('danger', 'Uh oh! Error communicating with the Modulus server.')
   Restangular.setErrorInterceptor(function(response, promise) {
+
+    // Log out if the token has expired.
+    if (response.status === 401 && response.data.error === "invalid_token") {
+      console.log('Logging out due to invalid_token');
+
+      // Open an alert only if the invalidation occured during usage.
+      if ($state.current) { // Returns false when the app is initially loading.
+        new Alert('info', 'Your authentication token became invalid and you ' +
+          'have been logged out.').open();
+      }
+
+      AuthService.doLogout();
+      reloadState();
+      return promise.reject(response);
+    }
 
     if (console.error) {
       console.error('Modulus API Error', response)
@@ -81,12 +133,39 @@ run(function($rootScope, editableOptions, Restangular, $route, Alert,
       element = prepareModule(element)
     }
     return element
-  })
+  });
 
+  $rootScope.$on('$stateChangeStart', checkAuthorization);
 
-  $rootScope.$on('$routeChangeSuccess', function(evt, data) {
-    $rootScope.title = $route.current.title
-    $rootScope.controller = $route.current.controller
-  })
+  $rootScope.$on('$stateChangeSuccess', function(evt, state) {
+    $rootScope.title = state.data ? state.data.title : null;
+    $rootScope.controller = state.controller;
+  });
+
+  // When logged-in status changes, reload the route.
+  $rootScope.$watch(function() {
+    return AuthService.loggedIn;
+  }, function(current, former) {
+
+    // true if `loggedIn` changed from true->false or false->true
+    if (current + former == 1) { reloadState(); }
+  });
+
+  /**
+   * Reload the current state of the application, which re-initializes the
+   * controller.
+   * @return {undefined}
+   */
+  function reloadState() {
+    // $state.reload();
+
+    // $state.reload() is broken in current builds of ui-router, so we do the
+    // same thing manually:
+    $state.transitionTo(
+      $state.current.name || 'home',
+      angular.copy($stateParams, checkAuthorization),
+      {reload: true, inherit: true, notify: true }
+    );
+  }
 
 });
