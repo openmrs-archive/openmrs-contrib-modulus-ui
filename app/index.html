@@ -70,12 +70,14 @@
 
         <div ng-controller="AuthCtrl" class="ng-cloak" ng-switch on="loggedIn"
         ng-init="init()">
+
           <button type="button" class="btn btn-primary navbar-btn navbar-right"
           ng-switch-when="false" ng-click="login()">
             Log in <span class="hidden-sm hidden-md">with OpenMRS ID</span>
           </button>
+
           <div class="btn-group navbar-right" dropdown is-open="status.isopen" 
-          ng-switch-when="true">
+          ng-switch-default>
             <button type="button" class="btn btn-primary navbar-btn
             dropdown-toggle" ng-disabled="disabled" title="{{user.username}}">
               {{user.fullname || user.username}}
