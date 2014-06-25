@@ -193,7 +193,7 @@ angular.module('modulusOne.showControllers', ['ui'])
   return function(user) {
     if (!user) return null
 
-    return 'https://wiki.openmrs.org/display/' + user.username
+    return 'https://wiki.openmrs.org/display/~' + user.username
   }
 })
 
