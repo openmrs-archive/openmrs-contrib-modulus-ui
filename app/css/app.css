@@ -69,6 +69,10 @@ header nav .navbar-btn.dropdown-toggle {
 header nav .dropdown-menu a {
   cursor: pointer;
 }
+header nav .admin-icon {
+  position: relative;
+  top: 0.14em;
+}
 .ListModulesCtrl .incomplete {
   color: #555555;
 }

@@ -80,7 +80,12 @@
           ng-switch-default>
             <button type="button" class="btn btn-primary navbar-btn
             dropdown-toggle" ng-disabled="disabled" title="{{user.username}}">
+
+              <span ng-if="user | hasRole:'admin'" 
+              class="glyphicon glyphicon-star admin-icon" title="Admin User"></span>
+
               {{user.fullname || user.username}}
+
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
