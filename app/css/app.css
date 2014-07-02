@@ -37,6 +37,17 @@
   font-size: 85%;
   margin-right: 1em;
 }
+.release-list h2 {
+  display: inline-block;
+}
+.release-list .header-button {
+  font-size: 1.1em;
+  margin-top: -0.4em;
+  margin-left: 0.3em;
+}
+.release-list table {
+  clear: both;
+}
 header {
   padding-top: 1.5em;
   padding-bottom: 1.5em;
@@ -140,4 +151,8 @@ a:link {
 .menu > li:nth-child(1):before {
   content: "";
   padding: 0;
+}
+button .glyphicon,
+a .glyphicon {
+  margin-right: 0.25em;
 }

@@ -61,3 +61,10 @@ a, a:link {
   content: "";
   padding: 0;
 }
+
+// When a glyphicon appears in a link insert a small right margin. Then, ensure
+// there are no spaces between the glyph and your link text. This avoids
+// weird underlines on links including the glyphicon.
+button .glyphicon, a .glyphicon {
+  margin-right: 0.25em;
+}

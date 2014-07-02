@@ -15,6 +15,7 @@ describe('AuthCtrl', function() {
 
   beforeEach(angular.mock.module("restangular"));
   beforeEach(angular.mock.module('modulusOne.services'));
+  beforeEach(angular.mock.module('ui.router'));
 
   beforeEach(inject(function($controller, $injector) {
     $scope = $injector.get('$rootScope');
@@ -64,6 +65,7 @@ describe('AuthCtrl', function() {
 
     var token;
     var openAlert;
+    var $state;
 
     beforeEach(inject(function($controller) {
       token = new UserAuth("ada95902-06c7-4335-8ff0-0dec3b0538cf",
@@ -71,13 +73,16 @@ describe('AuthCtrl', function() {
       $scope.user = {id: 1, username: 'horatio', fullname: 'Horatio Hornblower'};
       $scope.loggedIn = true;
 
+      $state = jasmine.createSpyObj('$state', ['go']);
+
       spyOn(storage, 'get').and.returnValue(JSON.parse(JSON.stringify(token)));
 
       ac = $controller('AuthCtrl', {
         $scope: $scope,
         localStorageService: storage,
         Config: config,
-        $window: $window
+        $window: $window,
+        $state: $state
       });
     }));
 
@@ -86,6 +91,8 @@ describe('AuthCtrl', function() {
 
       $scope.logout();
       expect(AuthService.doLogout).toHaveBeenCalled();
+
+      expect($state.go).toHaveBeenCalledWith('home');
     });
   });
 

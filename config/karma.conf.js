@@ -13,6 +13,7 @@ module.exports = function(config){
       'app/vendor/angular-ui/build/angular-ui.min.js',
       'app/vendor/angular-local-storage/angular-local-storage.min.js',
       'app/vendor/lodash/dist/lodash.min.js',
+      'app/vendor/angular-ui-router/release/angular-ui-router.min.js',
       'app/js/**/*.js',
       'test/unit/**/*.js',
       'test/lib/**/*.js'
@@ -31,7 +32,7 @@ module.exports = function(config){
 
     browsers : ['PhantomJS'],
 
-    reporters: ['dots', 'osx'],
+    reporters: ['mocha', 'osx'],
 
     plugins : [
             'karma-junit-reporter',

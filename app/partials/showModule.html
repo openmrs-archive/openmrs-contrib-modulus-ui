@@ -1,15 +1,15 @@
 <div class="row" ng-if="user | canEdit:module" ng-switch on="editable">
 
   <button ng-switch-default class="btn btn-link btn-warning" ng-click="toggleEdit()" >
-    Edit
+    <span class="glyphicon glyphicon-pencil"></span>Edit
   </button>
 
   <button ng-switch-when="true" class="btn btn-default btn-success" ng-click="updateModule(true)">
-    Save Edits
+    <span class="glyphicon glyphicon-ok"></span>Save Edits
   </button>
 
   <button class="btn btn-link btn-warning" ng-click="confirmDeleteModule()">
-    Delete
+    <span class="glyphicon glyphicon-trash"></span>Delete
   </button>
 </div>
 
@@ -131,26 +131,6 @@
 
 </div>
 
-<div class="row col-md-12">
-  <h2>Releases</h2>
-  <table class="table">
-    <tr>
-      <th>Version</th>
-      <th>OpenMRS Version Requirement</th>
-      <th>Date Created</th>
-      <th></th>
-    </tr>
-
-    <tr ng-repeat="release in module.releases">
-
-      <td>{{release.moduleVersion}}</td>    
-      <td>{{release.requiredOMRSVersion}}</td>
-      <td>{{release.dateCreated | date : 'short'}}</td>
-      <td>
-        <a ng-href="{{release.downloadURL}}">
-          <button type="button" class="btn btn-default btn-xs">Download</button>
-        </a>
-      </td>
-    </tr>
-  </table>
+<div class="row col-md-12 release-list release-view-container">
+  <div ui-view="release" autoscroll="true" class="release-view-animate"></div>
 </div>

@@ -17,7 +17,8 @@ angular.module('modulusOne', [
   'ui.bootstrap',
   'ui.router'
 ]).
-config(function($stateProvider, $urlRouterProvider, RestangularProvider) {
+config(function($stateProvider, $urlRouterProvider, RestangularProvider,
+$locationProvider) {
 
   function resolveAuth(AuthService) {
     return AuthService.waitUntilLoaded;
@@ -42,15 +43,36 @@ config(function($stateProvider, $urlRouterProvider, RestangularProvider) {
     }
   })
   .state('show', {
-    url: '/show/:id',
-    templateUrl: 'partials/showModule.html',
-    controller: 'ShowModuleCtrl',
+    url: '/show/:id/:slug',
     resolve: {
       auth: resolveAuth
+    },
+
+    views: {
+      '': {
+        templateUrl: 'partials/showModule.html',
+        controller: 'ShowModuleCtrl',
+      },
+      'release@show': {
+        templateUrl: 'partials/showModuleReleases.html'
+      }
     }
   })
-  .state('show.slug', {
-    url: '/:slug'
+  .state('show.newRelease', {
+    url: '/new',
+    views: {
+      'release': {
+        controller: 'NewReleaseCtrl',
+        templateUrl: 'partials/showModuleNewRelease.html'
+      }
+    },
+    date: {
+      requiredRole: 'ROLE_USER'
+    }
+  })
+  .state('redirectToShow', {
+    url: '/show/:id',
+    controller: 'RedirectToShowModuleCtrl'
   })
   .state('create', {
     url: '/create',
