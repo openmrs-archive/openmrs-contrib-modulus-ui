@@ -76,3 +76,13 @@ angular.module('modulusOne.authControllers', [
     });
 
   })
+
+  .filter('hasRole', function canEdit() {
+  return function(user, role) {
+    if (!user || (typeof role !== 'string')) return false;
+
+    role = 'ROLE_' + role.toUpperCase();
+
+    return _.contains(user.roles, role);
+  }
+})
