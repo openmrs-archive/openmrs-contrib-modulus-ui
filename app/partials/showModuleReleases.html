@@ -1,0 +1,27 @@
+<h2>Releases</h2>
+
+<button ng-if="user | canEdit:module" ui-sref="show.newRelease"
+class="btn btn-link header-button">
+  <span class="glyphicon glyphicon-cloud-upload"></span>Upload New Release
+</button>
+
+<table class="table">
+  <tr>
+    <th>Version</th>
+    <th>OpenMRS Version Requirement</th>
+    <th>Date Created</th>
+    <th></th>
+  </tr>
+
+  <tr ng-repeat="release in module.releases">
+
+    <td>{{release.moduleVersion}}</td>    
+    <td>{{release.requiredOMRSVersion}}</td>
+    <td>{{release.dateCreated | date : 'short'}}</td>
+    <td>
+      <a ng-href="{{release.downloadURL}}">
+        <button type="button" class="btn btn-default btn-xs">Download</button>
+      </a>
+    </td>
+  </tr>
+</table>

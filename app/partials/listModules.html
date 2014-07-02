@@ -6,12 +6,12 @@
 
   <tr ng-repeat="module in modules">
       <td>
-        <a ui-sref="show.slug({id: module.id, slug: module.slug})">
+        <a ui-sref="show({id: module.id, slug: module.slug})">
           {{module.name}}
         </a>
       </td>
       <td>
-        <a ui-sref="show.slug({id: module.id, slug: module.slug})">
+        <a ui-sref="show({id: module.id, slug: module.slug})">
           {{module.description}}
         </a>
       </td>

@@ -1,4 +1,6 @@
-angular.module('modulusOne.showControllers', ['ui'])
+angular.module('modulusOne.showControllers', [
+  'ui'
+])
 .controller('ShowModuleCtrl', function($scope, Restangular, $stateParams,
     $state, getModule, $rootScope, readonlyAlert, Config, AuthService) {
 
@@ -6,16 +8,6 @@ angular.module('modulusOne.showControllers', ['ui'])
     getModule($scope, $stateParams.id)
     .then(function() {
       $rootScope.title = $scope.module.name
-
-      // Redirect to the "complete" URL if necessary (like /show/id/slug)
-      if ($stateParams.slug !== $scope.module.slug) {
-        $state.go('show.slug', {
-          id: $scope.module.id,
-          slug: $scope.module.slug
-        }, {
-          location: 'replace'
-        });
-      }
     })
 
     // Load all releases for this module.
@@ -186,6 +178,84 @@ angular.module('modulusOne.showControllers', ['ui'])
 
     query: selectUsernameSearch
   }
+})
+
+.controller('RedirectToShowModuleCtrl', function(getModule, $scope,
+$stateParams, $state) {
+  getModule($scope, $stateParams.id)
+  .then(function() {
+
+    // Redirect to the "complete" URL if necessary (like /show/id/slug)
+    if ($stateParams.slug !== $scope.module.slug) {
+      $state.go('show', {
+        id: $scope.module.id,
+        slug: $scope.module.slug
+      }, {
+        location: 'replace'
+      });
+    }
+  })
+})
+
+.controller('NewReleaseCtrl', function($scope, $filter, AuthService, $state) {
+
+  // Disable this controller if the user cannot edit this module.
+  if (!$filter('canEdit', $scope.module, AuthService.user)) {
+    return false;
+  }
+
+  /**
+   * Called by ReleaseFileCtrl to create the release object to upload to.
+   * Calls the API to create a Release, then passes that release on
+   * @return {Promise} Promise resolving with the Release to upload to
+   */
+  $scope.createResources = function createResources() {
+    return $scope.module.all('releases').post({
+      module: {id: $scope.module.id}
+    })
+    .then(function(release) {
+      $scope.release = release;
+      return release;
+    })
+  };
+
+  /**
+   * Update the release and change state to the module details view.
+   * @return {promise} Promise that will be resolved after state change.
+   */
+  $scope.completeUpload = function completeUpload() {
+    return $scope.release.put()
+    .then(function() {
+
+      return $state.go('show', {
+        id: $scope.module.id,
+        slug: $scope.module.slug
+      }, {
+        reload: true
+      });
+
+    });
+  };
+
+  /**
+   * Delete the created release (if any) and return to the module details view
+   * @return {promise} Promise that will be resolved after state change.
+   */
+  $scope.cancel = function cancel() {
+    if ($scope.release) {
+      return $scope.release.remove().then(returnToState);
+    } else {
+      return returnToState();
+    }
+
+    function returnToState() {
+      return $state.go('show', {
+        id: $scope.module.id,
+        slug: $scope.module.slug
+      });
+    }
+  }
+
 })
 
 // Link to a user's wiki profile

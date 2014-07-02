@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="css/create.css"> 
+
+<h2>Releases</h2>
+
+<button ng-if="user | canEdit:module" ui-sref="show"
+class="btn btn-link header-button">
+  <span class="glyphicon glyphicon-list"></span>Show Releases
+</button>
+
+<div class="row">
+
+  <div class="jumbotron upload-jumbotron" ng-controller="ReleaseFileCtrl"
+  ng-file-drop="onFileSelect($files)"
+  ng-file-drag-over-class="upload-jumbotron-dragged"
+  ng-file-drop-available="dropSupported=true">
+
+    <h3>Upload a New Release:</h3>
+
+    <p ng-show="dropSupported">
+        Drop an <code>.omod</code> here or
+        <a class="btn btn-default action" ng-click="selectFile()">
+          choose a file
+        </a>
+    </p>
+    <p ng-show="progress">
+      <progressbar value="progress" type="{{success ? 'success' : 'primary'}}"
+      ng-switch on="success">
+        <span ng-switch-default>{{progress}}% complete</span>
+        <span ng-switch-when="true">Upload complete.</span>
+      </progressbar>
+    </p>
+
+
+  </div>
+
+  <form class="form">
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label class="control-label">Version</label>
+        <input class="form-control" type="text" ng-model="release.moduleVersion">
+      </div>
+
+      <div class="form-group col-md-6">
+        <label class="control-label">OpenMRS Version Requirement</label>
+        <input class="form-control" type="text" ng-model="release.requiredOMRSVersion">
+      </div>
+    </div>
+
+    <button ng-click="completeUpload()" class="btn btn-primary">
+      Complete Upload
+    </button>
+    <button ng-click="cancel()" class="btn btn-link">
+      Cancel
+    </button>
+  </form>
+
+
+</div>
