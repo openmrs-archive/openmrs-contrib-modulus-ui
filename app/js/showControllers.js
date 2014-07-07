@@ -200,7 +200,7 @@ $stateParams, $state) {
 .controller('NewReleaseCtrl', function($scope, $filter, AuthService, $state) {
 
   // Disable this controller if the user cannot edit this module.
-  if (!$filter('canEdit', $scope.module, AuthService.user)) {
+  if (!$filter('canEdit')(AuthService.user, $scope.module)) {
     return false;
   }
 
