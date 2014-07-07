@@ -16,6 +16,12 @@ module.exports = function(grunt) {
       }
     },
 
+    colorguard: {
+      files: {
+        src: 'app/css/*.css'
+      }
+    },
+
     connect: {
       development: {
         options: {
@@ -67,11 +73,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less')
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-connect')
+  grunt.loadNpmTasks('grunt-colorguard')
 
   grunt.registerTask('default', ['build'])
   grunt.registerTask('serve', ['build', 'connect:development', 'watch'])
   grunt.registerTask('heroku', ['connect:heroku'])
-  grunt.registerTask('build', ['config', 'less'])
+  grunt.registerTask('build', ['config', 'less', 'colorguard'])
 
   grunt.registerTask('config', function() {
 
