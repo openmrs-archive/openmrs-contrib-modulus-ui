@@ -27,7 +27,7 @@ module.exports = function(grunt) {
         options: {
           port: process.env.PORT || 8083,
           base: './app',
-          livereload: true,
+          livereload: 3333,
 
           middleware: function(connect, options, middlewares) {
             var morgan = require('morgan')

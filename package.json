@@ -15,7 +15,7 @@
     "node-static": "~0.7.3"
   },
   "devDependencies": {
-    "karma": "~0.10",
+    "karma": "~0.12",
     "karma-jasmine": "~0.2.0",
     "karma-junit-reporter": "~0.1",
     "karma-mocha-reporter": "^0.2.5",
