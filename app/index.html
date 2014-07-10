@@ -55,15 +55,24 @@
             </a>
           </li>
           <li>
-            <a ui-sref="search">
+            <a class="hidden-sm" ui-sref="search">
               <span class="glyphicon glyphicon-search"></span>
-              <span class="hidden-sm">Search</span>
+              Search
+            </a>
+            <a class="visible-sm" ui-sref="search" tooltip="Search">
+              <span class="glyphicon glyphicon-search"></span>
             </a>
           </li>
           <li>
-            <a ui-sref="create">
+            <a class="hidden-sm" ui-sref="create"
+            tooltip-append-to-body="true">
               <span class="glyphicon glyphicon-upload"></span>
-              <span class="hidden-sm">Upload</span>
+              Upload New Module
+            </a>
+            <a class="visible-sm" ui-sref="create" tooltip="Upload New Module"
+            tooltip-append-to-body="true">
+              <span class="glyphicon glyphicon-upload"></span>
+            </a>
             </a>
           </li>
         </ul>

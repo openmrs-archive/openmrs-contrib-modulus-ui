@@ -74,8 +74,8 @@ angular.module('modulusOne.createControllers', [])
     function beforeUnloadPrompt() {
       if (!$scope.created) return;
 
-      return "The module you've begun to upload is not complete! If you " +
-        "exit the page, it will be deleted.";
+      return "You have not finished uploading this module, and it will be " +
+        "deleted.";
     }
 
     function syncDeleteModule() {
@@ -235,4 +235,64 @@ angular.module('modulusOne.createControllers', [])
       });
 
     }
+  })
+
+  .controller('DuplicateModuleLookupCtrl', function($scope, Restangular) {
+
+    /**
+     * Search for modules whose names are similar to the given parameter.
+     * @param  {String} name the name to search for
+     * @return {Promise}     a promise resolved after the search request is
+     *                         finished
+     */
+    $scope.findSimilar = function findSimilar(name) {
+
+      return Restangular.oneUrl('search').get({
+        q: name,
+        complex: true
+      })
+      .then(function(results) {
+
+        // Filter out the module on $scope.module, since it will be included
+        // in the search results.
+        var items = results.items.filter(function(m) {
+          if (!$scope.module || !$scope.module.id) return true;
+
+          return m.id != $scope.module.id;
+        });
+
+        if (items.length > 0) {
+          $scope.displayAlert(items);
+        }
+
+      });
+    };
+
+    /**
+     * Display an alert on the page, indicating that one of the modules
+     * passed in `modules` may be a duplicate of this one.
+     * @param  {Array<Module>} modules list of modules similar to this one
+     * @return {undefined}
+     */
+    $scope.displayAlert = function displayAlert(modules) {
+
+      // Displaying the alert from this data will be handled by the view.
+      $scope.duplicates = modules;
+    };
+
+    $scope.init = function init() {
+
+      // Check for duplicates whenever the module changes.
+      $scope.$watch(function watcher() {
+        if ($scope.module && $scope.module.name) {
+          return $scope.module.name;
+        }
+      }, function listener(name) {
+        if (name) {
+          return $scope.findSimilar(name);
+        }
+      });
+
+    };
+
   })

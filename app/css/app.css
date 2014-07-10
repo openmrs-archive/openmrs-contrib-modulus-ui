@@ -77,6 +77,9 @@ header nav {
 header nav .navbar-btn.dropdown-toggle {
   margin-bottom: 0;
 }
+header nav .nav > li a {
+  padding-right: 10px;
+}
 header nav .dropdown-menu a {
   cursor: pointer;
 }

@@ -27,6 +27,8 @@ describe('NewReleaseCtrl', function() {
   describe('#createResources', function() {
 
     var $scope;
+    var $filter = jasmine.createSpy('$filter').and.returnValue(
+      jasmine.createSpy().and.returnValue(true)); // for the "canEdit" filter
 
     var sampleRelease = {
       id: 1234,
@@ -48,7 +50,8 @@ describe('NewReleaseCtrl', function() {
       }
 
       nrc = $controller('NewReleaseCtrl', {
-        $scope: $scope
+        $scope: $scope,
+        $filter: $filter
       });
 
     }));
@@ -73,7 +76,8 @@ describe('NewReleaseCtrl', function() {
 
     $state = jasmine.createSpyObj('$state', ['go']);
 
-    $filter = jasmine.createSpy('filter').and.returnValue(true);
+    $filter = jasmine.createSpy('$filter').and.returnValue(
+      jasmine.createSpy().and.returnValue(true));
 
     beforeEach(inject(function($q) {
 
@@ -93,7 +97,8 @@ describe('NewReleaseCtrl', function() {
       nrc = $controller('NewReleaseCtrl', {
         $state: $state,
         $scope: $scope,
-        AuthService: AuthService
+        AuthService: AuthService,
+        $filter: $filter
       });
     }));
 
