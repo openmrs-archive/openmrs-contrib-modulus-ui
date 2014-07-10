@@ -31,6 +31,30 @@
   </div>
 </div>
 
+<div class="row" ng-controller="DuplicateModuleLookupCtrl"
+ng-init="init()">
+
+<alert ng-if="duplicates" type="warning">
+  <p>
+    <strong>This module looks like it may be a duplicate of:</strong>
+  </p>
+  <ul ng-repeat="d in duplicates">
+    <li>
+      <a ui-sref="show({id: d.id, slug: d.slug})">{{d.name}}</a>
+      
+      ( <a ui-sref="show.newRelease({id: d.id, slug: d.slug})">
+      upload a new release</a> )
+    </li>
+  </ul>
+  <p>
+    Please confirm the module you're uploading is not a duplicate before
+    proceeding. Be sure to upload a new <em>release</em> of an existing module
+    if you're releasing a new version.
+  </p>
+</alert>
+
+</div>
+
 <div class="row">
 
   <div class="col-md-6">
@@ -85,16 +109,12 @@
   <button type="button" class="close" ng-click="close()">
     &times;
   </button>
-  <h4 class="modal-title">You have an unsaved module.</h4>
+  <h4 class="modal-title">Are you sure you want to abandon your module?</h4>
 </div>
 <div class="modal-body">
   <p>
-    The module you've begun to upload is not complete! If you continue, it will
-    be deleted.
-  </p>
-  <p>
-    To finish uploading your module, ensure a file has been uploaded and its
-    metadata fields have been filled out. Then, press "Complete Upload".
+    The module you've begun to upload is not complete. If you leave this page,
+    it will be deleted.
   </p>
 </div>
 <div class="modal-footer">
@@ -102,7 +122,7 @@
     Continue and Delete Upload
   </button>
   <button type="button" class="btn btn-default" ng-click="$dismiss()">
-    Cancel
+    Stay on this page
   </button>
 </div>
 </script>
