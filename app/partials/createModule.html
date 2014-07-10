@@ -36,14 +36,12 @@ ng-init="init()">
 
 <alert ng-if="duplicates" type="warning">
   <p>
+    <span class="glyphicon glyphicon-paperclip"></span>
     <strong>This module looks like it may be a duplicate of:</strong>
   </p>
   <ul ng-repeat="d in duplicates">
     <li>
       <a ui-sref="show({id: d.id, slug: d.slug})">{{d.name}}</a>
-      
-      ( <a ui-sref="show.newRelease({id: d.id, slug: d.slug})">
-      upload a new release</a> )
     </li>
   </ul>
   <p>
