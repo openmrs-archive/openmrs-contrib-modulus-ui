@@ -185,9 +185,11 @@ angular.module('modulusOne.createControllers', [])
 
     function onError(err) {
       if (console.error) {
-        console.error('Release upload error', err)
+        console.error('Release upload error', err);
       }
-      new Alert('danger', 'Encountered error while uploading release.').open()
+      new Alert('danger', 'Encountered error while uploading release. ' +
+               'Check the console for details.').open();
+      $scope.progress = null;
     }
 
     // Use file chooser to pick a file
@@ -204,28 +206,32 @@ angular.module('modulusOne.createControllers', [])
 
     // When file is chosen or dropped into the controller
     $scope.onFileSelect = function onFileSelect($files) {
+      
+      $scope.success = false; // Set to false in case this is a re-upload
 
       // Start by creating a module and release to upload to.
       $scope.createResources()
       .then(function() {
 
         //$files: an array of files selected, each file has name, size, and type.
-        var file = $files[0]
-        ,   fileReader = new FileReader()
+        var file = $files[0];
+        var fileReader = new FileReader();
 
 
-        fileReader.readAsArrayBuffer(file)
+        fileReader.readAsArrayBuffer(file);
         fileReader.onload = function(evt) {
 
-          var buf = new Uint8Array(fileReader.result)
-              url = Restangular.one('modules', $scope.module.id).all('releases')
-                      .one('upload', $scope.release.id)
+          var buf = new Uint8Array(fileReader.result);
+          var url = Restangular.one('modules', $scope.module.id).all('releases')
+                      .one('upload', $scope.release.id);
+          var headers = angular.extend({}, Restangular.defaultHeaders,
+                                      {'Content-Type': file.type});
 
           $scope.upload = $upload.http({
             url: url.getRestangularUrl(),
             method: 'PUT',
             params: {'filename': file.name},
-            headers: {'Content-Type': file.type},
+            headers: headers,
             data: buf.buffer
           }).progress(onProgress)
             .success(onSuccess)

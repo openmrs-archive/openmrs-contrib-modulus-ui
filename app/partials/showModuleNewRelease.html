@@ -23,10 +23,16 @@ class="btn btn-link header-button">
         </a>
     </p>
     <p ng-show="progress">
-      <progressbar value="progress" type="{{success ? 'success' : 'primary'}}"
-      ng-switch on="success">
-        <span ng-switch-default>{{progress}}% complete</span>
-        <span ng-switch-when="true">Upload complete.</span>
+      <progressbar value="progress" type="{{success ? 'success' : 'primary'}}">
+        <span ng-if="!success && progress != 100">
+          {{progress}}% complete
+        </span>
+        <span ng-if="!success && progress == 100">
+          Processing...
+        </span>
+        <span ng-if="success">
+          Upload complete.
+        </span>
       </progressbar>
     </p>
 
