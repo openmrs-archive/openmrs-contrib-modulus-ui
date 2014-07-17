@@ -12,6 +12,7 @@ angular.module('modulusOne', [
   'modulusOne.searchControllers',
   'modulusOne.authControllers',
   'modulusOne.routeSecurity',
+  'modulusOne.progressService',
   'xeditable',
   'angularFileUpload',
   'ui.bootstrap',
@@ -106,11 +107,14 @@ $locationProvider) {
 }).
 
 run(function($rootScope, editableOptions, Restangular, $state, Alert,
-  prepareModule, Config, AuthService, $location, $stateParams, checkAuthorization) {
+  prepareModule, Config, AuthService, $location, $stateParams,
+  checkAuthorization, ProgressBar) {
 
   editableOptions.theme = 'bs3'
 
   $rootScope.Config = Config
+
+  ProgressBar.bootstrap();
 
   Restangular.setBaseUrl(Config.api.baseUrl + '/api' ||
     '/api')
