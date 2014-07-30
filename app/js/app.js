@@ -39,7 +39,7 @@ $locationProvider) {
     resolve: {
       auth: resolveAuth
     },
-    date: {
+    data: {
       title: 'Search'
     }
   })
@@ -67,7 +67,7 @@ $locationProvider) {
         templateUrl: 'partials/showModuleNewRelease.html'
       }
     },
-    date: {
+    data: {
       requiredRole: 'ROLE_USER'
     }
   })

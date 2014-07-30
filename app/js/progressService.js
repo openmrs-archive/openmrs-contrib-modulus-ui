@@ -1,119 +1,122 @@
-angular.module('modulusOne.progressService', ['ngProgress'])
+angular.module('modulusOne.progressService', ['ngProgressLite'])
 .factory('ProgressTask', function(ProgressService, $timeout) {
 
   // Number of milliseconds until the progress bar will be resolved anyway.
   // Used to keep a request that gets stuck from keeping the progress bar up
   // forever.
   var TIMEOUT = 15 * 1000;
+  var tasks = [];
 
-  var ProgressTask = function() {
-    console.debug('task created');
-    ProgressService.incrRemaining();
+  var ProgressTask = function(opts) {
+    opts = opts || {};
 
-    $timeout(this.resolve, TIMEOUT);
+    // ProgressService.incrRemaining();
+    ProgressService.oneStarted();
 
+    this.name = opts.name;
     this._completed = false;
+    this._timeout = $timeout(
+      _.bind(this.resolve, this),
+      TIMEOUT
+    );
+
+    tasks.push(this);
 
     return this;
   }
 
   ProgressTask.prototype.resolve = function resolve() {
-    console.debug('task resolved');
 
     if (!this._completed) {
-      ProgressService.incrDone();
-      this._completed = true;
+      ProgressService.oneDone();
+      this._complete();
     }
 
   };
 
   ProgressTask.prototype.reject = function reject() {
-    console.debug('task rejected');
 
     if (!this._completed) {
-      ProgressService.fail();
-      this._completed = true;
+      ProgressService.oneFailed();
+      this._complete();
     }
 
   };
+
+  ProgressTask.prototype._complete = function _complete() {
+    this._completed = true;
+    $timeout.cancel(this._timeout);
+  }
 
   return ProgressTask;
 })
 
 
-.factory('ProgressService', function(ngProgress) {
+.factory('ProgressService', function(ngProgressLite, $timeout) {
 
   var ProgressService = {};
+  var tasks = 0;
+  var _started = false;
 
-  var finished = 0;
-  var total = 0;
+  // ngProgressLite.color('#53AFFF');
 
-  ProgressService.incrRemaining = function startedOne() {
-    total++;
-    ProgressService.progress(finished, total);
+  function started () {
+    // return ngProgressLite.status() !== 0;
+    return _started;
   };
 
-  ProgressService.incrDone = function finishedOne() {
-    finished++;
-    ProgressService.progress(finished, total);
-  }
-
-  ProgressService.progress = function progress(completed, total) {
-
-    var percentage = (completed / total) * 100;
-
-    console.debug('progress:', percentage);
-
-    ngProgress.set(percentage);
-
-    if (percentage === 100) {
-      ngProgress.complete();
+  var update = ProgressService.update = function update() {
+    if (!started() && tasks > 0) { // Progressbar not started
+      console.debug("START")
+      ngProgressLite.start();
+      _started = true;
+    } else if (started() && tasks < 1) { // Progress completed
+      deferToComplete();
+    } else if (started() && tasks > 0) { // Progress in progress
+      console.debug("INC")
+      ngProgressLite.inc();
     }
-
   };
 
-  ProgressService.fail = function fail() {
-    ngProgress.reset();
-  }
+  var deferToComplete = _.debounce(function deferToComplete() {
+    ngProgressLite.done();
+    _started = false;
+    console.debug("COMPLETE")
+  }, 400);
+
+  ProgressService.oneStarted = function oneStarted() {
+    tasks++;
+    update();
+  };
+
+  ProgressService.oneDone = function oneDone() {
+    if (tasks > 0) tasks--;
+    update();
+  };
+
+  ProgressService.oneFailed = function oneFailed() {
+    tasks = 0;
+    ngProgressLite.done();
+  };
 
   return ProgressService;
 
 })
 
-.factory('ProgressBar', function(ProgressTask, Restangular, $rootScope) {
+.factory('ProgressBar', function(ProgressTask, ProgressService, Restangular,
+$rootScope) {
 
   var ProgressBar = {};
 
   ProgressBar.bootstrap = function bootstrap() {
 
-    var tasks = {};
-
-    function start(name) {
-      tasks[name] = new ProgressTask();
-      return tasks[name];
-    }
-
-    function _resolve(name) {
-      if (tasks[name]) {
-        var result = tasks[name].resolve();
-        delete tasks[name];
-        return result;
-      }
-    }
-
-    function _reject(name) {
-      if (tasks[name]) {
-        var result = tasks[name].reject();
-        delete tasks[name];
-        return result;
-      }
-    }
+    var restangularTasks = {};
 
     // Make all Restangular requests create progressbar tasks.
     Restangular.addRequestInterceptor(
     function(element, operation, what, url) {
 
-      start(url);
+      restangularTasks[url] = new ProgressTask({name: operation + ' ' + url});
       return element;
 
     });
@@ -121,7 +124,7 @@ angular.module('modulusOne.progressService', ['ngProgress'])
     Restangular.addResponseInterceptor(
     function(data, operation, what, url, response, deferred) {
 
-      _resolve(url);
+      restangularTasks[url].resolve();
       return data;
 
     });
@@ -129,22 +132,27 @@ angular.module('modulusOne.progressService', ['ngProgress'])
     $rootScope.$on('$stateChangeStart',
     function(event, toState, toParams, fromState, fromParams) {
 
-      var taskName = fromState.name + ':' + toState.name;
-      start(taskName);
+      toState.data = toState.data || {};
+      toState.data.progressTask = new ProgressTask({
+        name: 'stateChange to ' + toState.name
+      });
+
     });
 
     $rootScope.$on('$stateChangeSuccess',
     function(event, toState, toParams, fromState, fromParams) {
 
-      var taskName = fromState.name + ':' + toState.name;
-      _resolve(taskName);
+      if (toState.data && toState.data.progressTask) {
+        toState.data.progressTask.resolve();
+      } else {
+        ProgressService.oneDone();
+      }
 
     });
 
     $rootScope.$on('$stateChangeError',
     function(event, toState, toParams, fromState, fromParams) {
-      var taskName = fromState.name + ':' + toState.name;
-      _reject(taskName);
+      toParams._progressTask.reject();
     });
 
   };
