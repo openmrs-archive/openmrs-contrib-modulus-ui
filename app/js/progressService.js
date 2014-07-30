@@ -67,13 +67,11 @@ angular.module('modulusOne.progressService', ['ngProgressLite'])
 
   var update = ProgressService.update = function update() {
     if (!started() && tasks > 0) { // Progressbar not started
-      console.debug("START")
       ngProgressLite.start();
       _started = true;
     } else if (started() && tasks < 1) { // Progress completed
       deferToComplete();
     } else if (started() && tasks > 0) { // Progress in progress
-      console.debug("INC")
       ngProgressLite.inc();
     }
   };
@@ -81,7 +79,6 @@ angular.module('modulusOne.progressService', ['ngProgressLite'])
   var deferToComplete = _.debounce(function deferToComplete() {
     ngProgressLite.done();
     _started = false;
-    console.debug("COMPLETE")
   }, 400);
 
   ProgressService.oneStarted = function oneStarted() {
