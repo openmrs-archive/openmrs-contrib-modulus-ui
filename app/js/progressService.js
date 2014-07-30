@@ -4,21 +4,33 @@ angular.module('modulusOne.progressService', ['ngProgressLite'])
   // Number of milliseconds until the progress bar will be resolved anyway.
   // Used to keep a request that gets stuck from keeping the progress bar up
   // forever.
-  var TIMEOUT = 15 * 1000;
+  var DEFAULT_TIMEOUT = 15 * 1000;
   var tasks = [];
 
-  var ProgressTask = function(opts) {
-    opts = opts || {};
+  var ProgressTask = function(args) {
 
-    // ProgressService.incrRemaining();
+    var opts = {};
+    angular.extend(opts, {
+      name: 'Task at ' + new Date(Date.now()).toTimeString(),
+      timeout: true
+    }, args);
+
     ProgressService.oneStarted();
 
     this.name = opts.name;
     this._completed = false;
-    this._timeout = $timeout(
-      _.bind(this.resolve, this),
-      TIMEOUT
-    );
+
+    if (opts.timeout) {
+
+      var time = typeof opts.timeout === 'number'
+        ? opts.timeout
+        : DEFAULT_TIMEOUT;
+
+      this._timeout = $timeout(
+        _.bind(this.resolve, this),
+        time
+      );
+    }
 
     tasks.push(this);
 
@@ -45,7 +57,8 @@ angular.module('modulusOne.progressService', ['ngProgressLite'])
 
   ProgressTask.prototype._complete = function _complete() {
     this._completed = true;
-    $timeout.cancel(this._timeout);
+    if (this._timeout)
+      $timeout.cancel(this._timeout);
   }
 
   return ProgressTask;
