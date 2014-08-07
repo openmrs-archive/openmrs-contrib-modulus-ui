@@ -3,6 +3,8 @@ Modulus UI
 
 This is the web-based interface of [Modulus][1], the OpenMRS Modules directory. It's a static, single-page web application written in AngularJS and provides a frontend to Modulus's REST API.
 
+[![Hack openmrs/openmrs-contrib-modulus-ui on Nitrous.IO](https://d3o0mnbgv6k92a.cloudfront.net/assets/hack-l-v1-4b6757c3247e3c50314390ece34cdb11.png)](https://www.nitrous.io/hack_button?source=embed&runtime=nodejs&repo=openmrs%2Fopenmrs-contrib-modulus-ui)
+
 Building
 -----
 
