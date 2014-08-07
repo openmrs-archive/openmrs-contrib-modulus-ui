@@ -27,7 +27,7 @@ module.exports = function(grunt) {
         options: {
           port: process.env.PORT || 8083,
           base: './app',
-          livereload: 3333,
+          livereload: 3572,
 
           middleware: function(connect, options, middlewares) {
             var morgan = require('morgan')
@@ -51,20 +51,20 @@ module.exports = function(grunt) {
         files: 'app/less/*.less',
         tasks: ['less'],
         options: {
-          livereload: true
+          livereload: 3572
         }
       },
       templates: {
         files: 'app/**/*.html',
         options: {
-          livereload: true
+          livereload: 3572
         }
       },
       config: {
         files: 'config/modulusui*.conf.js',
         tasks: 'config',
         options: {
-          livereload: true
+          livereload: 3572
         }
       }
     }

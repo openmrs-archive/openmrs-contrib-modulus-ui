@@ -73,7 +73,11 @@ angular.module('modulusOne.routeSecurity', [
 AuthService, toState, toStateParams, $timeout) {
 
   $scope.path = toState.url;
-  $scope.close = $modalInstance.close;
+  $scope.close = function() {
+    if (toState.data && toState.data.progressTask)
+      toState.data.progressTask.reject();
+    $modalInstance.close();
+  }
 
   // Automatically proceed to the route once the users logs in.
   $scope.$watch(function() {

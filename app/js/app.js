@@ -12,6 +12,7 @@ angular.module('modulusOne', [
   'modulusOne.searchControllers',
   'modulusOne.authControllers',
   'modulusOne.routeSecurity',
+  'modulusOne.progressService',
   'xeditable',
   'angularFileUpload',
   'ui.bootstrap',
@@ -38,7 +39,7 @@ $locationProvider) {
     resolve: {
       auth: resolveAuth
     },
-    date: {
+    data: {
       title: 'Search'
     }
   })
@@ -66,7 +67,7 @@ $locationProvider) {
         templateUrl: 'partials/showModuleNewRelease.html'
       }
     },
-    date: {
+    data: {
       requiredRole: 'ROLE_USER'
     }
   })
@@ -106,11 +107,14 @@ $locationProvider) {
 }).
 
 run(function($rootScope, editableOptions, Restangular, $state, Alert,
-  prepareModule, Config, AuthService, $location, $stateParams, checkAuthorization) {
+  prepareModule, Config, AuthService, $location, $stateParams,
+  checkAuthorization, ProgressBar) {
 
   editableOptions.theme = 'bs3'
 
   $rootScope.Config = Config
+
+  ProgressBar.bootstrap();
 
   Restangular.setBaseUrl(Config.api.baseUrl + '/api' ||
     '/api')
