@@ -20,9 +20,11 @@ Building
         # If you don't already have grunt installed on your system:
         $ npm install -g grunt-cli
         
-4. Set environment variable `MODULUS_API_BASE_URL` to the URL for your Modulus server's api:
+4. Check configuration settings in `config/modulusui.conf.js`. Most importantly, you'll want to check these settings:
 
-        $ export MODULUS_API_BASE_URL=http://localhost:8080/api
+   - `api.baseUrl`, the URL of the Modulus server that Modulus UI will connect to
+   - `appUrl`, the URL Modulus UI will be served from
+   - `auth.authenticateUrl` and `auth.clientId`, parameters used to perform OAuth login with OpenMRS ID
 
 5. Build & run:
 
