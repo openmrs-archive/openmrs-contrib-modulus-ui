@@ -1,0 +1,16 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700);
+.tag {
+  border: 0.1em solid #8c8c8c;
+  padding: 0.2em 0.5em;
+  background-color: #f2f2f2;
+  margin-right: 0.8em;
+}
+.tag a {
+  color: #363463;
+}
+.tag .close {
+  float: none;
+  position: relative;
+  top: 0.15em;
+  margin-left: 0.2em;
+}

@@ -1,0 +1,21 @@
+@import 'styleGuide';
+@tag-default-color: rgb(140,140,140);
+
+
+.tag {
+  border: 0.1em solid @tag-default-color;
+  padding: 0.2em 0.5em;
+  background-color: lighten(@tag-default-color, 40%);
+  margin-right: 0.8em;
+}
+
+.tag a {
+  color: @text;
+}
+
+.tag .close {
+  float: none;
+  position: relative;
+  top: 0.15em;
+  margin-left: 0.2em;
+}

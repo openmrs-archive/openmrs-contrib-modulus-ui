@@ -22,12 +22,17 @@
     </span>
   </h2>
 
-  <p class="desciription lead" ng-if="!editable">{{module.description}}</p>
-  <p class="desciription lead" ng-if="editable">
+  <p class="description lead" ng-if="!editable">{{module.description}}</p>
+  <p class="description lead" ng-if="editable">
     <span editable-textarea="module.description" e-rows="4" e-cols="60"
       e-placeholder="Description">
       {{module.description}}
     </span>
+  </p>
+
+  <!--Tags-->
+  <p class="tags">
+    <tag ng-repeat="tag in module.tags"></tag>
   </p>
 
 </div>

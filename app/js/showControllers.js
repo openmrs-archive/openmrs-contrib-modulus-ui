@@ -288,3 +288,31 @@ $stateParams, $state) {
     return isMaintainer || isAdmin;
   }
 })
+
+
+.directive('tag', function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'partials/tag.html'
+  };
+})
+
+.directive('tagColor', function(Color) {
+  function link(scope, element, attrs) {
+    var color = attrs.tagColor;
+
+    if (!color)
+      return;
+
+    if (color[0] !== '#')
+      color = '#' + color;
+
+    element.css('border-color', color);
+    element.css('background-color', Color.shade(color, 0.8));
+  }
+
+  return {
+    link: link,
+    restrict: 'A'
+  };
+})
