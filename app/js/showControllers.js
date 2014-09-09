@@ -316,3 +316,37 @@ $stateParams, $state) {
     restrict: 'A'
   };
 })
+
+
+.controller('TagCtrl', function($scope, Restangular) {
+  var module = $scope.module;
+
+  $scope.removeTagFromModule = function removeTagFromModule() {
+    alert('Will remove ' + $scope.tag.name + ' from ' + $scope.module.name);
+  };
+
+
+})
+
+.controller('TagAddCtrl', function($scope, Restangular) {
+  $scope.newTagName = '';
+
+  $scope.tags = ['foo', 'bar', 'baz'];
+
+  $scope.searchForTags = function searchForTags(name) {
+    return Restangular.one('search').get({
+      q: name || '',
+      type: 'tag'
+    })
+    .then(function(results) {
+      console.debug(results);
+      if (results.items.length > 0) {
+        return results.items.map(function (t) {
+          return t.name;
+        });
+      } else {
+        return ['Create new tag "' + name + '"...'];
+      }
+    })
+  }
+})

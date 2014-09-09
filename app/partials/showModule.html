@@ -33,6 +33,9 @@
   <!--Tags-->
   <p class="tags">
     <tag ng-repeat="tag in module.tags"></tag>
+    <input class="tags-add-tag" type="text" placeholder="Add a tag..."
+      ng-controller="TagAddCtrl" ng-model="newTagName"
+      typeahead="tag for tag in searchForTags($viewValue)">
   </p>
 
 </div>
