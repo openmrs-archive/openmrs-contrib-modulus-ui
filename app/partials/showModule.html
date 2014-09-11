@@ -31,11 +31,18 @@
   </p>
 
   <!--Tags-->
-  <p class="tags">
-    <tag ng-repeat="tag in module.tags"></tag>
-    <input class="tags-add-tag" type="text" placeholder="Add a tag..."
-      ng-controller="TagAddCtrl" ng-model="newTagName"
-      typeahead="tag for tag in searchForTags($viewValue)">
+  <p class="tags" ng-controller="ShowModuleTagCtrl">
+    <tags-input
+      ng-model="$parent.module.tags"
+      display-property="name"
+      on-tag-added="updateModule()"
+      on-tag-removed="updateModule()"
+      add-from-autocomplete-only="true">
+      
+      <auto-complete source="searchForTags($query)">
+      </auto-complete>
+
+    </tags-input>
   </p>
 
 </div>
