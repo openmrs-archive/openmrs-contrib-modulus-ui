@@ -1,0 +1,15 @@
+<!-- Customized for Modulus, 2014-09-12 -->
+
+<div class="autocomplete" ng-show="suggestionList.visible">
+<ul class="suggestion-list">
+<li class="suggestion-item"
+  ng-repeat="item in suggestionList.items track by track(item)"
+  ng-class="{selected: item == suggestionList.selected}"
+  ng-click="addSuggestionByIndex($index)"
+  ng-mouseenter="suggestionList.select($index)">
+  
+  <!-- color swatch -->
+  {{ item.label ? item.label : item.name }}
+</li>
+</ul>
+</div>

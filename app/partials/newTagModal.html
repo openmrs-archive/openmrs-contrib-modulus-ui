@@ -1,0 +1,35 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="cancel()">
+    &times;
+  </button>
+  <h3 class="modal-title">Creating "{{tag.name}}" Tag</h3>
+</div>
+<div class="modal-body">
+
+  <p>
+    Since "{{tag.name}}" is a new tag, please provide some information about
+    the tag you're adding to the directory.
+  </p>
+
+  <form>
+    <div class="form-group">
+      <label for="descriptions">Tag Description</label>
+      
+      <textarea rows="3" id="description" class="form-control"
+        ng-model="tag.description" autofocus
+        placeholder="What kinds of modules will be tagged &quot;{{tag.name}}&quot;?">
+      </textarea>
+    </div>
+  </form>
+
+
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" ng-click="cancel()">
+    Cancel
+  </button>
+  <button type="button" class="btn btn-primary" ng-click="ok()">
+    Create Tag
+  </button>
+</div>

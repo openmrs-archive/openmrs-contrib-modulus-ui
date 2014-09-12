@@ -319,8 +319,44 @@ $stateParams, $state) {
 })
 
 
-.controller('ShowModuleTagCtrl', function($scope, Restangular) {
+.controller('ShowModuleTagCtrl', function($scope, Restangular, $state, $modal) {
 
+  $scope.createAndAdd = function createAndAdd() {
+
+    var newTags = $scope.module.tags.filter(function (t) {
+      return !t.id;
+    });
+
+    if (newTags && newTags.length > 0) {
+
+      var modal = $modal.open({
+        templateUrl: 'partials/newTagModal.html',
+        controller: 'NewTagModalCtrl',
+        size: 'sm',
+        resolve: {
+          tag: function () { return newTags[0]; }
+        }
+      });
+
+      return modal.result.then(
+        function complete () {
+          $scope.updateModule();
+        },
+
+        // Delete newly added tags if modal is cancelled.
+        function reject () {
+          $scope.module.tags = _.difference($scope.module.tags, newTags);
+        });
+    }
+
+    return $scope.updateModule();
+  };
+
+  /**
+   * Look up tags via the API
+   * @param  {string} name the query to search for
+   * @return {Promise}     promise that resolves with an array of tags found
+   */
   $scope.searchForTags = function searchForTags(name) {
     return Restangular.one('search').get({
       q: name || '',
@@ -328,9 +364,35 @@ $stateParams, $state) {
     })
     .then(function(results) {
 
-      return results.items;
+      var items = results.items || [];
+
+      // If there are no exact matches from the search, create a meta-
+      // entry that will activate the create tag modal.
+      if (_.pluck(items, 'name').indexOf(name) < 0) {
+        items.push({
+          name: name,
+          label: 'Create new tag "' + name + '"...'
+        });
+      }
+
+      return items;
 
     });
   };
 
 })
+
+
+.controller('NewTagModalCtrl', function ($scope, $modalInstance, tag) {
+
+  $scope.tag = tag;
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+
+  $scope.ok = function () {
+    $modalInstance.close(tag);
+  };
+
+});
