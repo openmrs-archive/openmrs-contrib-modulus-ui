@@ -135,6 +135,20 @@ button .glyphicon,
 a .glyphicon {
   margin-right: 0.25em;
 }
+.modal.fade {
+  opacity: 1;
+}
+.modal-backdrop.fade {
+  opacity: 0.5;
+  -webkit-transition: none;
+  transition: none;
+}
+.modal.fade .modal-dialog,
+.modal.in .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
 header {
   padding-top: 1.5em;
   padding-bottom: 1.5em;
