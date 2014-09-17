@@ -122,23 +122,6 @@ $rootScope) {
 
     var restangularTasks = {};
 
-    // Make all Restangular requests create progressbar tasks.
-    Restangular.addRequestInterceptor(
-    function(element, operation, what, url) {
-
-      restangularTasks[url] = new ProgressTask({name: operation + ' ' + url});
-      return element;
-
-    });
-
-    Restangular.addResponseInterceptor(
-    function(data, operation, what, url, response, deferred) {
-
-      restangularTasks[url].resolve();
-      return data;
-
-    });
-
     $rootScope.$on('$stateChangeStart',
     function(event, toState, toParams, fromState, fromParams) {
 
