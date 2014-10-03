@@ -3,6 +3,8 @@ Modulus UI
 
 This is the web-based interface of [Modulus][1], the OpenMRS Modules directory. It's a static, single-page web application written in AngularJS and provides a frontend to Modulus's REST API.
 
+[![Hack openmrs/openmrs-contrib-modulus-ui on Nitrous.IO](https://d3o0mnbgv6k92a.cloudfront.net/assets/hack-l-v1-4b6757c3247e3c50314390ece34cdb11.png)](https://www.nitrous.io/hack_button?source=embed&runtime=nodejs&repo=openmrs%2Fopenmrs-contrib-modulus-ui)
+
 Building
 -----
 
@@ -20,9 +22,11 @@ Building
         # If you don't already have grunt installed on your system:
         $ npm install -g grunt-cli
         
-4. Set environment variable `MODULUS_API_BASE_URL` to the URL for your Modulus server's api:
+4. Check configuration settings in `config/modulusui.conf.js`. Most importantly, you'll want to check these settings:
 
-        $ export MODULUS_API_BASE_URL=http://localhost:8080/api
+   - `api.baseUrl`, the URL of the Modulus server that Modulus UI will connect to
+   - `appUrl`, the URL Modulus UI will be served from
+   - `auth.authenticateUrl` and `auth.clientId`, parameters used to perform OAuth login with OpenMRS ID
 
 5. Build & run:
 
