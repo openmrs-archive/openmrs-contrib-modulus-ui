@@ -12,8 +12,8 @@ angular.module('modulusOne.showControllers', [
 
     // Load all releases for this module.
     .then(function() {
-      return $scope.module.all('releases').getList({sort: 'dateCreated',
-        order: 'desc'})
+      return $scope.module.all('releases').getList({sort: 'moduleVersion',
+      order: 'desc'});
     })
 
     // Stick release variables into scope.
