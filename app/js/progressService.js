@@ -77,6 +77,7 @@ angular.module('modulusOne.progressService', ['ngProgressLite'])
     // return ngProgressLite.status() !== 0;
     return _started;
   };
+  ProgressService.started = started;
 
   var update = ProgressService.update = function update() {
     if (!started() && tasks > 0) { // Progressbar not started
@@ -107,6 +108,7 @@ angular.module('modulusOne.progressService', ['ngProgressLite'])
   ProgressService.oneFailed = function oneFailed() {
     tasks = 0;
     ngProgressLite.done();
+    _started = false;
   };
 
   return ProgressService;
@@ -121,23 +123,6 @@ $rootScope) {
   ProgressBar.bootstrap = function bootstrap() {
 
     var restangularTasks = {};
-
-    // Make all Restangular requests create progressbar tasks.
-    Restangular.addRequestInterceptor(
-    function(element, operation, what, url) {
-
-      restangularTasks[url] = new ProgressTask({name: operation + ' ' + url});
-      return element;
-
-    });
-
-    Restangular.addResponseInterceptor(
-    function(data, operation, what, url, response, deferred) {
-
-      restangularTasks[url].resolve();
-      return data;
-
-    });
 
     $rootScope.$on('$stateChangeStart',
     function(event, toState, toParams, fromState, fromParams) {

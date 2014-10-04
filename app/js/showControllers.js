@@ -1,20 +1,15 @@
 angular.module('modulusOne.showControllers', [
   'ui'
 ])
-.controller('ShowModuleCtrl', function($scope, Restangular, $stateParams,
+.controller('ShowModuleCtrl', function($scope, module, Restangular, $stateParams,
     $state, getModule, $rootScope, readonlyAlert, Config, AuthService) {
 
-    // Load this page's module.
-    getModule($scope, $stateParams.id)
-    .then(function() {
-      $rootScope.title = $scope.module.name
-    })
+    $scope.module = module;
+    $rootScope.title = $scope.module.name;
 
     // Load all releases for this module.
-    .then(function() {
-      return $scope.module.all('releases').getList({sort: 'moduleVersion',
-      order: 'desc'});
-    })
+    $scope.module.all('releases').getList({sort: 'moduleVersion',
+      order: 'desc'})
 
     // Stick release variables into scope.
     .then(function(releases){

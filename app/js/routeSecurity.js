@@ -1,7 +1,11 @@
 angular.module('modulusOne.routeSecurity', [
-  'ui.bootstrap', 'ui.router', 'modulusOne.authServices'
+  'ui.bootstrap',
+  'ui.router',
+  'modulusOne.authServices',
+  'modulusOne.progressService'
 ])
-.factory('checkAuthorization', function($modal, $state, AuthService) {
+.factory('checkAuthorization', function($modal, $state, AuthService,
+  ProgressService) {
 
   return function(event, toState, toStateParams, fromState, fromStateParams) {
 
@@ -9,8 +13,17 @@ angular.module('modulusOne.routeSecurity', [
       return true;
     }
 
-    function needsLogin() {
+    function stopStateChange() {
       event.preventDefault();
+
+      // Prevent from showning a progress bar on top of the dialog. The user
+      // authorizes, there's a new state change so the progress bar will come
+      // back.
+      if (ProgressService.started()) ProgressService.oneFailed();
+    }
+
+    function needsLogin() {
+      stopStateChange();
       $modal.open({
         templateUrl: 'partials/loginRequired.html',
         resolve: {
@@ -23,7 +36,7 @@ angular.module('modulusOne.routeSecurity', [
     }
 
     function unauthorized() {
-      event.preventDefault();
+      stopStateChange();
       $modal.open({
         templateUrl: 'partials/unauthorized.html',
         controller: 'UnauthorizedDialogCtrl',
@@ -55,7 +68,7 @@ angular.module('modulusOne.routeSecurity', [
     }
 
     if (AuthService.loggedIn === undefined) {
-      event.preventDefault();
+      stopStateChange();
       var transition = {toState: toState, toStateParams: toStateParams};
       AuthService.waitUntilLoaded.then(function() {
         if (checkAuthorization()) {
