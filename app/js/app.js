@@ -25,6 +25,10 @@ $locationProvider) {
     return AuthService.waitUntilLoaded;
   }
 
+  function getModule($stateParams, Restangular, $rootScope) {
+    return Restangular.one('modules', $stateParams.id).get()
+  }
+
   $stateProvider
   .state('home', {
     url: '/',
@@ -46,7 +50,8 @@ $locationProvider) {
   .state('show', {
     url: '/show/:id/:slug',
     resolve: {
-      auth: resolveAuth
+      auth: resolveAuth,
+      module: getModule
     },
 
     views: {
