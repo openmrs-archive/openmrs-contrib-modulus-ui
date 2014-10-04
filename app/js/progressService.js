@@ -77,6 +77,7 @@ angular.module('modulusOne.progressService', ['ngProgressLite'])
     // return ngProgressLite.status() !== 0;
     return _started;
   };
+  ProgressService.started = started;
 
   var update = ProgressService.update = function update() {
     if (!started() && tasks > 0) { // Progressbar not started
@@ -107,6 +108,7 @@ angular.module('modulusOne.progressService', ['ngProgressLite'])
   ProgressService.oneFailed = function oneFailed() {
     tasks = 0;
     ngProgressLite.done();
+    _started = false;
   };
 
   return ProgressService;
