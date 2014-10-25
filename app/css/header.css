@@ -55,6 +55,9 @@
   color: #555555;
   line-height: 32px;
 }
+.ListModulesCtrl .pager a {
+  cursor: pointer;
+}
 .SearchCtrl .search {
   position: relative;
   font-size: 2em;

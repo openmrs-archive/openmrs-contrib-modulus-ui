@@ -93,7 +93,7 @@ $locationProvider) {
     }
   })
   .state('browse', {
-    url: '/browse',
+    url: '/browse/:page',
     templateUrl: 'partials/browse.html',
     controller: 'ListModulesCtrl',
     resolve: {
@@ -102,9 +102,6 @@ $locationProvider) {
     data: {
       title: 'Recently Update Modules'
     }
-  })
-  .state('browse.page', {
-    url: '/:page'
   });
 
   // Direct empty routes to the home state
