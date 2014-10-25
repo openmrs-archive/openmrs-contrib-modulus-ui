@@ -22,15 +22,15 @@
 <ul class="pager" ng-if="showPager">
   <li class="previous" ng-class="{disabled: !canPageLeft()}"
     ng-switch on="canPageLeft()">
-      <a ng-switch-when="true" ui-sref="browse.page({page: page - 1})">&larr; Newer</a>
+      <a ng-switch-when="true" ng-click="changePage(currentPage - 1)">&larr; Newer</a>
       <a ng-switch-when="false">&larr; Newer</a>
   </li>
 
-  <li class="pagenum">Page {{page}}</li>
+  <li class="pagenum">Page {{currentPage}}</li>
 
   <li class="next" ng-class="{disabled: !canPageRight()}"
     ng-switch on="canPageRight()">
-      <a ng-switch-when="true" ui-sref="browse.page({page: page + 1})">Older &rarr;</a>
+      <a ng-switch-when="true" ng-click="changePage(currentPage + 1)">Older &rarr;</a>
       <a ng-switch-when="false">Older &rarr;</a>
   </li>
 </ul>
