@@ -43,7 +43,7 @@ ng-init="init()">
 <alert ng-if="duplicates" type="warning">
   <p>
     <span class="glyphicon glyphicon-paperclip"></span>
-    <strong>This module looks like it may be a duplicate of:</strong>
+    <strong>It looks like you're uploading a duplicate of:</strong>
   </p>
   <ul ng-repeat="d in duplicates">
     <li>
@@ -51,7 +51,7 @@ ng-init="init()">
     </li>
   </ul>
   <p>
-    Please confirm the module you're uploading is not a duplicate before
+    Would you like help? Please confirm the module you're uploading is not a duplicate before
     proceeding. Be sure to upload a new <em>release</em> of an existing module
     if you're releasing a new version.
   </p>
