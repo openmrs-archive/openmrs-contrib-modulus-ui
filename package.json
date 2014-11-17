@@ -2,7 +2,7 @@
   "name": "openmrs-contrib-modulus-ui",
   "description": "Reference interface for Modulus, the OpenMRS Module Repository",
   "repository": "https://github.com/elliottwilliams/openmrs-contrib-modulus-ui",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "dependencies": {
     "grunt": "~0.4.2",
     "grunt-cli": "~0.1.13",
