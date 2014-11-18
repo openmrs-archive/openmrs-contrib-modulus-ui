@@ -8,7 +8,7 @@ This is the web-based interface of [Modulus][1], the OpenMRS Modules directory. 
 Building
 -----
 
-1. You need [Node][0] v0.8 or greated installed.
+1. You need [Node][0] v0.8 or greater installed.
 
 2. Clone the source code:
 
