@@ -22,6 +22,9 @@ class="btn btn-link header-button">
       <a ng-href="{{release.downloadURL}}">
         <button type="button" class="btn btn-default btn-xs">Download</button>
       </a>
+      <button class="btn btn-link btn-warning" ng-if="user | canEdit:module"  ng-click="confirmDeleteRelease($index)">
+        <span class="glyphicon glyphicon-trash"></span>Delete
+      </button>
     </td>
   </tr>
 </table>

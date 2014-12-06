@@ -62,6 +62,28 @@ angular.module('modulusOne.showControllers', [
       }
     }
 
+    $scope.confirmDeleteRelease = function(releaseIndex) {
+      if (Config.api.readOnly) {
+        readonlyAlert.open()
+        return false
+      }
+
+      var release = $scope.module.releases[releaseIndex];
+      var message;
+      if($scope.module.releases.length == 1) {
+        message = 'You are deleting the only release of "' + $scope.module.name + '" '
+           + 'Would you like to keep this module\'s metadata in the system, or delete the module entirely?';
+      } else {
+        message = '"' + $scope.module.name + '" version "' + release.moduleVersion + '" will be deleted.';
+      }
+      if (confirm(message)) {
+        release.remove()
+        .finally(function() {
+          $scope.module.releases.splice(releaseIndex, 1);
+        })
+      }
+    }
+
     $scope.incrementDownload = function() {
       $scope.latestRelease.downloadCount++;
       $scope.module.downloadCount++
