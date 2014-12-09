@@ -2,7 +2,7 @@ angular.module('modulusOne.showControllers', [
   'ui'
 ])
 .controller('ShowModuleCtrl', function($scope, module, Restangular, $stateParams,
-    $state, getModule, $rootScope, readonlyAlert, Config, AuthService) {
+    $state, getModule, $rootScope, readonlyAlert, Config, AuthService, $modal) {
 
     $scope.module = module;
     $rootScope.title = $scope.module.name;
@@ -69,19 +69,19 @@ angular.module('modulusOne.showControllers', [
       }
 
       var release = $scope.module.releases[releaseIndex];
-      var message;
-      if($scope.module.releases.length == 1) {
-        message = 'You are deleting the only release of "' + $scope.module.name + '" '
-           + 'Would you like to keep this module\'s metadata in the system, or delete the module entirely?';
-      } else {
-        message = '"' + $scope.module.name + '" version "' + release.moduleVersion + '" will be deleted.';
-      }
-      if (confirm(message)) {
+      var modal = $modal.open({
+        templateUrl: 'uponDeleteReleaseDialog.html',
+        scope: $scope,
+        controller: function ($scope) {
+          $scope.release = release;
+        }
+      });
+      modal.result.then(function() {
         release.remove()
         .finally(function() {
           $scope.module.releases.splice(releaseIndex, 1);
         })
-      }
+      })
     }
 
     $scope.incrementDownload = function() {
