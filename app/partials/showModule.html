@@ -87,6 +87,7 @@
         </th>
 
         <td ng-switch-when="false">
+          <img ng-src="{{avatar}}"></img>
             {{module.owner}}
           <span ng-if="!module.owner" class="no-users-label">
             None
@@ -104,10 +105,10 @@
           <span class="glyphicon glyphicon-question-sign" tooltip="Users who
           have edit and upload permissions for this module."></span>
         </th>
-
         <td ng-switch-when="false">
           <span ng-repeat="m in module.maintainers">
-            <a ng-href="{{m | wikiprofile}}">{{m.username}}</a>{{$last ? '' : ','}} 
+            <img ng-src="{{m | avatar}}"></img>
+            <a ng-href="{{m | wikiprofile}}">{{m.username}}</a>{{$last ? '' : ','}}
           </span>
           <span ng-if="module.maintainers.length == 0" class="no-users-label">
             None

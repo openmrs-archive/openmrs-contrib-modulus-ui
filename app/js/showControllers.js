@@ -262,6 +262,13 @@ $stateParams, $state) {
   }
 })
 
+.filter('avatar', function($sanitize) {
+  return function(user) {
+    if (!user) return null
+    return 'https://talk.openmrs.org/user_avatar/talk.openmrs.org/' + user.username + '/32/1.png'
+  }
+})
+
 // Translate a user object to the format used by Select2
 .filter('selectable', function() {
   return function(user) {
