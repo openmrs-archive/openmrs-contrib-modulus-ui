@@ -262,6 +262,7 @@ $stateParams, $state) {
   }
 })
 
+// Show user's avatar
 .filter('avatar', function($sanitize) {
   return function(user) {
     if (!user) return null
