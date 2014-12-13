@@ -107,7 +107,8 @@
 
         <td ng-switch-when="false">
           <span ng-repeat="m in module.maintainers">
-            <a ng-href="{{m | wikiprofile}}">{{m.username}}</a>{{$last ? '' : ','}} 
+            <img ng-src="{{m | avatar}}"></img>
+            <a ng-href="{{m | wikiprofile}}">{{m.username}}</a>{{$last ? '' : ','}}
           </span>
           <span ng-if="module.maintainers.length == 0" class="no-users-label">
             None
