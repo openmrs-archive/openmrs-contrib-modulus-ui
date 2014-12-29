@@ -8,6 +8,8 @@ This is the web-based interface of [Modulus][1], the OpenMRS Modules directory. 
 Building
 -----
 
+(for an in-depth guide on setting up a Modulus server with Modulus UI on the frontend, check out [the guide on the OpenMRS Wiki](https://wiki.openmrs.org/display/docs/How+to+install+Modulus+and+Modulus+UI))
+
 1. You need [Node][0] v0.8 or greater installed.
 
 2. Clone the source code:
