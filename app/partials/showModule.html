@@ -8,8 +8,12 @@
     <span class="glyphicon glyphicon-ok"></span>Save Edits
   </button>
 
-  <button class="btn btn-link btn-warning" ng-click="confirmDeleteModule()">
-    <span class="glyphicon glyphicon-trash"></span>Delete
+  <button ng-switch-when="true" class="btn btn-link" ng-click="cancelEdit(true)">
+    Cancel
+  </button>
+
+  <button class="btn btn-danger pull-right" ng-click="confirmDeleteModule()">
+    <span class="glyphicon glyphicon-trash"></span>Delete All Module Data
   </button>
 </div>
 

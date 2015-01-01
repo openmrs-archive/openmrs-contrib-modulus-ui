@@ -46,6 +46,10 @@ angular.module('modulusOne.showControllers', [
       })
     }
 
+    $scope.cancelEdit = function(toggleEditWhenDone) {
+      window.location.reload();
+      if (toggleEditWhenDone) $scope.toggleEdit()
+    }
 
     $scope.confirmDeleteModule = function() {
       if (Config.api.readOnly) {
