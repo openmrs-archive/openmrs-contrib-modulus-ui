@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="css/create.css"> 
+<link rel="stylesheet" href="css/create.css">
 
 <form>
 
@@ -78,8 +78,16 @@ ng-init="init()">
       <label>Documentation URL</label>
       <input class="form-control" type="text" ng-model="module.documentationURL">
     </div>
+
+    <div class="form-group">
+      <label>Required Modules</label>
+      <input class="form-control" type="text" ng-model="module.requiredModules">
+    </div>
   </div>
-  
+<<<<<<< HEAD
+=======
+
+>>>>>>> aceb536... Properly displays a reqiredModule string
 
   <div class="col-md-6">
 
@@ -92,6 +100,11 @@ ng-init="init()">
     <div class="form-group">
       <label>OpenMRS Version Requirement</label>
       <input class="form-control" type="text" ng-model="release.requiredOMRSVersion">
+    </div>
+
+    <div class="form-group">
+      <label>Module Requirement</label>
+      <input class="form-control" type="text" ng-model="module.requiredModule">
     </div>
 
   </div>

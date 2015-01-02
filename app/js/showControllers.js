@@ -15,6 +15,7 @@ angular.module('modulusOne.showControllers', [
     .then(function(releases){
       $scope.latestRelease = releases[0] // release list sorted by dateCreated
       $scope.module.releases = releases
+      console.log($scope.latestRelease.requiredModules)
     })
 
 
@@ -72,6 +73,19 @@ angular.module('modulusOne.showControllers', [
     $scope.incrementDownload = function() {
       $scope.latestRelease.downloadCount++;
       $scope.module.downloadCount++
+    }
+
+    // converts from slug to readable name
+    $scope.linkRequiredModules = function() {
+      for (module in $scope.module.requiredModules) {
+        var ModulesArray = []
+
+        Restangular.one('modules', $scope.module.requiredModules[module]).get()
+        .then(function(modules) {
+          ModulesArray.push(modules.name)
+          $scope.module.requiredModules[module] = modules.name
+        })
+      }
     }
 
     // Search function that typeahead in the `owner` field calls
@@ -259,6 +273,15 @@ $stateParams, $state) {
   }
 
 })
+
+// Link to the required Module
+.filter('linkModule', function($sanitize) {
+  return function(module) {
+    if (!module) return null
+
+      return 'https://modules.openmrs.org/#/show/' + module
+    }
+  })
 
 // Link to a user's wiki profile
 .filter('wikiprofile', function($sanitize) {
