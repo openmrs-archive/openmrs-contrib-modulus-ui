@@ -4,17 +4,22 @@
     <span class="glyphicon glyphicon-pencil"></span>Edit
   </button>
 
-  <button ng-switch-when="true" class="btn btn-default btn-success" ng-click="updateModule(true)">
-    <span class="glyphicon glyphicon-ok"></span>Save Edits
-  </button>
+  <div ng-switch-when="true" class="col-md-8">
 
-  <button ng-switch-when="true" class="btn btn-link" ng-click="cancelEdit(true)">
-    Cancel
-  </button>
+    <button class="btn btn-default btn-success pull-left" ng-click="updateModule(true)">
+      <span class="glyphicon glyphicon-ok"></span>Save Edits
+    </button>
 
-  <button class="btn btn-danger pull-right" ng-click="confirmDeleteModule()">
-    <span class="glyphicon glyphicon-trash"></span>Delete All Module Data
-  </button>
+    <button class="btn btn-link pull-left" ng-click="cancelEdit(true)">
+      Cancel
+    </button>
+
+    <button class="btn btn-danger pull-right" ng-click="confirmDeleteModule()">
+      <span class="glyphicon glyphicon-trash"></span>Delete All Module Data
+    </button>
+
+  </div>
+
 </div>
 
 <div class="row col-md-8">
