@@ -46,6 +46,13 @@ angular.module('modulusOne.showControllers', [
       })
     }
 
+    $scope.cancelEdit = function(toggleEditWhenDone) {
+      $state.transitionTo($state.current, $stateParams, {
+        reload: true, inherit: false, notify: true
+      });
+
+      if (toggleEditWhenDone) $scope.toggleEdit()
+    }
 
     $scope.confirmDeleteModule = function() {
       if (Config.api.readOnly) {
