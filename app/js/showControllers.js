@@ -15,7 +15,6 @@ angular.module('modulusOne.showControllers', [
     .then(function(releases){
       $scope.latestRelease = releases[0] // release list sorted by dateCreated
       $scope.module.releases = releases
-      console.log($scope.latestRelease.requiredModules)
     })
 
 
@@ -273,6 +272,7 @@ $stateParams, $state) {
   }
 
 })
+
 
 // Link to the required Module
 .filter('linkModule', function($sanitize) {
