@@ -75,14 +75,14 @@ angular.module('modulusOne.showControllers', [
     }
 
     // converts from slug to readable name
-    $scope.linkRequiredModules = function() {
+    $scope.getModuleObject = function() {
       for (module in $scope.module.requiredModules) {
         var ModulesArray = []
 
         Restangular.one('modules', $scope.module.requiredModules[module]).get()
         .then(function(modules) {
-          ModulesArray.push(modules.name)
-          $scope.module.requiredModules[module] = modules.name
+          ModulesArray.push(modules)
+          $scope.module.requiredModules = ModulesArray
         })
       }
     }
@@ -279,7 +279,7 @@ $stateParams, $state) {
   return function(module) {
     if (!module) return null
 
-      return 'https://modules.openmrs.org/#/show/' + module
+      return 'https://modules.openmrs.org/#/show/' + module.slug
     }
   })
 

@@ -78,9 +78,9 @@
       <tr>
 
         <th>Required Modulus</th>
-        <td ng-init="linkRequiredModules()">
+        <td ng-init="getModuleObject()">
           <span ng-repeat="module in module.requiredModules">
-            <a ng-href="{{module | linkModule}}">{{module}}</a>
+            <a ng-href="{{module | linkModule}}">{{module.name}}</a>
             <span ng-if='!$last'>, </span>
           </span>
         </td>
