@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="css/create.css"> 
 
-<h2>Releases</h2>
+<h2 id="releases-header">Releases</h2>
 
 <button ng-if="user | canEdit:module" ui-sref="show"
 class="btn btn-link header-button">
@@ -62,3 +62,7 @@ class="btn btn-link header-button">
 
 
 </div>
+
+<script>
+$(window).scrollTop($("#releases-header").offset().top)
+</script>
