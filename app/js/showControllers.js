@@ -275,11 +275,11 @@ $stateParams, $state) {
 
 
 // Link to the required Module
-.filter('linkModule', function($sanitize) {
+.filter('linkModule', function($sanitize, Config) {
   return function(module) {
     if (!module) return null
 
-      return 'https://modules.openmrs.org/#/show/' + module.slug
+      return Config.appUrl + '/#/show/' + module.slug
     }
   })
 
