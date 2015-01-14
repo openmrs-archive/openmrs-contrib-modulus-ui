@@ -206,7 +206,7 @@ angular.module('modulusOne.createControllers', [])
 
     // When file is chosen or dropped into the controller
     $scope.onFileSelect = function onFileSelect($files) {
-      
+
       $scope.success = false; // Set to false in case this is a re-upload
 
       // Start by creating a module and release to upload to.
