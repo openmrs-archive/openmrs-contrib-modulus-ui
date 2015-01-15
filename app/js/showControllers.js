@@ -21,6 +21,10 @@ angular.module('modulusOne.showControllers', [
     // Allow the view to access the logged-in user.
     $scope.user = AuthService.user;
 
+    // Method to tell if we should autoscroll to the bottom of the page
+    $scope.autoscrollToRelease = function () {
+      return $state.is("show.newRelease");
+    }
 
     // Editability
     $scope.editable = false
