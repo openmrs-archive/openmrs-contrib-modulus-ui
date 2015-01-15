@@ -74,6 +74,19 @@ angular.module('modulusOne.showControllers', [
       $scope.module.downloadCount++
     }
 
+    // converts from slug to readable name
+    $scope.getModuleObject = function() {
+      for (module in $scope.module.requiredModules) {
+        var ModulesArray = []
+
+        Restangular.one('modules', $scope.module.requiredModules[module]).get()
+        .then(function(modules) {
+          ModulesArray.push(modules)
+          $scope.module.requiredModules = ModulesArray
+        })
+      }
+    }
+
     // Search function that typeahead in the `owner` field calls
     $scope.searchUsers = function(query) {
 
@@ -259,6 +272,16 @@ $stateParams, $state) {
   }
 
 })
+
+
+// Link to the required Module
+.filter('linkModule', function($sanitize, Config) {
+  return function(module) {
+    if (!module) return null
+
+      return Config.appUrl + '/#/show/' + module.slug
+    }
+  })
 
 // Link to a user's wiki profile
 .filter('wikiprofile', function($sanitize) {
