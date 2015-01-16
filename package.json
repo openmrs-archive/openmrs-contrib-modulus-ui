@@ -15,6 +15,7 @@
     "node-static": "~0.7.3"
   },
   "devDependencies": {
+    "grunt-html-build": "^0.3.2",
     "karma": "~0.12",
     "karma-jasmine": "~0.2.0",
     "karma-junit-reporter": "~0.1",
