@@ -22,7 +22,7 @@
 
 </div>
 
-<div class="row col-md-8">
+<div class="row col-md-8" autoscroll="false">
 
   <h2 class="module-name" ng-if="!editable">{{module.name}}</h2>
   <h2 ng-if="editable">
@@ -73,6 +73,17 @@
       <tr>
         <th>Compatibility</th>
         <td>{{latestRelease.requiredOMRSVersion}}</td>
+      </tr>
+
+      <tr>
+
+        <th>Required Modules</th>
+        <td ng-init="getModuleObject()">
+          <span ng-repeat="module in module.requiredModules">
+            <a ng-href="{{module | linkModule}}">{{module.name}}</a>
+            <span ng-if='!$last'>, </span>
+          </span>
+        </td>
       </tr>
 
       <tr>
