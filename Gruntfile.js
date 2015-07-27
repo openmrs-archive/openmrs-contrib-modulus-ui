@@ -67,6 +67,19 @@ module.exports = function(grunt) {
           livereload: 3572
         }
       }
+    },
+
+    htmlbuild: {
+      dist: {
+        src: 'app/**/*.html',
+        options: {
+          beautify: true,
+          relative: true,
+          scripts: {
+            'google-analytics': 'app/js/googleAnalytics.js'
+          },
+        }
+      }
     }
   })
 
@@ -74,6 +87,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-connect')
   grunt.loadNpmTasks('grunt-colorguard')
+  grunt.loadNpmTasks('grunt-html-build')
 
   grunt.registerTask('default', ['build'])
   grunt.registerTask('serve', ['build', 'connect:development', 'watch'])

@@ -12,7 +12,7 @@ module.exports = {
     readOnly: false
   },
 
-  // URL where this instance of Modulus UI will be publicly accessible  
+  // URL where this instance of Modulus UI will be publicly accessible  
   appUrl: 'http://localhost:3001',
 
   // OAuth Client credentials
