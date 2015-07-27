@@ -2,7 +2,7 @@ angular.module('modulusOne.showControllers', [
   'ui'
 ])
 .controller('ShowModuleCtrl', function($scope, module, Restangular, $stateParams,
-    $state, getModule, $rootScope, readonlyAlert, Config, AuthService) {
+    $state, getModule, $rootScope, readonlyAlert, Config, AuthService, $modal) {
 
     $scope.module = module;
     $rootScope.title = $scope.module.name;
@@ -67,6 +67,28 @@ angular.module('modulusOne.showControllers', [
           $state.go('browse');
         })
       }
+    }
+
+    $scope.confirmDeleteRelease = function(releaseIndex) {
+      if (Config.api.readOnly) {
+        readonlyAlert.open()
+        return false
+      }
+
+      var release = $scope.module.releases[releaseIndex];
+      var modal = $modal.open({
+        templateUrl: 'uponDeleteReleaseDialog.html',
+        scope: $scope,
+        controller: function ($scope) {
+          $scope.release = release;
+        }
+      });
+      modal.result.then(function() {
+        release.remove()
+        .finally(function() {
+          $scope.module.releases.splice(releaseIndex, 1);
+        })
+      })
     }
 
     $scope.incrementDownload = function() {
