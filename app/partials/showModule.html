@@ -22,7 +22,7 @@
 
 </div>
 
-<div class="row col-md-8" autoscroll="false">
+<div class="row col-md-8">
 
   <h2 class="module-name" ng-if="!editable">{{module.name}}</h2>
   <h2 ng-if="editable">
@@ -153,5 +153,5 @@
 </div>
 
 <div class="row col-md-12 release-list release-view-container">
-  <div ui-view="release" class="release-view-animate"></div>
+  <div ui-view="release" autoscroll="autoscrollToRelease()" class="release-view-animate"></div>
 </div>
