@@ -9,11 +9,45 @@ angular.module('modulusOne.showControllers', [
 
     // Load all releases for this module.
     $scope.module.all('releases').getList({sort: 'moduleVersion',
-      order: 'desc'})
+      order: 'desc', max: '999'})
+
+    var asInts = function(array) {
+        var ret = new Array();
+        for (var i = 0; i < array.length; ++i) {
+          var maybe = parseFloat(array[i]);
+          ret[i] = isNaN(maybe) ? 0 : maybe;
+        }
+        return ret;
+    }
+
+    // will sort by module version ascending
+    // adapted from http://stackoverflow.com/a/6832721
+    var versionCompare = function(v1, v2) {
+        var v1parts = asInts(v1.split('.'));
+        var v2parts = asInts(v2.split('.'));
+        while (v1parts.length < v2parts.length) { v1parts.push(0); }
+        while (v2parts.length < v1parts.length) { v2parts.push(0); }
+
+        for (var i = 0; i < v1parts.length; ++i) {
+            if (v1parts[i] == v2parts[i]) {
+                continue;
+            }
+            else if (v1parts[i] > v2parts[i]) {
+                return 1;
+            }
+            else {
+                return -1;
+            }
+        }
+        return 0;
+    }
 
     // Stick release variables into scope.
     .then(function(releases){
-      $scope.latestRelease = releases[0] // release list sorted by dateCreated
+      releases.sort(function(a, b) {
+        return -versionCompare(a.moduleVersion, b.moduleVersion); // negative because we want descending version
+      });
+      $scope.latestRelease = releases[0] // release list sorted by moduleVersion
       $scope.module.releases = releases
     })
 
