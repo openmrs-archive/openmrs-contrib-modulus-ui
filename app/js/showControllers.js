@@ -19,6 +19,8 @@ angular.module('modulusOne.showControllers', [
     // will sort by module version ascending
     // adapted from http://stackoverflow.com/a/6832721
     var versionCompare = function(v1, v2) {
+        if (v1 === null) { v1 = "0"; }
+        if (v2 === null) { v2 = "0"; }
         var v1parts = asInts(v1.split('.'));
         var v2parts = asInts(v2.split('.'));
         while (v1parts.length < v2parts.length) { v1parts.push(0); }
