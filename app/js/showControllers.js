@@ -7,15 +7,11 @@ angular.module('modulusOne.showControllers', [
     $scope.module = module;
     $rootScope.title = $scope.module.name;
 
-    // Load all releases for this module.
-    $scope.module.all('releases').getList({sort: 'moduleVersion',
-      order: 'desc', max: '999'})
-
     var asInts = function(array) {
         var ret = new Array();
         for (var i = 0; i < array.length; ++i) {
-          var maybe = parseFloat(array[i]);
-          ret[i] = isNaN(maybe) ? 0 : maybe;
+            var maybe = parseFloat(array[i]);
+            ret[i] = isNaN(maybe) ? 0 : maybe;
         }
         return ret;
     }
@@ -41,6 +37,10 @@ angular.module('modulusOne.showControllers', [
         }
         return 0;
     }
+
+    // Load all releases for this module.
+    $scope.module.all('releases').getList({sort: 'moduleVersion',
+      order: 'desc', max: '999'})
 
     // Stick release variables into scope.
     .then(function(releases){
