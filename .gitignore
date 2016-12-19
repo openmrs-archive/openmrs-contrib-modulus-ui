@@ -4,6 +4,7 @@ node_modules/
 tmp
 .DS_Store
 .idea
+*.iml
 *.sublime-*
 app/js/config.js
 npm-debug.log
